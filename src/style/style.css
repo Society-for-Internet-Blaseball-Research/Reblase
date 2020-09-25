@@ -1,0 +1,27 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply text-gray-900 antialiased min-h-screen;
+    }
+    
+    strong {
+        @apply font-semibold;
+    }
+    
+    label {
+        @apply cursor-pointer;
+    }
+    
+    a:hover {
+        @apply underline;
+    }
+}
+
+@layer components {
+    .tag {
+        @apply text-sm rounded px-2 py-1 inline-flex items-center justify-center;
+    }
+}
