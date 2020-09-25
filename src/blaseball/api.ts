@@ -1,51 +1,33 @@
 import { GameUpdate } from "./update";
-import { Day, Game } from "./game";
+import { Game } from "./game";
 import useSWR, { useSWRInfinite } from "swr";
 import { useEffect, useState } from "react";
+import queryString from "query-string";
 
 // empty string local, also try eg. https://blase.srv.astr.cc/
-const BASE_URL = "";
-
-export interface GamesResponse {
-    days: Day[];
-}
+const BASE_URL = process.env.REACT_APP_SIBR_API;
 
 export interface EventsResponse {
     games: Game[];
 }
 
-export interface GameUpdatesResponse {
-    updates: GameUpdate[];
+export interface GamesListQuery {
+    season?: number;
+    day?: number;
+    started?: boolean;
+    finished?: boolean;
+    outcomes?: boolean;
+    order?: "asc" | "desc";
 }
 
-export function useGameList(season: number, pageSize: number) {
-    function getNextPage(pageIndex: number, previousPageData: GamesResponse | null) {
-        let startDay = 999;
-        if (previousPageData) {
-            const { days } = previousPageData;
-            const lastDay = days[days.length - 1];
-            startDay = lastDay.day - 1;
-        }
-
-        if (startDay < 0)
-            // at the end! :)
-            return null;
-
-        return BASE_URL + `/api/games?season=${season - 1}&day=${startDay}&dayCount=${pageSize}&reverse=true`;
-    }
-
-    const { data, size, setSize, error } = useSWRInfinite<GamesResponse>(getNextPage, {
+export function useGameList(query: GamesListQuery): { games: Game[] | undefined; error: any } {
+    const { data, error } = useSWR<Game[]>(BASE_URL + `/games?${queryString.stringify(query)}`, {
         revalidateOnFocus: false,
     });
 
-    const days = [];
-    for (const page of data ?? []) days.push(...page.days);
-
     return {
-        days: data ? days : null,
+        games: data,
         error,
-        pageCount: size,
-        nextPage: () => setSize(size + 1),
     };
 }
 
@@ -55,38 +37,48 @@ interface GameUpdatesHookReturn {
     isLoading: boolean;
 }
 
-export function useGameUpdates(game: string, autoRefresh: boolean): GameUpdatesHookReturn {
+interface GameUpdatesQuery {
+    game: string;
+    started: boolean;
+    after?: string;
+}
+
+export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): GameUpdatesHookReturn {
     // First load of original data
-    const { data: initialData, error } = useSWR<GameUpdatesResponse>(BASE_URL + `/api/games/${game}/updates`, {
-        revalidateOnFocus: false,
-    });
+    const { data: initialData, error } = useSWR<GameUpdate[]>(
+        BASE_URL + `/games/updates?${queryString.stringify(query)}`,
+        {
+            revalidateOnFocus: false,
+        }
+    );
 
     // Updates added via autoupdating
     const [extraUpdates, setExtraUpdates] = useState<GameUpdate[]>([]);
 
     // Combined the above!
-    const allUpdates = [...(initialData?.updates ?? []), ...extraUpdates];
+    const allUpdates = [...(initialData ?? []), ...extraUpdates];
 
     // Background timer for autoupdating
     useEffect(() => {
         const timer = setInterval(async () => {
             // Stop if autorefresh is off
             // (effect closure will get remade on change so this "updates" properly)
-            if (!autoRefresh || allUpdates.length == 0) return;
+            if (!autoRefresh || allUpdates.length === 0) return;
 
             // Handle autorefresh logic
             const lastUpdate = allUpdates[allUpdates.length - 1];
             const lastTimestamp = lastUpdate.timestamp;
 
-            const url = BASE_URL + `/api/games/${game}/updates?after=${encodeURIComponent(lastTimestamp)}`;
+            query.after = lastTimestamp;
+            const url = BASE_URL + `/games/updates?${queryString.stringify(query)}`;
             const response = await fetch(url);
-            const json = <GameUpdatesResponse>await response.json();
+            const json = (await response.json()) as GameUpdate[];
 
             // Add the data we got to the extra state :)
-            setExtraUpdates([...extraUpdates, ...json.updates]);
+            setExtraUpdates([...extraUpdates, ...json]);
         }, 2000);
         return () => clearInterval(timer);
-    }, [game, autoRefresh, allUpdates.length]);
+    }, [query, autoRefresh, allUpdates, extraUpdates]);
 
     return {
         updates: allUpdates,
@@ -106,12 +98,12 @@ interface GameEventsHookReturn {
 export function useGameEvents(): GameEventsHookReturn {
     function getNextPage(pageIndex: number, previousPageData: EventsResponse | null) {
         if (previousPageData == null) return BASE_URL + "/api/events";
-        if (previousPageData?.games.length == 0) return null;
+        if (previousPageData?.games.length === 0) return null;
 
         const games = previousPageData?.games ?? [];
-        const lastGameTimestamp = games[games?.length - 1].lastUpdateTime;
+        const lastGameTimestamp = games[games?.length - 1].end;
 
-        return BASE_URL + `/api/events?before=${encodeURIComponent(lastGameTimestamp)}`;
+        return BASE_URL + `/api/events?before=${encodeURIComponent(lastGameTimestamp ?? "null")}`;
     }
 
     const { data, error, size, setSize } = useSWRInfinite<EventsResponse>(getNextPage, { revalidateOnFocus: false });

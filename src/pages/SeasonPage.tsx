@@ -6,35 +6,56 @@ import { Loading } from "../components/Loading";
 import { Container } from "../components/Container";
 import { useGameList } from "../blaseball/api";
 import Error from "../components/Error";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { cache } from "swr";
+import { Game } from "../blaseball/game";
 
-function GamesListFetching(props: { season: number }) {
-    let { days, error, nextPage } = useGameList(props.season, 10);
+type GameDay = { games: Game[]; season: number; day: number };
+function groupByDay(games: Game[]): GameDay[] {
+    const days: Record<string, GameDay> = {};
+    for (const game of games) {
+        const day = game.data.day;
+        if (!days[day]) days[day] = { games: [], season: game.data.season, day: game.data.day };
+        days[day].games.push(game);
+    }
+
+    const daysList = [];
+
+    // Can't find a better way to do this because JS sorting is hard
+    // 120 should be an upper bound (inb4 falsehoods....)
+    for (let i = 0; i < 120; i++) {
+        if (days[i]) daysList.push(days[i]);
+    }
+
+    return daysList;
+}
+
+function GamesList(props: { season: number }) {
+    let { games, error } = useGameList({
+        season: props.season - 1,
+        started: true,
+    });
     if (error) return <Error>{error}</Error>;
+    if (!games) return <Loading />;
 
-    if (!days) return <Loading />;
-
-    const lastDay = days[days.length - 1].day;
+    const days = groupByDay(games);
+    days.reverse();
 
     return (
-        <InfiniteScroll
-            next={nextPage}
-            hasMore={lastDay > 0}
-            loader={<Loading />}
-            dataLength={days.length}
-            scrollThreshold="500px"
-        >
+        <>
             {days.map(({ games, season, day }) => {
                 return <DayTable key={day} season={season + 1} day={day + 1} games={games} />;
             })}
-        </InfiniteScroll>
+        </>
     );
 }
 
+interface SeasonPageParams {
+    season: string;
+}
+
 export function SeasonPage() {
-    let { season } = useParams();
-    season = parseInt(season);
+    let { season: seasonStr } = useParams<SeasonPageParams>();
+    const season = parseInt(seasonStr);
 
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
@@ -43,7 +64,7 @@ export function SeasonPage() {
         <Container className={"mt-4"}>
             <h2 className="text-2xl font-semibold mb-4">Games in Season {season}</h2>
 
-            <GamesListFetching season={season} />
+            <GamesList season={season} />
         </Container>
     );
 }

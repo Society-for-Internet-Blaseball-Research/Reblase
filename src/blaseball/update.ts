@@ -37,9 +37,10 @@ export interface GamePayload {
 }
 
 export type GameUpdate = {
-    id: string;
+    gameId: string;
+    hash: string;
     timestamp: string;
-    payload: GamePayload;
+    data: GamePayload;
 };
 
 const importantMessages: RegExp[] = [

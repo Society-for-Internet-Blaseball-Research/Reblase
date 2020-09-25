@@ -49,24 +49,24 @@ type Element =
     | { type: "row"; update: GameUpdate }
     | { type: "heading"; update: GameUpdate; inning: number; top: boolean };
 
-function groupByInning(updates: GameUpdate[], direction: "asc" | "desc", filterImportant: boolean): Element[] {
+function addInningHeaderRows(updates: GameUpdate[], direction: "asc" | "desc", filterImportant: boolean): Element[] {
     const elements: Element[] = [];
 
     let lastPayload = null;
     for (const update of updates) {
-        const payload = update.payload;
+        const payload = update.data;
         const row: Element = { type: "row", update };
 
         if (filterImportant && !isImportant(payload)) continue;
 
-        if (!lastPayload || lastPayload.inning != payload.inning || lastPayload.topOfInning != payload.topOfInning) {
+        if (!lastPayload || lastPayload.inning !== payload.inning || lastPayload.topOfInning !== payload.topOfInning) {
             // New inning, add header
             const header: Element = { type: "heading", inning: payload.inning, top: payload.topOfInning, update };
             elements.push(header);
         }
 
         // Reorder accounting for the early pitching updates we get
-        if (direction == "asc") {
+        if (direction === "asc") {
             if (payload.lastUpdate.endsWith("batting.") && elements.length > 2) {
                 const [heading, prevUpdate] = elements.splice(-2);
                 elements.push(prevUpdate, heading);
@@ -74,7 +74,7 @@ function groupByInning(updates: GameUpdate[], direction: "asc" | "desc", filterI
         } else {
             if (elements.length > 3) {
                 const [prevPrevUpdate, prevUpdate, heading] = elements.splice(-3);
-                if (heading.type === "heading" && prevPrevUpdate.update.payload.lastUpdate.endsWith("batting.")) {
+                if (heading.type === "heading" && prevPrevUpdate.update.data.lastUpdate.endsWith("batting.")) {
                     elements.push(prevPrevUpdate, heading, prevUpdate);
                 } else {
                     elements.push(prevPrevUpdate, prevUpdate, heading);
@@ -94,17 +94,26 @@ function groupByInning(updates: GameUpdate[], direction: "asc" | "desc", filterI
 export function GameUpdateList(props: GameUpdateListProps) {
     const updates = props.updateOrder === "desc" ? [...props.updates].reverse() : props.updates;
 
-    const elements = useMemo(() => groupByInning(updates, props.updateOrder, props.filterImportant), [
+    const elements = useMemo(() => addInningHeaderRows(updates, props.updateOrder, props.filterImportant), [
         updates,
         props.updateOrder,
         props.filterImportant,
     ]);
 
+    var elems = [];
+    for (const elem of elements) {
+        if (elem.type === "heading") {
+            elems.push({ firstUpdate: elem.update.data, updates: [] as GameUpdate[] });
+        } else {
+            elems[elems.length - 1].updates.push(elem.update);
+        }
+    }
+
     return (
         <div className="grid grid-flow-row-dense gap-2 items-center" style={{ gridTemplateColumns: "auto auto 1fr" }}>
             {elements.map((elem) => {
-                if (elem.type === "row") return <UpdateRow key={elem.update.id + "_update"} update={elem.update} />;
-                else return <InningHeader key={elem.update.id + "_heading"} evt={elem.update.payload} />;
+                if (elem.type === "row") return <UpdateRow key={elem.update.hash + "_update"} update={elem.update} />;
+                else return <InningHeader key={elem.update.hash + "_heading"} evt={elem.update.data} />;
             })}
         </div>
     );

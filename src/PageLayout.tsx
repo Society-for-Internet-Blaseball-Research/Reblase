@@ -13,7 +13,7 @@ export function PageLayout(props: { children: React.ReactNode }) {
                 <br />
                 <a href="https://twitter.com/floofstrid">Author</a> (@Ske#6201) |{" "}
                 <a href="https://github.com/xSke/BlaseballData">GitHub</a> |{" "}
-                <a href="https://discord.gg/XKppCuj">SIBR Discord</a>g
+                <a href="https://discord.gg/XKppCuj">SIBR Discord</a>
             </div>
         </div>
     );

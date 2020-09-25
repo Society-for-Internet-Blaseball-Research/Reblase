@@ -2,12 +2,11 @@
 
 import { Loading } from "../components/Loading";
 import { Container } from "../components/Container";
-import { useGameEvents } from "../blaseball/api";
+import { useGameList } from "../blaseball/api";
 import { getOutcomes } from "../blaseball/outcome";
 import Error from "../components/Error";
 import { getTeam, TeamInfo } from "../blaseball/team";
 import { Link } from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 interface GameEvent {
     game: string;
@@ -28,43 +27,43 @@ const EventRow = ({ evt }: { evt: GameEvent }) => {
                 <Link to={`/game/${evt.game}`} className="text-sm font-semibold flex-1">
                     {evt.emoji} {evt.type}
                 </Link>
-                <Link to={`/game/${evt.game}`} className="text-sm text-gray-700">
+                <Link to={`/game/${evt.game}`} className="text-sm">
                     Season <strong>{evt.season + 1}</strong>, Day <strong>{evt.day + 1}</strong>
-                    {" - "}
-                    {evt.awayTeam.nickname} vs. {evt.homeTeam.nickname}
                 </Link>
             </div>
-            <p className="text-sm whitespace-pre-line">{evt.text.join("\n")}</p>
+            <p className="text-sm whitespace-pre-line float-left">{evt.text.join("\n")}</p>
+            <span className="text-sm text-gray-700 float-right">
+                {evt.awayTeam.nickname} vs. {evt.homeTeam.nickname}
+            </span>
         </div>
     );
 };
 
 export function EventsPage() {
-    const { games, isLoading, error, nextPage, hasMoreData } = useGameEvents();
-
+    const { games, error } = useGameList({ outcomes: true, order: "desc" });
     if (error) return <Error>{error.toString()}</Error>;
-    if (isLoading) return <Loading />;
+    if (!games) return <Loading />;
 
     const events: GameEvent[] = [];
     for (let game of games) {
-        const outcomes = getOutcomes(game.lastUpdate);
+        const outcomes = getOutcomes(game.data);
         for (let outcome of outcomes) {
             const lastEvent = events[events.length - 1];
-            if (lastEvent && lastEvent.game == game.id && lastEvent.type == outcome.name) {
+            if (lastEvent && lastEvent.game === game.id && lastEvent.type === outcome.name) {
                 lastEvent.text.push(outcome.text);
                 continue;
             }
 
-            if (outcome.name == "Party")
+            if (outcome.name === "Party")
                 // too damn many
                 continue;
 
             events.push({
                 game: game.id,
-                season: game.lastUpdate.season,
-                day: game.lastUpdate.day,
-                homeTeam: getTeam(game.lastUpdate, "home"),
-                awayTeam: getTeam(game.lastUpdate, "away"),
+                season: game.data.season,
+                day: game.data.day,
+                homeTeam: getTeam(game.data, "home"),
+                awayTeam: getTeam(game.data, "away"),
                 type: outcome.name,
                 text: [outcome.text],
                 color: outcome.color,
@@ -78,17 +77,9 @@ export function EventsPage() {
             <h2 className="text-2xl font-semibold mb-2">Recent game events</h2>
 
             <div className="flex flex-col">
-                <InfiniteScroll
-                    next={nextPage}
-                    hasMore={hasMoreData}
-                    loader={<Loading />}
-                    dataLength={events.length}
-                    scrollThreshold="500px"
-                >
-                    {events.map((evt, idx) => (
-                        <EventRow evt={evt} key={idx} />
-                    ))}
-                </InfiniteScroll>
+                {events.map((evt, idx) => (
+                    <EventRow evt={evt} key={idx} />
+                ))}
             </div>
         </Container>
     );

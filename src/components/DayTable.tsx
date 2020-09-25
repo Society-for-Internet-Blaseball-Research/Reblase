@@ -22,7 +22,7 @@ const EventsGrid = "col-start-2 justify-self-end";
 const DividerGrid = "col-start-1 col-end-5";
 
 const Weather = (props: GameProps) => {
-    const evt = props.game.lastUpdate;
+    const evt = props.game.data;
 
     const weather = getWeather(evt);
     if (!weather) return <pre>{evt.weather}</pre>;
@@ -39,7 +39,7 @@ const Weather = (props: GameProps) => {
 };
 
 const Score = (props: GameProps) => {
-    const evt = props.game.lastUpdate;
+    const evt = props.game.data;
 
     let color = "bg-green-200 text-green-800";
     if (evt.shame) color = "bg-purple-200 text-purple-800";
@@ -53,7 +53,7 @@ const Score = (props: GameProps) => {
 };
 
 const Inning = (props: GameProps) => {
-    const evt = props.game.lastUpdate;
+    const evt = props.game.data;
     const arrow = evt.topOfInning ? "\u25B2" : "\u25BC";
     return (
         <span className={`${InningGrid} text-sm font-semibold text-right w-8 mr-1 leading-6`}>
@@ -74,7 +74,7 @@ const Duration = (props: GameProps) => {
 
     return (
         <Link className={`${DurationGrid} w-16 text-center text-xs font-semibold`} to={`/game/${props.game.id}`}>
-            <span className="">{content}</span>
+            <span>{content}</span>
         </Link>
     );
 };
@@ -82,31 +82,33 @@ const Duration = (props: GameProps) => {
 function Team({ team, otherTeam, className }: { team: TeamInfo; otherTeam: TeamInfo; className: string }) {
     const weight = team.score > otherTeam.score ? "font-semibold" : "font-normal";
     return (
-        <span className={`${className} ${weight}`}>
+        <span className={`${className}`}>
             <Emoji emoji={team.emoji} className={"mr-2"} />
-            <span>{team.nickname}</span>
+            <span className={`${weight}`}>{team.nickname}</span>
+
+            <span className="text-sm ml-2 text-gray-700 italic">{team.pitcherName}</span>
         </span>
     );
 }
 
 const AwayTeam = (props: GameProps) => (
     <Team
-        team={getTeam(props.game.lastUpdate, "away")}
-        otherTeam={getTeam(props.game.lastUpdate, "home")}
+        team={getTeam(props.game.data, "away")}
+        otherTeam={getTeam(props.game.data, "home")}
         className={AwayTeamGrid}
     />
 );
 
 const HomeTeam = (props: GameProps) => (
     <Team
-        team={getTeam(props.game.lastUpdate, "home")}
-        otherTeam={getTeam(props.game.lastUpdate, "away")}
+        team={getTeam(props.game.data, "home")}
+        otherTeam={getTeam(props.game.data, "away")}
         className={HomeTeamGrid}
     />
 );
 
 const Events = (props: GameProps) => {
-    const outcomes = getOutcomes(props.game.lastUpdate);
+    const outcomes = getOutcomes(props.game.data);
     if (!outcomes) return <></>;
 
     const style: Record<string, string> = {

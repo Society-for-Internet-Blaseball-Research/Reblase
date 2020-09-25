@@ -103,8 +103,9 @@ const GamePageOptions = (props: GamePageOptionsProps) => {
     );
 };
 
+type GamePageParams = { gameId?: string };
 export function GamePage() {
-    const { gameId } = useParams();
+    const { gameId } = useParams<GamePageParams>();
 
     // Never reuse caches across multiple games, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [gameId]);
@@ -117,10 +118,14 @@ export function GamePage() {
 
     if (options.autoUpdate && !options.reverse) setOptions({ ...options, reverse: true });
 
-    const { updates, error, isLoading } = useGameUpdates(gameId, options.autoUpdate);
+    const query = {
+        game: gameId ?? "null",
+        started: true,
+    };
+    const { updates, error, isLoading } = useGameUpdates(query, options.autoUpdate);
     if (error) return <Error>{error.toString()}</Error>;
 
-    const last = updates[updates.length - 1]?.payload;
+    const last = updates[updates.length - 1]?.data;
 
     // Stop autoupdating once the game is over
     if (last?.gameComplete && options.autoUpdate) setOptions({ ...options, autoUpdate: false });

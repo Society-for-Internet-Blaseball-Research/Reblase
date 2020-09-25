@@ -21,7 +21,7 @@ export function getPitchingTeam(evt: GamePayload): TeamInfo {
 }
 
 export function getTeam(evt: GamePayload, team: "home" | "away"): TeamInfo {
-    const nullIfEmpty = (s: string | null) => (s == "" ? null : s);
+    const nullIfEmpty = (s: string | null) => (s === "" ? null : s);
 
     if (team === "home") {
         return {

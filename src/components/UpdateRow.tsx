@@ -104,8 +104,8 @@ function BlaseRunners({ evt }: UpdateProps) {
 }
 
 export const UpdateRow = React.memo(
-    function UpdateRow({ update, ...props }: WrappedUpdateProps) {
-        const evt = update.payload;
+    function UpdateRow({ update }: WrappedUpdateProps) {
+        const evt = update.data;
 
         return (
             <div className="contents">
@@ -120,6 +120,6 @@ export const UpdateRow = React.memo(
         );
     },
     (oldProps, newProps) => {
-        return oldProps.update.id == newProps.update.id;
+        return oldProps.update.hash === newProps.update.hash;
     }
 );
