@@ -5,7 +5,7 @@ import { Loading } from "../components/Loading";
 import Error from "../components/Error";
 import { Game } from "../blaseball/game";
 import dayjs from "dayjs";
-import { Link, useHistory, withRouter } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function SeasonRow(props: { game: Game }) {
     const history = useHistory();
