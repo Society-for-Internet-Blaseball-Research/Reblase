@@ -1,4 +1,4 @@
-import {GamePayload} from "./update";
+import { GamePayload } from "./update";
 
 export interface Game {
     id: string;

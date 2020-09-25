@@ -8,7 +8,7 @@ export interface GamePayload {
     atBatStrikes: number;
     atBatBalls: number;
     halfInningOuts: number;
-    
+
     homeStrikes: number;
     awayStrikes: number;
 
@@ -38,9 +38,9 @@ export interface GamePayload {
 
 export type GameUpdate = {
     id: string;
-    timestamp: string,
-    payload: GamePayload
-}
+    timestamp: string;
+    payload: GamePayload;
+};
 
 const importantMessages: RegExp[] = [
     /hits a (Single|Double|Triple|grand slam)/,
@@ -58,13 +58,11 @@ const importantMessages: RegExp[] = [
     /hits [\w\s]+ with a pitch/,
     /The Shame Pit/,
     /Red Hot/,
-    /they peck [\w\s]+ free!/
+    /they peck [\w\s]+ free!/,
 ];
 
 export function isImportant(evt: GamePayload): boolean {
-    for (const regex of importantMessages)
-        if (regex.test(evt.lastUpdate))
-            return true;
+    for (const regex of importantMessages) if (regex.test(evt.lastUpdate)) return true;
 
     return false;
 }

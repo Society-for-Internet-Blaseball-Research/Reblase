@@ -6,7 +6,7 @@ interface CirclesProps {
     label: string;
 }
 
-export function Circles({amount, total, label}: CirclesProps) {
+export function Circles({ amount, total, label }: CirclesProps) {
     let circlesStr = "";
     for (let i = 0; i < total; i++) {
         circlesStr += i < amount ? "\u25c9" : "\u25cb";

@@ -1,4 +1,4 @@
-import {GamePayload} from "./update";
+import { GamePayload } from "./update";
 
 export interface TeamInfo {
     batterName: string | null;
@@ -21,7 +21,7 @@ export function getPitchingTeam(evt: GamePayload): TeamInfo {
 }
 
 export function getTeam(evt: GamePayload, team: "home" | "away"): TeamInfo {
-    const nullIfEmpty = (s: string | null) => s == "" ? null : s;
+    const nullIfEmpty = (s: string | null) => (s == "" ? null : s);
 
     if (team === "home") {
         return {
@@ -33,7 +33,7 @@ export function getTeam(evt: GamePayload, team: "home" | "away"): TeamInfo {
             score: evt.homeScore,
             isBatting: !evt.topOfInning,
             isPitching: evt.topOfInning,
-            maxStrikes: evt.homeStrikes
+            maxStrikes: evt.homeStrikes,
         };
     } else {
         return {
@@ -45,7 +45,7 @@ export function getTeam(evt: GamePayload, team: "home" | "away"): TeamInfo {
             score: evt.awayScore,
             isBatting: evt.topOfInning,
             isPitching: !evt.topOfInning,
-            maxStrikes: evt.awayStrikes
-        }
+            maxStrikes: evt.awayStrikes,
+        };
     }
 }
