@@ -6,6 +6,7 @@ import { GamePage } from "./pages/GamePage";
 import { SeasonPage } from "./pages/SeasonPage";
 import { Home } from "./pages/Home";
 import { EventsPage } from "./pages/EventsPage";
+import { SeasonListPage } from "./pages/SeasonListPage";
 
 export default function App() {
     return (
@@ -13,6 +14,7 @@ export default function App() {
             <PageLayout>
                 <Switch>
                     <Route path="/game/:gameId" component={GamePage} />
+                    <Route path="/seasons" component={SeasonListPage} />
                     <Route path="/season/:season" component={SeasonPage} />
                     <Route path="/events" component={EventsPage} />
                     <Route path="/" component={Home} />
