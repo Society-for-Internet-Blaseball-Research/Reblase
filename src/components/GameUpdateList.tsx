@@ -100,21 +100,30 @@ export function GameUpdateList(props: GameUpdateListProps) {
         props.filterImportant,
     ]);
 
-    var elems = [];
+    var grouped = [];
     for (const elem of elements) {
         if (elem.type === "heading") {
-            elems.push({ firstUpdate: elem.update.data, updates: [] as GameUpdate[] });
+            grouped.push({ firstUpdate: elem.update, updates: [] as GameUpdate[] });
         } else {
-            elems[elems.length - 1].updates.push(elem.update);
+            grouped[grouped.length - 1].updates.push(elem.update);
         }
     }
 
     return (
-        <div className="grid grid-flow-row-dense gap-2 items-center" style={{ gridTemplateColumns: "auto auto 1fr" }}>
-            {elements.map((elem) => {
-                if (elem.type === "row") return <UpdateRow key={elem.update.hash + "_update"} update={elem.update} />;
-                else return <InningHeader key={elem.update.hash + "_heading"} evt={elem.update.data} />;
-            })}
+        <div className="flex flex-col">
+            {grouped.map((group) => (
+                <div key={group.firstUpdate.hash + "_group"}>
+                    <InningHeader key={group.firstUpdate.hash + "_heading"} evt={group.firstUpdate.data} />
+                    <div
+                        className="grid grid-flow-row-dense gap-2 items-center"
+                        style={{ gridTemplateColumns: "auto auto 1fr" }}
+                    >
+                        {group.updates.map((update) => (
+                            <UpdateRow key={update.hash + "_update"} update={update} />
+                        ))}
+                    </div>
+                </div>
+            ))}
         </div>
     );
 }
