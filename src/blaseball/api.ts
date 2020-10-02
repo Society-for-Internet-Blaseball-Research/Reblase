@@ -4,8 +4,7 @@ import useSWR, { useSWRInfinite } from "swr";
 import { useEffect, useState } from "react";
 import queryString from "query-string";
 
-// empty string local, also try eg. https://blase.srv.astr.cc/
-const BASE_URL = process.env.REACT_APP_SIBR_API;
+export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
 
 export interface EventsResponse {
     games: Game[];
@@ -41,10 +40,12 @@ interface GameUpdatesQuery {
     game: string;
     started: boolean;
     after?: string;
+    count?: number;
 }
 
 export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): GameUpdatesHookReturn {
     // First load of original data
+    query.count = 1000; // should be enough, right? :)
     const { data: initialData, error } = useSWR<GameUpdate[]>(
         BASE_URL + `/games/updates?${queryString.stringify(query)}`,
         {
