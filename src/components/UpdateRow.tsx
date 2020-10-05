@@ -1,17 +1,19 @@
-﻿import { GamePayload, GameUpdate, isImportant } from "../blaseball/update";
+﻿import { isImportant } from "../blaseball/update";
 import { getBattingTeam } from "../blaseball/team";
 import { Circles } from "./Circles";
 import React from "react";
 import dayjs from "dayjs";
 import Emoji from "./Emoji";
 import Tooltip from "rc-tooltip";
+import { BlaseGame } from "../blaseball/models";
+import { ChronGameUpdate } from "../blaseball/chronicler";
 
 interface WrappedUpdateProps {
-    update: GameUpdate;
+    update: ChronGameUpdate;
 }
 
 interface UpdateProps {
-    evt: GamePayload;
+    evt: BlaseGame;
 }
 
 const TimestampGrid = "col-start-4 col-end-4 lg:col-start-1 lg:col-end-1";

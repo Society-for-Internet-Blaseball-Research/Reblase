@@ -9,7 +9,9 @@
         },
         extend: {},
     },
-    variants: {},
+    variants: {
+        backgroundColor: ["responsive", "odd", "hover", "focus"],
+    },
     plugins: [],
     future: {
         removeDeprecatedGapUtilities: true,

@@ -1,4 +1,4 @@
-import { GamePayload } from "./update";
+import { BlaseGame } from "./models";
 
 interface Weather {
     name: string;
@@ -14,6 +14,10 @@ export const weatherTypes: Partial<Record<number, Weather>> = {
     13: { name: "Reverb", emoji: "\u{1F30A}" },
 };
 
-export function getWeather(evt: GamePayload): Weather | null {
+export function getWeather(evt: BlaseGame): Weather | null {
     return weatherTypes[evt.weather] ?? null;
+}
+
+export function getWeatherById(weather: number): Weather | null {
+    return weatherTypes[weather] ?? null;
 }

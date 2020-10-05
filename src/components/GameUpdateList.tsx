@@ -1,13 +1,15 @@
-﻿import { GamePayload, GameUpdate, isImportant } from "../blaseball/update";
+﻿import { isImportant } from "../blaseball/update";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
 import { getBattingTeam, getPitchingTeam } from "../blaseball/team";
 
 import "../style/GamePage.css";
 import Emoji from "./Emoji";
+import { ChronGameUpdate } from "../blaseball/chronicler";
+import { BlaseGame } from "../blaseball/models";
 
 interface UpdateProps {
-    evt: GamePayload;
+    evt: BlaseGame;
 }
 
 export const InningHeader = React.memo(function InningHeader(props: UpdateProps) {
@@ -40,16 +42,20 @@ export const InningHeader = React.memo(function InningHeader(props: UpdateProps)
 });
 
 interface GameUpdateListProps {
-    updates: GameUpdate[];
+    updates: ChronGameUpdate[];
     updateOrder: "asc" | "desc";
     filterImportant: boolean;
 }
 
 type Element =
-    | { type: "row"; update: GameUpdate }
-    | { type: "heading"; update: GameUpdate; inning: number; top: boolean };
+    | { type: "row"; update: ChronGameUpdate }
+    | { type: "heading"; update: ChronGameUpdate; inning: number; top: boolean };
 
-function addInningHeaderRows(updates: GameUpdate[], direction: "asc" | "desc", filterImportant: boolean): Element[] {
+function addInningHeaderRows(
+    updates: ChronGameUpdate[],
+    direction: "asc" | "desc",
+    filterImportant: boolean
+): Element[] {
     const elements: Element[] = [];
 
     let lastPayload = null;
@@ -103,7 +109,7 @@ export function GameUpdateList(props: GameUpdateListProps) {
     var grouped = [];
     for (const elem of elements) {
         if (elem.type === "heading") {
-            grouped.push({ firstUpdate: elem.update, updates: [] as GameUpdate[] });
+            grouped.push({ firstUpdate: elem.update, updates: [] as ChronGameUpdate[] });
         } else {
             grouped[grouped.length - 1].updates.push(elem.update);
         }

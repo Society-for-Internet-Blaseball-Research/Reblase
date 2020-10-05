@@ -2,11 +2,11 @@
 
 import { Loading } from "../components/Loading";
 import { Container } from "../components/Container";
-import { useGameList } from "../blaseball/api";
 import { getOutcomes } from "../blaseball/outcome";
 import Error from "../components/Error";
 import { getTeam, TeamInfo } from "../blaseball/team";
 import { Link } from "react-router-dom";
+import { useGameList } from "../blaseball/hooks";
 
 interface GameEvent {
     game: string;
@@ -40,16 +40,16 @@ const EventRow = ({ evt }: { evt: GameEvent }) => {
 };
 
 export function EventsPage() {
-    const { games, error } = useGameList({ outcomes: true, order: "desc" });
+    const { games, error, isLoading } = useGameList({ outcomes: true, order: "desc" });
     if (error) return <Error>{error.toString()}</Error>;
-    if (!games) return <Loading />;
+    if (isLoading) return <Loading />;
 
     const events: GameEvent[] = [];
     for (let game of games) {
         const outcomes = getOutcomes(game.data);
         for (let outcome of outcomes) {
             const lastEvent = events[events.length - 1];
-            if (lastEvent && lastEvent.game === game.id && lastEvent.type === outcome.name) {
+            if (lastEvent && lastEvent.game === game.gameId && lastEvent.type === outcome.name) {
                 lastEvent.text.push(outcome.text);
                 continue;
             }
@@ -59,7 +59,7 @@ export function EventsPage() {
                 continue;
 
             events.push({
-                game: game.id,
+                game: game.gameId,
                 season: game.data.season,
                 day: game.data.day,
                 homeTeam: getTeam(game.data, "home"),

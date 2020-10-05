@@ -2,16 +2,17 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { Loading } from "../components/Loading";
-import { useGameUpdates } from "../blaseball/api";
 import { GameUpdateList } from "../components/GameUpdateList";
-import { GamePayload, GameUpdate } from "../blaseball/update";
 import { cache } from "swr";
 import Spinner from "../components/Spinner";
 import Error from "../components/Error";
+import { useGameUpdates } from "../blaseball/hooks";
+import { ChronGameUpdate } from "../blaseball/chronicler";
+import { BlaseGame } from "../blaseball/models";
 
 interface UpdatesListFetchingProps {
     isLoading: boolean;
-    updates: GameUpdate[];
+    updates: ChronGameUpdate[];
     order: "asc" | "desc";
     filterImportant: boolean;
     autoRefresh: boolean;
@@ -34,7 +35,7 @@ function UpdatesListFetching(props: UpdatesListFetchingProps) {
 }
 
 interface PayloadProps {
-    evt: GamePayload;
+    evt: BlaseGame;
 }
 
 const GameHeading = (props: PayloadProps) => (

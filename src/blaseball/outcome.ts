@@ -1,6 +1,6 @@
-import { GamePayload } from "./update";
+import { BlaseGame } from "./models";
 
-interface Outcome {
+export interface Outcome {
     name: string;
     emoji: string;
     text: string;
@@ -15,7 +15,7 @@ interface OutcomeType {
 }
 
 export const outcomeTypes: OutcomeType[] = [
-    { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "yellow" },
+    { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "gray" },
     { name: "Chain", emoji: "\u{1F517}", search: [/The Instability chains/i], color: "grey" },
     { name: "Reverb", emoji: "\u{1F30A}", search: [/reverb/i], color: "blue" },
     { name: "Feedback", emoji: "\u{1F3A4}", search: [/feedback/i], color: "pink" },
@@ -27,9 +27,9 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Peanut", emoji: "\u{1F95C}", search: [/peanut/i], color: "orange" },
 ];
 
-export function getOutcomes(evt: GamePayload): Outcome[] {
+export function getOutcomesFromData(outcomes: string[]): Outcome[] {
     const foundOutcomes = [];
-    for (const outcomeText of evt.outcomes) {
+    for (const outcomeText of outcomes) {
         let foundType = null;
         for (const outcomeType of outcomeTypes) {
             for (const outcomeSearch of outcomeType.search) {
@@ -48,4 +48,8 @@ export function getOutcomes(evt: GamePayload): Outcome[] {
     }
 
     return foundOutcomes;
+}
+
+export function getOutcomes(evt: BlaseGame): Outcome[] {
+    return getOutcomesFromData(evt.outcomes);
 }

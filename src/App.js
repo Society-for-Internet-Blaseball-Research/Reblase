@@ -7,16 +7,23 @@ import { SeasonPage } from "./pages/SeasonPage";
 import { Home } from "./pages/Home";
 import { EventsPage } from "./pages/EventsPage";
 import { SeasonListPage } from "./pages/SeasonListPage";
+// import { PlayersPage } from "./pages/PlayersPage";
+
+const swrConfig = {
+    fetcher: (...args) => fetch(...args).then((res) => res.json()),
+    revalidateOnFocus: false,
+};
 
 export default function App() {
     return (
-        <SWRConfig value={{ fetcher: (...args) => fetch(...args).then((res) => res.json()) }}>
+        <SWRConfig value={swrConfig}>
             <PageLayout>
                 <Switch>
                     <Route path="/game/:gameId" component={GamePage} />
                     <Route path="/seasons" component={SeasonListPage} />
                     <Route path="/season/:season" component={SeasonPage} />
                     <Route path="/events" component={EventsPage} />
+                    {/* <Route path="/players" component={PlayersPage} /> */}
                     <Route path="/" component={Home} />
                 </Switch>
             </PageLayout>

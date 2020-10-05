@@ -1,19 +1,19 @@
 import React from "react";
-import { useGameList } from "../blaseball/api";
 import { Container } from "../components/Container";
 import { Loading } from "../components/Loading";
 import Error from "../components/Error";
-import { Game } from "../blaseball/game";
 import dayjs from "dayjs";
 import { Link, useHistory } from "react-router-dom";
+import { useGameList } from "../blaseball/hooks";
+import { ChronGame } from "../blaseball/chronicler";
 
-function SeasonRow(props: { game: Game }) {
+function SeasonRow(props: { game: ChronGame }) {
     const history = useHistory();
 
-    const { start, data } = props.game;
+    const { startTime, data } = props.game;
 
-    const startDate = dayjs(start!);
-    const endDate = dayjs(start!).add(6, "day");
+    const startDate = startTime ? dayjs(startTime) : null;
+    const endDate = startTime ? dayjs(startTime).add(6, "day") : null;
     const dateFormat = "MMM D, YYYY";
 
     const target = `/season/${data.season + 1}`;
@@ -24,7 +24,7 @@ function SeasonRow(props: { game: Game }) {
         >
             <span className="text-lg font-semibold">Season {data.season + 1}</span>
             <span className="text-gray-700 ml-4 mr-auto">
-                {startDate.format(dateFormat)} - {endDate.format(dateFormat)}
+                {startDate?.format(dateFormat) ?? "TBD"} - {endDate?.format(dateFormat) ?? "TBD"}
             </span>
             <Link to={target}>
                 <span className="text-semibold">View games</span>
@@ -34,11 +34,11 @@ function SeasonRow(props: { game: Game }) {
 }
 
 export function SeasonListPage() {
-    const query = { day: 0, started: true };
-    const { games, error } = useGameList(query);
+    const query = { day: 0 };
+    const { games, error, isLoading } = useGameList(query);
 
     if (error) return <Error>{error.toString()}</Error>;
-    if (!games) return <Loading />;
+    if (isLoading) return <Loading />;
 
     const seasons = [];
     for (const game of games) seasons[game.data.season] = game;

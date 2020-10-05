@@ -1,4 +1,4 @@
-import { GamePayload } from "./update";
+import { BlaseGame } from "./models";
 
 export interface TeamInfo {
     batterName: string | null;
@@ -12,40 +12,40 @@ export interface TeamInfo {
     maxStrikes: number;
 }
 
-export function getBattingTeam(evt: GamePayload): TeamInfo {
-    return evt.topOfInning ? getTeam(evt, "away") : getTeam(evt, "home");
+export function getBattingTeam(game: BlaseGame): TeamInfo {
+    return game.topOfInning ? getTeam(game, "away") : getTeam(game, "home");
 }
 
-export function getPitchingTeam(evt: GamePayload): TeamInfo {
-    return evt.topOfInning ? getTeam(evt, "home") : getTeam(evt, "away");
+export function getPitchingTeam(game: BlaseGame): TeamInfo {
+    return game.topOfInning ? getTeam(game, "home") : getTeam(game, "away");
 }
 
-export function getTeam(evt: GamePayload, team: "home" | "away"): TeamInfo {
+export function getTeam(game: BlaseGame, team: "home" | "away"): TeamInfo {
     const nullIfEmpty = (s: string | null) => (s === "" ? null : s);
 
     if (team === "home") {
         return {
-            batterName: nullIfEmpty(evt.homeBatterName),
-            pitcherName: nullIfEmpty(evt.homePitcherName),
-            emoji: evt.homeTeamEmoji,
-            name: evt.homeTeamName,
-            nickname: evt.homeTeamNickname,
-            score: evt.homeScore,
-            isBatting: !evt.topOfInning,
-            isPitching: evt.topOfInning,
-            maxStrikes: evt.homeStrikes,
+            batterName: nullIfEmpty(game.homeBatterName),
+            pitcherName: nullIfEmpty(game.homePitcherName),
+            emoji: game.homeTeamEmoji,
+            name: game.homeTeamName,
+            nickname: game.homeTeamNickname,
+            score: game.homeScore,
+            isBatting: !game.topOfInning,
+            isPitching: game.topOfInning,
+            maxStrikes: game.homeStrikes,
         };
     } else {
         return {
-            batterName: nullIfEmpty(evt.awayBatterName),
-            pitcherName: nullIfEmpty(evt.awayPitcherName),
-            emoji: evt.awayTeamEmoji,
-            name: evt.awayTeamName,
-            nickname: evt.awayTeamNickname,
-            score: evt.awayScore,
-            isBatting: evt.topOfInning,
-            isPitching: !evt.topOfInning,
-            maxStrikes: evt.awayStrikes,
+            batterName: nullIfEmpty(game.awayBatterName),
+            pitcherName: nullIfEmpty(game.awayPitcherName),
+            emoji: game.awayTeamEmoji,
+            name: game.awayTeamName,
+            nickname: game.awayTeamNickname,
+            score: game.awayScore,
+            isBatting: game.topOfInning,
+            isPitching: !game.topOfInning,
+            maxStrikes: game.awayStrikes,
         };
     }
 }

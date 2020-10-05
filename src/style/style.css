@@ -18,10 +18,23 @@
     a:hover {
         @apply underline;
     }
+
+    /* Twemoji support */
+    img.emoji {
+        display: inline-block;
+        height: 1em;
+        width: 1em;
+        margin: 0 .05em 0 .1em;
+        vertical-align: -0.15em;
+    }
 }
 
 @layer components {
     .tag {
         @apply text-sm rounded px-2 py-1 inline-flex items-center justify-center;
+    }
+
+    .tag-sm {
+        @apply text-sm rounded px-2 inline-flex items-center justify-center;
     }
 }
