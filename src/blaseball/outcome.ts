@@ -18,6 +18,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "gray" },
     { name: "Chain", emoji: "\u{1F517}", search: [/The Instability chains/i], color: "grey" },
     { name: "Reverb", emoji: "\u{1F30A}", search: [/reverb/i], color: "blue" },
+    { name: "Beaned", emoji: "\u{1F3AF}", search: [/hits [\w\s]+ with a pitch/], color: "blue" },
     { name: "Feedback", emoji: "\u{1F3A4}", search: [/feedback/i], color: "pink" },
     { name: "Incineration", emoji: "\u{1F525}", search: [/rogue umpire/i], color: "orange" },
     { name: "Blooddrain", emoji: "\u{1FA78}", search: [/blooddrain/i], color: "purple" },
