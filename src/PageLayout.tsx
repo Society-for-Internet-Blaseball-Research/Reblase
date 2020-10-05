@@ -12,7 +12,7 @@ export function PageLayout(props: { children: React.ReactNode }) {
                 Brought to you by the {"\u{1f36c}"} Breath Mints.
                 <br />
                 <a href="https://twitter.com/floofstrid">Author</a> (@Ske#6201) |{" "}
-                <a href="https://github.com/xSke/BlaseballData">GitHub</a> |{" "}
+                <a href="https://github.com/Society-for-Internet-Blaseball-Research/Reblase">GitHub</a> |{" "}
                 <a href="https://discord.gg/XKppCuj">SIBR Discord</a>
             </div>
         </div>
