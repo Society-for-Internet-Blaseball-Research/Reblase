@@ -114,6 +114,7 @@ export function SeasonPage() {
 
     return (
         <Container className={"mt-4"}>
+            <p className="mb-2"><Link to="/seasons">&larr; Back to Seasons</Link></p>
             <h2 className="text-2xl font-semibold mb-4"><Link to={location.pathname}>Games in Season {season}</Link></h2>
 
             <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">

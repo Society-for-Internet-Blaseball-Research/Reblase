@@ -14,10 +14,12 @@ function SeasonRow(props: { game: ChronGame }) {
     const endDate = startTime ? dayjs(startTime).add(6, "day") : null;
     const dateFormat = "MMM D, YYYY";
 
-    const target = `/season/${data.season + 1}`;
+    const displaySeasonNumber = data.season + 1;
+
+    const target = `/season/${displaySeasonNumber}`;
     return (
-        <Link className="flex px-4 py-2 border-b border-solid border-gray-300 items-center cursor-pointer hover:bg-gray-200" to={target}>
-            <span className="text-lg font-semibold">Season {data.season + 1}</span>
+        <Link className="flex px-4 py-2 border-b border-solid border-gray-300 items-center hover:bg-gray-200" to={target}>
+            <span className="text-lg font-semibold">Season {displaySeasonNumber}</span>
             <span className="text-gray-700 ml-4 mr-auto">
                 {startDate?.format(dateFormat) ?? "TBD"} - {endDate?.format(dateFormat) ?? "TBD"}
             </span>
