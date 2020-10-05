@@ -18,6 +18,7 @@ const importantMessages: RegExp[] = [
     /Red Hot/,
     /they peck [\w\s]+ free!/,
     /Big Peanut/,
+    /flock of Crows/,
 ];
 
 export function isImportant(evt: BlaseGame): boolean {
