@@ -3,8 +3,7 @@ import Tooltip from "rc-tooltip";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChronGame } from "../blaseball/chronicler";
-import { BlaseGame } from "../blaseball/models";
-import { getOutcomes, getOutcomesFromData, Outcome } from "../blaseball/outcome";
+import { getOutcomesFromData, Outcome } from "../blaseball/outcome";
 import { getWeatherById } from "../blaseball/weather";
 import Twemoji from "./Twemoji";
 
