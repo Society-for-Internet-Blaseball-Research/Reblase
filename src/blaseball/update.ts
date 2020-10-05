@@ -17,6 +17,7 @@ const importantMessages: RegExp[] = [
     /The Shame Pit/,
     /Red Hot/,
     /they peck [\w\s]+ free!/,
+    /Big Peanut/,
 ];
 
 export function isImportant(evt: BlaseGame): boolean {
