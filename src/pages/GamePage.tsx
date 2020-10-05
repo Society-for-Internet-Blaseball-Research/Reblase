@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router";
 
 import { Loading } from "../components/Loading";
 import { GameUpdateList } from "../components/GameUpdateList";
@@ -9,6 +9,7 @@ import Error from "../components/Error";
 import { useGameUpdates } from "../blaseball/hooks";
 import { ChronGameUpdate } from "../blaseball/chronicler";
 import { BlaseGame } from "../blaseball/models";
+import { Link } from "react-router-dom";
 
 interface UpdatesListFetchingProps {
     isLoading: boolean;
@@ -38,18 +39,25 @@ interface PayloadProps {
     evt: BlaseGame;
 }
 
-const GameHeading = (props: PayloadProps) => (
-    <>
-        <h2 className="text-3xl font-semibold">
-            Season {props.evt.season + 1}, Day {props.evt.day + 1}
-        </h2>
-        <h3>
-            <strong>{props.evt.awayTeamName}</strong>
-            <small> vs. </small>
-            <strong>{props.evt.homeTeamName}</strong>
-        </h3>
-    </>
-);
+const GameHeading = ({ evt }: PayloadProps) => {
+    const location = useLocation();
+
+    const displaySeasonNumber = evt.season + 1;
+
+    return (<>
+        <p className="mb-2"><Link to={`/season/${displaySeasonNumber}`}>&larr; Back to Season {displaySeasonNumber}</Link></p>
+        <Link to={location.pathname}>
+            <h2 className="text-3xl font-semibold">
+                Season {displaySeasonNumber}, Day {evt.day + 1}
+            </h2>
+            <h3>
+                <strong>{evt.awayTeamName}</strong>
+                <small> vs. </small>
+                <strong>{evt.homeTeamName}</strong>
+            </h3>
+        </Link>
+    </>);
+};
 
 interface GamePageOptions {
     reverse: boolean;
