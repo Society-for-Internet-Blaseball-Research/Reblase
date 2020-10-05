@@ -1,4 +1,4 @@
-﻿import { useParams } from "react-router";
+﻿import { useLocation, useParams } from "react-router";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { DayTable } from "../components/DayTable";
@@ -13,6 +13,7 @@ import OutcomePicker from "../components/OutcomePicker";
 import { getOutcomes } from "../blaseball/outcome";
 import WeatherPicker from "../components/WeatherPicker";
 import Checkbox from "../components/Checkbox";
+import { Link } from "react-router-dom";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
 function groupByDay(games: ChronGame[]): GameDay[] {
@@ -93,6 +94,8 @@ interface SeasonPageParams {
 }
 
 export function SeasonPage() {
+    const location = useLocation();
+
     let { season: seasonStr } = useParams<SeasonPageParams>();
     const season = parseInt(seasonStr);
 
@@ -111,7 +114,7 @@ export function SeasonPage() {
 
     return (
         <Container className={"mt-4"}>
-            <h2 className="text-2xl font-semibold mb-4">Games in Season {season}</h2>
+            <h2 className="text-2xl font-semibold mb-4"><Link to={location.pathname}>Games in Season {season}</Link></h2>
 
             <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>
