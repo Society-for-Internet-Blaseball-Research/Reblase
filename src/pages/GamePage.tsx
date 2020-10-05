@@ -41,19 +41,21 @@ interface PayloadProps {
 
 const GameHeading = ({ evt }: PayloadProps) => {
     const location = useLocation();
-    
+
     const displaySeasonNumber = evt.season + 1;
 
     return (<>
         <p className="mb-2"><Link to={`/season/${displaySeasonNumber}`}>&larr; Back to Season {displaySeasonNumber}</Link></p>
-        <h2 className="text-3xl font-semibold">
-            <Link to={location.pathname}>Season {displaySeasonNumber}, Day {evt.day + 1}</Link>
-        </h2>
-        <h3>
-            <strong>{evt.awayTeamName}</strong>
-            <small> vs. </small>
-            <strong>{evt.homeTeamName}</strong>
-        </h3>
+        <Link to={location.pathname}>
+            <h2 className="text-3xl font-semibold">
+                Season {displaySeasonNumber}, Day {evt.day + 1}
+            </h2>
+            <h3>
+                <strong>{evt.awayTeamName}</strong>
+                <small> vs. </small>
+                <strong>{evt.homeTeamName}</strong>
+            </h3>
+        </Link>
     </>);
 };
 
