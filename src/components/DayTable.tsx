@@ -14,9 +14,9 @@ interface DayTableProps {
 export const DayTable = function DayTable(props: DayTableProps) {
     return (
         <>
-            <h3 className="font-semibold mt-4 mb-2 mr-2">
+            {/* <h3 className="font-semibold mt-4 mb-2 mr-2">
                 Season {props.season}, Day {props.day}
-            </h3>
+            </h3> */}
 
             {props.games.map((game) => (
                 <GameRow
