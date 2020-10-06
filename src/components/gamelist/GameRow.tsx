@@ -2,10 +2,10 @@ import dayjs from "dayjs";
 import Tooltip from "rc-tooltip";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ChronGame } from "../blaseball/chronicler";
-import { getOutcomesFromData, Outcome } from "../blaseball/outcome";
-import { getWeatherById } from "../blaseball/weather";
-import Twemoji from "./Twemoji";
+import { ChronGame } from "../../blaseball/chronicler";
+import { getOutcomesFromData, Outcome } from "../../blaseball/outcome";
+import { getWeatherById } from "../../blaseball/weather";
+import Twemoji from "../elements/Twemoji";
 
 const Events = React.memo((props: { outcomes: string[] }) => {
     const outcomes = getOutcomesFromData(props.outcomes);

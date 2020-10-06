@@ -1,18 +1,18 @@
 ﻿import { useLocation, useParams } from "react-router";
 import React, { useEffect, useMemo, useState } from "react";
 
-import { DayTable } from "../components/DayTable";
-import { Loading } from "../components/Loading";
-import { Container } from "../components/Container";
-import Error from "../components/Error";
+import { DayTable } from "../components/gamelist/DayTable";
+import { Loading } from "../components/elements/Loading";
+import { Container } from "../components/layout/Container";
+import Error from "../components/elements/Error";
 import { cache } from "swr";
 import { useGameList, usePlayerTeamsList } from "../blaseball/hooks";
 import { ChronGame } from "../blaseball/chronicler";
-import TeamPicker from "../components/TeamPicker";
-import OutcomePicker from "../components/OutcomePicker";
+import TeamPicker from "../components/elements/TeamPicker";
+import OutcomePicker from "../components/elements/OutcomePicker";
 import { getOutcomes } from "../blaseball/outcome";
-import WeatherPicker from "../components/WeatherPicker";
-import Checkbox from "../components/Checkbox";
+import WeatherPicker from "../components/elements/WeatherPicker";
+import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
@@ -114,8 +114,12 @@ export function SeasonPage() {
 
     return (
         <Container className={"mt-4"}>
-            <p className="mb-2"><Link to="/seasons">&larr; Back to Seasons</Link></p>
-            <h2 className="text-2xl font-semibold mb-4"><Link to={location.pathname}>Games in Season {season}</Link></h2>
+            <p className="mb-2">
+                <Link to="/seasons">&larr; Back to Seasons</Link>
+            </p>
+            <h2 className="text-2xl font-semibold mb-4">
+                <Link to={location.pathname}>Games in Season {season}</Link>
+            </h2>
 
             <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>

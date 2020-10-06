@@ -1,12 +1,12 @@
-﻿import { isImportant } from "../blaseball/update";
-import { getBattingTeam } from "../blaseball/team";
-import { Circles } from "./Circles";
+﻿import { isImportant } from "../../blaseball/update";
+import { getBattingTeam } from "../../blaseball/team";
+import { Circles } from "../elements/Circles";
 import React from "react";
 import dayjs from "dayjs";
-import Emoji from "./Emoji";
-import Tooltip from "rc-tooltip";
-import { BlaseGame } from "../blaseball/models";
-import { ChronGameUpdate } from "../blaseball/chronicler";
+import Emoji from "../elements/Emoji";
+import { BlaseGame } from "../../blaseball/models";
+import { ChronGameUpdate } from "../../blaseball/chronicler";
+import BaseDisplay from "../elements/BaseDisplay";
 
 interface WrappedUpdateProps {
     update: ChronGameUpdate;
@@ -67,41 +67,25 @@ const Outs = ({ evt }: UpdateProps) => <Circles label="Outs" amount={evt.halfInn
 
 function AtBatInfo({ evt }: UpdateProps) {
     return (
-        <div className={`${AtBatGrid} flex flex-row`}>
+        <div className={`${AtBatGrid} flex flex-row items-center space-x-2`}>
             <BlaseRunners evt={evt} />
-            <Balls evt={evt} />
-            <Strikes evt={evt} />
-            <Outs evt={evt} />
+            <span className="flex space-x-1">
+                <Balls evt={evt} />
+                <Strikes evt={evt} />
+                <Outs evt={evt} />
+            </span>
         </div>
     );
 }
-
-function Base({ base, evt }: { base: number } & UpdateProps) {
-    const { basesOccupied, baseRunnerNames } = evt;
-
-    const myIndex = basesOccupied.indexOf(base);
-    const glyph = myIndex > -1 ? "\u{25C6}" : "\u{25C7}";
-
-    const name = myIndex > -1 && baseRunnerNames ? baseRunnerNames[myIndex] : null;
-
-    if (name) {
-        return (
-            <Tooltip placement="top" overlay={<span>{name}</span>}>
-                <span className={`BlaseRunners-Base-${base}`}>{glyph}</span>
-            </Tooltip>
-        );
-    }
-
-    return <span className={`BlaseRunners-Base-${base}`}>{glyph}</span>;
-}
-
 function BlaseRunners({ evt }: UpdateProps) {
+    const basesIncludingHome = (evt.topOfInning ? evt.awayBases : evt.homeBases) ?? 4;
+
     return (
-        <span className="BlaseRunners">
-            <Base evt={evt} base={2} />
-            <Base evt={evt} base={1} />
-            <Base evt={evt} base={0} />
-        </span>
+        <BaseDisplay
+            basesOccupied={evt.basesOccupied}
+            baseRunnerNames={evt.baseRunnerNames}
+            totalBases={basesIncludingHome - 1}
+        />
     );
 }
 

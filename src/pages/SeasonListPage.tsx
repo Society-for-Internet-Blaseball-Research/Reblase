@@ -1,7 +1,7 @@
 import React from "react";
-import { Container } from "../components/Container";
-import { Loading } from "../components/Loading";
-import Error from "../components/Error";
+import { Container } from "../components/layout/Container";
+import { Loading } from "../components/elements/Loading";
+import Error from "../components/elements/Error";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { useGameList } from "../blaseball/hooks";
@@ -18,7 +18,10 @@ function SeasonRow(props: { game: ChronGame }) {
 
     const target = `/season/${displaySeasonNumber}`;
     return (
-        <Link className="flex px-4 py-2 border-b border-solid border-gray-300 items-center hover:bg-gray-200" to={target}>
+        <Link
+            className="flex px-4 py-2 border-b border-solid border-gray-300 items-center hover:bg-gray-200"
+            to={target}
+        >
             <span className="text-lg font-semibold">Season {displaySeasonNumber}</span>
             <span className="text-gray-700 ml-4 mr-auto">
                 {startDate?.format(dateFormat) ?? "TBD"} - {endDate?.format(dateFormat) ?? "TBD"}

@@ -1,7 +1,7 @@
 import React from "react";
 import Twemoji from "./Twemoji";
 import Select from "react-select";
-import { weatherTypes } from "../blaseball/weather";
+import { weatherTypes } from "../../blaseball/weather";
 
 export interface WeatherPickerProps {
     placeholder?: string;

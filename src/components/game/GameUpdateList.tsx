@@ -1,12 +1,12 @@
-﻿import { isImportant } from "../blaseball/update";
+﻿import { isImportant } from "../../blaseball/update";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
-import { getBattingTeam, getPitchingTeam } from "../blaseball/team";
+import { getBattingTeam, getPitchingTeam } from "../../blaseball/team";
 
-import "../style/GamePage.css";
-import Emoji from "./Emoji";
-import { ChronGameUpdate } from "../blaseball/chronicler";
-import { BlaseGame } from "../blaseball/models";
+import "../../style/GamePage.css";
+import Emoji from "../elements/Emoji";
+import { ChronGameUpdate } from "../../blaseball/chronicler";
+import { BlaseGame } from "../../blaseball/models";
 
 interface UpdateProps {
     evt: BlaseGame;

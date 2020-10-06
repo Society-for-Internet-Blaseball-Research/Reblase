@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { ChronTeam } from "../blaseball/chronicler";
+import { ChronTeam } from "../../blaseball/chronicler";
 import Twemoji from "./Twemoji";
 
 export interface TeamPickerProps {

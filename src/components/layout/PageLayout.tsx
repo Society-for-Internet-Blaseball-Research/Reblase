@@ -1,5 +1,5 @@
 import React from "react";
-import { NavMenu } from "./components/NavMenu";
+import { NavMenu } from "./NavMenu";
 
 export function PageLayout(props: { children: React.ReactNode }) {
     return (

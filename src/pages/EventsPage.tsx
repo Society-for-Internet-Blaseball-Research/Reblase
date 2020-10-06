@@ -1,9 +1,9 @@
 ﻿import React from "react";
 
-import { Loading } from "../components/Loading";
-import { Container } from "../components/Container";
+import { Loading } from "../components/elements/Loading";
+import { Container } from "../components/layout/Container";
 import { getOutcomes } from "../blaseball/outcome";
-import Error from "../components/Error";
+import Error from "../components/elements/Error";
 import { getTeam, TeamInfo } from "../blaseball/team";
 import { Link } from "react-router-dom";
 import { useGameList } from "../blaseball/hooks";

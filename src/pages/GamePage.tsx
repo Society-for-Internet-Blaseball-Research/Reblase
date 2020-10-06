@@ -1,11 +1,11 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
 
-import { Loading } from "../components/Loading";
-import { GameUpdateList } from "../components/GameUpdateList";
+import { Loading } from "../components/elements/Loading";
+import { GameUpdateList } from "../components/game/GameUpdateList";
 import { cache } from "swr";
-import Spinner from "../components/Spinner";
-import Error from "../components/Error";
+import Spinner from "../components/elements/Spinner";
+import Error from "../components/elements/Error";
 import { useGameUpdates } from "../blaseball/hooks";
 import { ChronGameUpdate } from "../blaseball/chronicler";
 import { BlaseGame } from "../blaseball/models";
@@ -44,19 +44,23 @@ const GameHeading = ({ evt }: PayloadProps) => {
 
     const displaySeasonNumber = evt.season + 1;
 
-    return (<>
-        <p className="mb-2"><Link to={`/season/${displaySeasonNumber}`}>&larr; Back to Season {displaySeasonNumber}</Link></p>
-        <Link to={location.pathname}>
-            <h2 className="text-3xl font-semibold">
-                Season {displaySeasonNumber}, Day {evt.day + 1}
-            </h2>
-            <h3>
-                <strong>{evt.awayTeamName}</strong>
-                <small> vs. </small>
-                <strong>{evt.homeTeamName}</strong>
-            </h3>
-        </Link>
-    </>);
+    return (
+        <>
+            <p className="mb-2">
+                <Link to={`/season/${displaySeasonNumber}`}>&larr; Back to Season {displaySeasonNumber}</Link>
+            </p>
+            <Link to={location.pathname}>
+                <h2 className="text-3xl font-semibold">
+                    Season {displaySeasonNumber}, Day {evt.day + 1}
+                </h2>
+                <h3>
+                    <strong>{evt.awayTeamName}</strong>
+                    <small> vs. </small>
+                    <strong>{evt.homeTeamName}</strong>
+                </h3>
+            </Link>
+        </>
+    );
 };
 
 interface GamePageOptions {

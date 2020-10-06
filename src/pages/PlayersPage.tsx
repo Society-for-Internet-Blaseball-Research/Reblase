@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import { CellProps, Column, ColumnInstance, useSortBy, UseSortByColumnProps, useTable } from "react-table";
-import { Loading } from "../components/Loading";
-import Error from "../components/Error";
-import { Container } from "../components/Container";
-import { Stars } from "../components/Stars";
+import { Loading } from "../components/elements/Loading";
+import Error from "../components/elements/Error";
+import { Container } from "../components/layout/Container";
+import { Stars } from "../components/elements/Stars";
 import { usePlayerTeamsList } from "../blaseball/hooks";
 import { ChronPlayer } from "../blaseball/chronicler";
 

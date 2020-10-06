@@ -1,5 +1,5 @@
 import React from "react";
-import { outcomeTypes } from "../blaseball/outcome";
+import { outcomeTypes } from "../../blaseball/outcome";
 import Twemoji from "./Twemoji";
 import Select from "react-select";
 

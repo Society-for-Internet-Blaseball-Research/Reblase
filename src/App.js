@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router";
-import { PageLayout } from "./PageLayout";
+import { PageLayout } from "./components/layout/PageLayout";
 import { SWRConfig } from "swr";
 import { GamePage } from "./pages/GamePage";
 import { SeasonPage } from "./pages/SeasonPage";
