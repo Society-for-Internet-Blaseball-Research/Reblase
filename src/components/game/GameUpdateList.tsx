@@ -1,5 +1,5 @@
 ﻿import { isImportant } from "../../blaseball/update";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
 import { getBattingTeam, getPitchingTeam } from "../../blaseball/team";
 
