@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { BlaseGame, BlasePlayer, BlaseTeam } from "./models";
+import { BlaseGame, BlasePlayer, BlaseTeam, BlaseTemporal } from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
 
@@ -26,6 +26,7 @@ export const chroniclerApi = {
     gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "/games/updates?" + queryString.stringify(query),
     players: () => BASE_URL + "/players",
     teams: () => BASE_URL + "/teams",
+    temporal: () => BASE_URL + "/temporal/updates",
 };
 
 export interface ChronResponse<T> {
@@ -76,14 +77,6 @@ export interface ChronPlayer {
     data: BlasePlayer;
 }
 
-export interface ChronPlayerUpdate {
-    updateId: string;
-    playerId: string;
-    firstSeen: Timestamp;
-    lastSeen: Timestamp;
-    data: BlasePlayer;
-}
-
 export interface ChronSiteUpdate {
     timestamp: Timestamp;
     path: string;
@@ -98,16 +91,25 @@ export interface ChronTeam {
     data: BlaseTeam;
 }
 
-export interface ChronTeamUpdate {
-    updateId: string;
-    teamId: string;
-    firstSeen: Timestamp;
-    lastSeen: Timestamp;
-    data: BlaseTeam;
-}
-
 export interface ChronTributeUpdate {
     updateId: string;
     timestamp: Timestamp;
     players: Partial<Record<string, number>>;
+}
+
+export interface ChronEntityVersion<T> {
+    updateId: string;
+    firstSeen: Timestamp;
+    lastSeen: Timestamp;
+    data: T;
+}
+
+export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseTemporal> {}
+
+export interface ChronPlayerUpdate extends ChronEntityVersion<BlasePlayer> {
+    playerId: string;
+}
+
+export interface ChronTeamUpdate extends ChronEntityVersion<BlaseTeam> {
+    teamId: string;
 }

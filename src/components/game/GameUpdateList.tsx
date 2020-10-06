@@ -1,5 +1,5 @@
 ﻿import { isImportant } from "../../blaseball/update";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef } from "react";
 import { UpdateRow } from "./UpdateRow";
 import { getBattingTeam, getPitchingTeam } from "../../blaseball/team";
 
@@ -115,18 +115,18 @@ export function GameUpdateList(props: GameUpdateListProps) {
         }
     }
 
+    const scrollTarget = window.location.hash.replace("#", "");
+
     return (
         <div className="flex flex-col">
             {grouped.map((group) => (
                 <div key={group.firstUpdate.hash + "_group"}>
                     <InningHeader key={group.firstUpdate.hash + "_heading"} evt={group.firstUpdate.data} />
-                    <div
-                        className="grid grid-flow-row-dense gap-2 items-center"
-                        style={{ gridTemplateColumns: "auto auto 1fr" }}
-                    >
-                        {group.updates.map((update) => (
-                            <UpdateRow key={update.hash + "_update"} update={update} />
-                        ))}
+                    <div className="flex flex-col">
+                        {group.updates.map((update) => {
+                            const highlight = update.hash === scrollTarget;
+                            return <UpdateRow key={update.hash + "_update"} update={update} highlight={highlight} />;
+                        })}
                     </div>
                 </div>
             ))}

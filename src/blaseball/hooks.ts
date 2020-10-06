@@ -7,6 +7,7 @@ import {
     ChronPlayer,
     ChronResponse,
     ChronTeam,
+    ChronTemporalUpdate,
     GameListQuery,
     GameUpdatesQuery,
 } from "./chronicler";
@@ -99,5 +100,21 @@ export function usePlayerTeamsList(): PlayerTeamsHookReturn {
         teamsObj,
         error: playersError || teamsError,
         isLoading: (!players || !teams) && !(playersError || teamsError),
+    };
+}
+
+interface TemporalHookReturn {
+    updates: ChronTemporalUpdate[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useTemporal(): TemporalHookReturn {
+    const { data, error } = useSWR<ChronResponse<ChronTemporalUpdate>>(chroniclerApi.temporal);
+
+    return {
+        updates: data?.data ?? [],
+        error,
+        isLoading: !data && !error,
     };
 }

@@ -163,3 +163,14 @@ export interface HasAttributes {
     weekAttr: Attribute[];
     gameAttr: Attribute[];
 }
+
+export interface BlaseTemporal {
+    doc?: {
+        alpha: number;
+        beta: number;
+        zeta: string;
+        delta: boolean;
+        gamma: number;
+        epsilon: boolean;
+    };
+}

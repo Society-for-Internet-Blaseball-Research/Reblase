@@ -1,12 +1,13 @@
 ﻿import { isImportant } from "../../blaseball/update";
 import { getBattingTeam } from "../../blaseball/team";
 import { Circles } from "../elements/Circles";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import Emoji from "../elements/Emoji";
 import { BlaseGame } from "../../blaseball/models";
 import { ChronGameUpdate } from "../../blaseball/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
+import { AiOutlineLink } from "react-icons/ai";
 
 interface WrappedUpdateProps {
     update: ChronGameUpdate;
@@ -21,7 +22,7 @@ const ScoreGrid = "col-start-1 col-end-1 lg:col-start-2 lg:col-end-2";
 const GameLogGrid = "col-start-1 col-end-4 lg:col-start-3 lg:col-end-3";
 const BatterGrid = "col-start-2 col-end-2 justify-self-start lg:col-start-4 lg:col-end-4 lg:justify-self-end";
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
-const DividerGrid = "col-start-1 col-end-5 lg:col-end-6";
+const LinkGrid = "lg:col-start-6 lg:col-end-6";
 
 function Timestamp({ update }: WrappedUpdateProps) {
     const updateTime = dayjs(update.timestamp);
@@ -89,23 +90,50 @@ function BlaseRunners({ evt }: UpdateProps) {
     );
 }
 
+interface UpdateRowProps extends WrappedUpdateProps {
+    highlight: boolean;
+}
+
+function UpdateLink(props: { hash: string }) {
+    const href = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + props.hash;
+    return (
+        <a href={href} className={`${LinkGrid} -mr-16 pl-4 cursor-pointer text-lg text-gray-500 hover:text-gray-900`}>
+            <AiOutlineLink />
+        </a>
+    );
+}
+
 export const UpdateRow = React.memo(
-    function UpdateRow({ update }: WrappedUpdateProps) {
+    function UpdateRow({ update, highlight }: UpdateRowProps) {
         const evt = update.data;
 
+        const scrollRef = useRef<HTMLDivElement>(null);
+        useEffect(() => {
+            if (highlight) {
+                scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }, [highlight, scrollRef]);
+
         return (
-            <div className="contents">
+            <div
+                ref={highlight ? scrollRef : undefined}
+                className={
+                    "grid grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300 " +
+                    (highlight ? "bg-yellow-200" : "")
+                }
+                style={{ gridTemplateColumns: "auto auto 1fr" }}
+            >
                 <GameLog evt={evt} />
                 <Timestamp update={update} />
                 <Score evt={evt} />
                 <Batter evt={evt} />
                 <AtBatInfo evt={evt} />
 
-                <div className={`${DividerGrid} border-b border-solid border-gray-300`} />
+                <UpdateLink hash={update.hash} />
             </div>
         );
     },
     (oldProps, newProps) => {
-        return oldProps.update.hash === newProps.update.hash;
+        return oldProps.update.hash === newProps.update.hash && oldProps.highlight === newProps.highlight;
     }
 );

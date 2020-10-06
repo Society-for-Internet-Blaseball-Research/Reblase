@@ -21,7 +21,7 @@ export function Circles({ amount, total, label }: CirclesProps) {
         const filled = i < amount;
 
         circles.push(
-            <svg className="inline-block" width={size} height={size}>
+            <svg key={i} className="inline-block" width={size} height={size}>
                 <circle cx={size / 2} cy={size / 2} r={radius} strokeWidth="1.2" stroke={color} fill="none" />
                 {filled && <circle cx={size / 2} cy={size / 2} r={radiusInner} fill={colorInner} />}
             </svg>
