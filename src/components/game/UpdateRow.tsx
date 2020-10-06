@@ -22,7 +22,7 @@ const ScoreGrid = "col-start-1 col-end-1 lg:col-start-2 lg:col-end-2";
 const GameLogGrid = "col-start-1 col-end-4 lg:col-start-3 lg:col-end-3";
 const BatterGrid = "col-start-2 col-end-2 justify-self-start lg:col-start-4 lg:col-end-4 lg:justify-self-end";
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
-const LinkGrid = "lg:col-start-6 lg:col-end-6";
+const LinkGrid = "hidden lg:block lg:col-start-6 lg:col-end-6";
 
 function Timestamp({ update }: WrappedUpdateProps) {
     const updateTime = dayjs(update.timestamp);
