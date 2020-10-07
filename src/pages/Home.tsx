@@ -22,7 +22,7 @@ export function Home() {
         if (gameLoadingError) return <Error>{gameLoadingError.toString()}</Error>;
         if (gamesAreLoading || simulationIsLoading) return <Loading />;
 
-        return <ul className="flex flex-col">
+        return <ul className="flex flex-col mb-3">
             {games && games.map((game: ChronGame) => {
                 const arrow = game.data.topOfInning ? "\u25B2" : "\u25BC";
 
@@ -54,6 +54,7 @@ export function Home() {
         </ul>;
     }
 
+    const displaySeasonNumber = simulation && simulation.season + 1;
 
     return <Container className="grid grid-cols-2 gap-4">
         <Container className="col-span-2">
@@ -65,8 +66,9 @@ export function Home() {
         </Container> */}
         <Container className="col-span-2 md:col-span-1">
             <h2 className="text-2xl font-semibold mb-2">Today's Games</h2>
-            {simulation && <h3 className="text-xl font-semibold mb-1">Season {simulation.season + 1}, Day {simulation.day + 1}</h3>}
+            {simulation && <h3 className="text-xl font-semibold mb-1">Season {displaySeasonNumber}, Day {simulation.day + 1}</h3>}
             {renderLiveGames()}
+            {simulation && <Link to={`/season/${displaySeasonNumber}`}>View all Season {displaySeasonNumber} games &rarr;</Link>}
         </Container>
     </Container>;
 }
