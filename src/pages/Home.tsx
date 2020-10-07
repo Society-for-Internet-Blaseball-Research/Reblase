@@ -44,7 +44,7 @@ export function Home() {
                         </div>
 
                         <div className="flex flex-col">
-                            <Weather weather={game.data.weather} />
+                            <Weather weather={game.data.weather} className="text-right" />
                             <div className="space-x-1 text-sm tabular-nums text-gray-700">
                                 <span>{game.data.inning + 1}</span>
                                 <span>{arrow}</span>
