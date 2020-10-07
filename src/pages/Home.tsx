@@ -25,6 +25,8 @@ export function Home() {
         return <ul className="flex flex-col mb-3">
             {games && games.map((game: ChronGame) => {
                 const arrow = game.data.topOfInning ? "\u25B2" : "\u25BC";
+                const homeTeamIsWinning = game.data.homeScore >= game.data.awayScore;
+                const awayTeamIsWinning = game.data.awayScore >= game.data.homeScore;
 
                 return <li key={game.gameId} className="flex hover:bg-gray-200">
                     <Link to={`/game/${game.gameId}`} className="flex-grow p-2 border-b border-gray-300 flex">
@@ -32,12 +34,12 @@ export function Home() {
                             <div className="space-x-2">
                                 <strong>{game.data.homeScore}</strong>
                                 <Twemoji emoji={game.data.homeTeamEmoji} />
-                                <span>{game.data.homeTeamNickname}</span>
+                                <span className={homeTeamIsWinning ? "font-semibold" : "font-normal"}>{game.data.homeTeamNickname}</span>
                             </div>
                             <div className="space-x-2">
                                 <strong>{game.data.awayScore}</strong>
                                 <Twemoji emoji={game.data.awayTeamEmoji} />
-                                <span>{game.data.awayTeamNickname}</span>
+                                <span className={awayTeamIsWinning ? "font-semibold" : "font-normal"}>{game.data.awayTeamNickname}</span>
                             </div>
                         </div>
 
