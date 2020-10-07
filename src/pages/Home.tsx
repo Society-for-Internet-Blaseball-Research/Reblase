@@ -1,5 +1,5 @@
 ﻿import { useGameList, useSimulation } from "../blaseball/hooks";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Error from "../components/elements/Error";
 
 import { Container } from "../components/layout/Container";
