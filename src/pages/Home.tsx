@@ -17,6 +17,14 @@ export function Home() {
         day: simulation ? simulation.day : undefined,
     });
 
+    function renderLiveGameTeam(score: number, emoji: string, isWinning: boolean, nickname: string) {
+        return <div className="space-x-2 flex">
+            <div className="w-6 text-right tabular-nums"><strong>{score}</strong></div>
+            <Twemoji emoji={emoji} />
+            <span className={isWinning ? "font-semibold" : "font-normal"}>{nickname}</span>
+        </div>
+    }
+
     function renderLiveGames() {
         if (simulationLoadingError) return <Error>{simulationLoadingError.toString()}</Error>
         if (gameLoadingError) return <Error>{gameLoadingError.toString()}</Error>;
@@ -31,16 +39,8 @@ export function Home() {
                 return <li key={game.gameId} className="flex hover:bg-gray-200">
                     <Link to={`/game/${game.gameId}`} className="flex-grow p-2 border-b border-gray-300 flex">
                         <div className="flex-grow flex flex-col">
-                            <div className="space-x-2">
-                                <strong>{game.data.homeScore}</strong>
-                                <Twemoji emoji={game.data.homeTeamEmoji} />
-                                <span className={homeTeamIsWinning ? "font-semibold" : "font-normal"}>{game.data.homeTeamNickname}</span>
-                            </div>
-                            <div className="space-x-2">
-                                <strong>{game.data.awayScore}</strong>
-                                <Twemoji emoji={game.data.awayTeamEmoji} />
-                                <span className={awayTeamIsWinning ? "font-semibold" : "font-normal"}>{game.data.awayTeamNickname}</span>
-                            </div>
+                            {renderLiveGameTeam(game.data.homeScore, game.data.homeTeamEmoji, homeTeamIsWinning, game.data.homeTeamNickname)}
+                            {renderLiveGameTeam(game.data.awayScore, game.data.awayTeamEmoji, awayTeamIsWinning, game.data.awayTeamNickname)}
                         </div>
 
                         <div className="flex flex-col">
