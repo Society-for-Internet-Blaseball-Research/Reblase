@@ -1,11 +1,12 @@
 import { BlaseGame } from "./models";
 
 const importantMessages: RegExp[] = [
-    /hits a (Single|Double|Triple|grand slam)/,
-    /hits a (solo|2-run|3-run) home run/,
-    /steals (second base|third base|home)/,
+    // TODO once 5th base lands, are these correct?
+    /hits a (Single|Double|Triple|Quadruple|grand slam)/,
+    /hits a (solo|2-run|3-run|4-run) home run/,
+    /steals (second base|third base|fourth base|fifth base|home)/,
     /scores/,
-    /(2s|3s) score/,
+    /(2s|3s|4s) score/,
     /Rogue Umpire/,
     /feedback/,
     /Reverb/,
