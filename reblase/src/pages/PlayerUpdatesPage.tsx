@@ -179,7 +179,6 @@ export default function PlayerUpdatesPage() {
                                         />
                                     </li>
                                 );
-                                return <li>{update.firstSeen}</li>;
                             })}
                     </ul>
                 )}
