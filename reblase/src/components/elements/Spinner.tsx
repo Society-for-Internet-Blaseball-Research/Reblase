@@ -1,6 +1,6 @@
 ﻿import React from "react";
 
-import { CgSpinner } from "react-icons/cg/index";
+import { CgSpinner } from "react-icons/cg";
 
 export default function Spinner() {
     return (
