@@ -6,6 +6,7 @@ import {
     GameID,
     LeagueID,
     PlayerID,
+    PlayerStats,
     PlayoffsID,
     SeasonID,
     TeamID,
@@ -79,7 +80,7 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     repeatCount?: number;
 }
 
-export interface BlaseballPlayer extends BlaseballEntity<PlayerID>, BlaseballAttributes {
+export interface BlaseballPlayer extends BlaseballEntity<PlayerID>, BlaseballAttributes, PlayerStats {
     name: string;
 
     deceased: boolean;

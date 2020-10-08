@@ -12,6 +12,8 @@ import {
     GameUpdatesQuery,
     GameUpdatesResponse,
     chroniclerApi,
+    ChronPlayerUpdate,
+    PlayerUpdatesQuery,
 } from "blaseball-lib/chronicler";
 import { blaseballApi } from "blaseball-lib/api";
 import { BlaseballSimData } from "blaseball-lib/models";
@@ -137,4 +139,14 @@ export function useSimulation(): SimDataHookReturn {
         error,
         isLoading: !data && !error,
     };
+}
+
+export interface PlayerUpdatesHookReturn {
+    updates: ChronPlayerUpdate[] | undefined;
+    error: any;
+}
+
+export function usePlayerUpdates(query: PlayerUpdatesQuery): PlayerUpdatesHookReturn {
+    const { data, error } = useSWR<ChronResponse<ChronPlayerUpdate>>(chroniclerApi.playerUpdates(query));
+    return { updates: data?.data, error };
 }

@@ -106,4 +106,5 @@ export function getVibeCategory(vibe: number): VibeCategory {
     for (const category of allVibeCategories) {
         if (!category.threshold || vibe > category.threshold) return category;
     }
+    return allVibeCategories[allVibeCategories.length - 1];
 }

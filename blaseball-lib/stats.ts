@@ -53,15 +53,16 @@ export function calculateSkills(stats: PlayerStats) {
     };
 }
 
-export function skillToStars(skill: number): number {
-    return Math.round(skill * 5 * 2) / 2;
+export function skillToStars(skill: number, rounded: "rounded" | "unrounded"): number {
+    if (rounded === "rounded") return Math.round(skill * 5 * 2) / 2;
+    else return skill * 5;
 }
 
-export function calculateStars(stats: PlayerStats) {
+export function calculateStars(stats: PlayerStats, rounded: "rounded" | "unrounded") {
     return {
-        batting: skillToStars(calculateBattingSkill(stats)),
-        pitching: skillToStars(calculatePitchingSkill(stats)),
-        baserunning: skillToStars(calculateBaserunningSkill(stats)),
-        defense: skillToStars(calculateDefenseSkill(stats)),
+        batting: skillToStars(calculateBattingSkill(stats), rounded),
+        pitching: skillToStars(calculatePitchingSkill(stats), rounded),
+        baserunning: skillToStars(calculateBaserunningSkill(stats), rounded),
+        defense: skillToStars(calculateDefenseSkill(stats), rounded),
     };
 }

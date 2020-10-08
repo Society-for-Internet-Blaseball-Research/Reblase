@@ -7,8 +7,14 @@ export const chroniclerApi = {
     gameList: (query: GameListQuery) => BASE_URL + "/games?" + queryString.stringify(query),
     gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "/games/updates?" + queryString.stringify(query),
     players: () => BASE_URL + "/players",
+    playerUpdates: (query: PlayerUpdatesQuery) => BASE_URL + "/players/updates?" + queryString.stringify(query),
     teams: () => BASE_URL + "/teams",
     temporalUpdates: () => BASE_URL + "/temporal/updates",
+};
+
+export type PlayerUpdatesQuery = {
+    player?: string;
+    order?: "asc" | "desc";
 };
 
 export type GameListQuery = {
