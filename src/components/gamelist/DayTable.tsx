@@ -18,7 +18,7 @@ export const DayTable = function DayTable(props: DayTableProps) {
 
     return (
         <>
-            <div className="flex flex-row items-baseline mt-4 mb-1 space-x-2">
+            <div className="flex flex-row items-baseline mt-4 space-x-2">
                 <span className="font-semibold">
                     Season {props.season}, Day {props.day}
                 </span>

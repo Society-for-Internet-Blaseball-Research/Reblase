@@ -4,73 +4,44 @@ import Error from "../components/elements/Error";
 
 import { Container } from "../components/layout/Container";
 import { Loading } from "../components/elements/Loading";
-import { ChronGame } from "../blaseball/chronicler";
 import { Link } from "react-router-dom";
-import Twemoji from "../components/elements/Twemoji";
-import { Weather } from "../components/gamelist/GameRow"
+import GameRow from "../components/gamelist/GameRow";
+
+function SingleDayGamesList(props: { season: number; day: number }) {
+    const { games, error, isLoading } = useGameList({ season: props.season, day: props.day });
+
+    if (error) return <Error>{error.toString()}</Error>;
+    if (isLoading) return <Loading />;
+    return (
+        <div className="flex flex-col">
+            {games.map((game) => {
+                return <GameRow game={game} showWeather={true} />;
+            })}
+        </div>
+    );
+}
 
 export function Home() {
     // Load games from the game list, or show error if there's an error, or loading if they're loading
     const { data: simulation, error: simulationLoadingError, isLoading: simulationIsLoading } = useSimulation();
-    const { games, error: gameLoadingError, isLoading: gamesAreLoading } = useGameList({
-        season: simulation ? simulation.season : undefined,
-        day: simulation ? simulation.day : undefined,
-    });
 
-    function renderLiveGameTeam(score: number, emoji: string, isWinning: boolean, nickname: string) {
-        return <div className="space-x-2 flex">
-            <div className="w-6 text-right tabular-nums"><strong>{score}</strong></div>
-            <Twemoji emoji={emoji} />
-            <span className={isWinning ? "font-semibold" : "font-normal"}>{nickname}</span>
-        </div>
-    }
+    if (simulationIsLoading) return <Loading />;
+    if (simulationLoadingError) return <Error>{simulationLoadingError.toString()}</Error>;
+    return (
+        <Container>
+            <p className="mb-4">Hi! {"\u{1F44B}"} Select a season up top to view more games.</p>
 
-    function renderLiveGames() {
-        if (simulationLoadingError) return <Error>{simulationLoadingError.toString()}</Error>
-        if (gameLoadingError) return <Error>{gameLoadingError.toString()}</Error>;
-        if (gamesAreLoading || simulationIsLoading) return <Loading />;
+            <div>
+                <h3 className="text-2xl font-semibold">Current games</h3>
+                <h4 className="text-md text-gray-700 mb-2">
+                    Season {simulation.season + 1}, Day {simulation.day + 1}
+                </h4>
 
-        return <ul className="flex flex-col mb-3">
-            {games && games.map((game: ChronGame) => {
-                const arrow = game.data.topOfInning ? "\u25B2" : "\u25BC";
-                const homeTeamIsWinning = game.data.homeScore >= game.data.awayScore;
-                const awayTeamIsWinning = game.data.awayScore >= game.data.homeScore;
-
-                return <li key={game.gameId} className="flex hover:bg-gray-200">
-                    <Link to={`/game/${game.gameId}`} className="flex-grow p-2 border-b border-gray-300 flex">
-                        <div className="flex-grow flex flex-col">
-                            {renderLiveGameTeam(game.data.homeScore, game.data.homeTeamEmoji, homeTeamIsWinning, game.data.homeTeamNickname)}
-                            {renderLiveGameTeam(game.data.awayScore, game.data.awayTeamEmoji, awayTeamIsWinning, game.data.awayTeamNickname)}
-                        </div>
-
-                        <div className="flex flex-col">
-                            <Weather weather={game.data.weather} className="text-right" />
-                            <div className="space-x-1 text-sm tabular-nums text-gray-700">
-                                <span>{game.data.inning + 1}</span>
-                                <span>{arrow}</span>
-                            </div>
-                        </div>
-                    </Link>
-                </li>
-            })}
-        </ul>;
-    }
-
-    const displaySeasonNumber = simulation && simulation.season + 1;
-
-    return <Container className="grid grid-cols-2 gap-4">
-        <Container className="col-span-2">
-            <p>Hi! {"\u{1F44B}"} Select a season up top to view more games.</p>
+                {simulation && <SingleDayGamesList season={simulation.season} day={simulation.day} />}
+                <Link className="block mt-2" to={`/season/${simulation.season + 1}`}>
+                    View all Season {simulation.season + 1} games &rarr;
+                </Link>
+            </div>
         </Container>
-        {/* <Container className="col-span-2 md:col-span-1">
-            <h2 className="text-2xl font-semibold mb-2">Recent Events</h2>
-            TODO: List recent events here
-        </Container> */}
-        <Container className="col-span-2 md:col-span-1">
-            <h2 className="text-2xl font-semibold mb-2">Today's Games</h2>
-            {simulation && <h3 className="text-xl font-semibold mb-1">Season {displaySeasonNumber}, Day {simulation.day + 1}</h3>}
-            {renderLiveGames()}
-            {simulation && <Link to={`/season/${displaySeasonNumber}`}>View all Season {displaySeasonNumber} games &rarr;</Link>}
-        </Container>
-    </Container>;
+    );
 }

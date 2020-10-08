@@ -181,7 +181,10 @@ export default React.memo(
         const weather = props.showWeather ? data.weather : null;
 
         return (
-            <div className="flex flex-row pb-2 border-b mb-2 border-gray-300 space-x-2 items-baseline">
+            <Link
+                to={`/game/${props.game.gameId}`}
+                className="flex flex-row px-2 py-2 border-b border-gray-300 space-x-2 items-baseline hover:bg-gray-200"
+            >
                 <div className="contents md:hidden">
                     <TwoLineTeamScore home={home} away={away} />
 
@@ -225,7 +228,7 @@ export default React.memo(
                         <Weather weather={weather} />
                     </div>
                 </div>
-            </div>
+            </Link>
         );
     },
     (prev, next) => prev.game.gameId === next.game.gameId && prev.showWeather === next.showWeather
