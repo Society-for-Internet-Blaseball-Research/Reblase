@@ -154,7 +154,7 @@ const StandalonePitchers = React.memo(
                 {props.awayPitcher ? props.awayPitcher : props.predictedAwayPitcher}
                 {" / "}
                 {props.homePitcher ? props.homePitcher : props.predictedHomePitcher}
-                {(props.predictedAwayPitcher || props.predictedHomePitcher) && " (est.)"}
+                {(!props.awayPitcher || !props.homePitcher) && " (est.)"}
             </div>
         );
     }
