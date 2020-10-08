@@ -80,7 +80,7 @@ const Duration = React.memo(
     }
 );
 
-const Weather = React.memo((props: { weather: number | null; className?: string }) => {
+export const Weather = React.memo((props: { weather: number | null; className?: string }) => {
     const weather = getWeatherById(props.weather ?? -1);
     if (!weather) return <Twemoji emoji={"\u{2753}"} className={props.className} />;
 

@@ -11,6 +11,7 @@ import {
     GameListQuery,
     GameUpdatesQuery,
 } from "./chronicler";
+import { Simulation } from "./models";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -117,4 +118,20 @@ export function useTemporal(): TemporalHookReturn {
         error,
         isLoading: !data && !error,
     };
+}
+
+interface SimulationHookReturn {
+    data: Simulation;
+    error: any;
+    isLoading: boolean
+}
+
+export function useSimulation(): SimulationHookReturn {
+    const {data, error} = useSWR<any>("https://api.sibr.dev/proxy/database/simulationData");
+    
+    return {
+        data,
+        error,
+        isLoading: !data && !error,
+    }
 }

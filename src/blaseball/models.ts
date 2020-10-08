@@ -174,3 +174,26 @@ export interface BlaseTemporal {
         epsilon: boolean;
     };
 }
+
+// See this API doc for more information about each field:
+// https://github.com/Society-for-Internet-Blaseball-Research/blaseball-api-spec/blob/master/simulation-data.md
+export interface Simulation {
+    id: string;
+    day: number;
+    league: string;
+    nextElectionEnd: string;
+    nextPhaseTime: string;
+    nextSeasonStart: string;
+    phase: number;
+    playOffRound: number;
+    playoffs: string;
+    rules: string;
+    season: number;
+    seasonId: string;
+    terminology: string;
+    eraColor: string;
+    eraTitle: string;
+    twgo: string;
+    subEraColor: string;
+    attr: string[];
+}
