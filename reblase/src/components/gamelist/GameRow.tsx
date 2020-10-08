@@ -96,6 +96,7 @@ interface TeamData {
     emoji: string;
     score: number;
     pitcher: string | null;
+    predictedPitcher: string | null;
     win: boolean;
 }
 
@@ -106,7 +107,9 @@ const TeamScoreLine = React.memo((props: { team: TeamData }) => {
             <span className={props.team.win ? "font-semibold" : "font-normal"}>
                 <Twemoji emoji={props.team.emoji} className="mr-1" /> {props.team.name}
             </span>
-            <span className="text-sm text-gray-700 italic">{props.team.pitcher}</span>
+            <span className="text-sm text-gray-700 italic">
+                {props.team.pitcher ? props.team.pitcher : `${props.team.predictedPitcher} (est.)`}
+            </span>
         </div>
     );
 });
@@ -139,12 +142,19 @@ const OneLineTeamScore = React.memo((props: { away: TeamData; home: TeamData; cl
 });
 
 const StandalonePitchers = React.memo(
-    (props: { homePitcher: string | null; awayPitcher: string | null; className?: string }) => {
+    (props: {
+        homePitcher: string | null;
+        awayPitcher: string | null;
+        predictedHomePitcher: string | null;
+        predictedAwayPitcher: string | null;
+        className?: string;
+    }) => {
         return (
             <div className={`text-sm text-gray-700 italic ${props.className}`}>
-                {props.awayPitcher ? props.awayPitcher : "TBD"}
+                {props.awayPitcher ? props.awayPitcher : props.predictedAwayPitcher}
                 {" / "}
-                {props.homePitcher ? props.homePitcher : "TBD"}
+                {props.homePitcher ? props.homePitcher : props.predictedHomePitcher}
+                {(props.predictedAwayPitcher || props.predictedHomePitcher) && " (est.)"}
             </div>
         );
     }
@@ -159,7 +169,12 @@ const SeasonDay = React.memo((props: { season: number; day: number; className?: 
 });
 
 export default React.memo(
-    (props: { game: ChronGame; showWeather: boolean }) => {
+    (props: {
+        game: ChronGame;
+        showWeather: boolean;
+        predictedHomePitcher: string | null;
+        predictedAwayPitcher: string | null;
+    }) => {
         const { data } = props.game;
 
         const home = {
@@ -167,6 +182,7 @@ export default React.memo(
             emoji: data.homeTeamEmoji,
             score: data.homeScore,
             pitcher: data.homePitcherName,
+            predictedPitcher: props.predictedHomePitcher,
             win: data.homeScore >= data.awayScore,
         };
 
@@ -175,6 +191,7 @@ export default React.memo(
             emoji: data.awayTeamEmoji,
             score: data.awayScore,
             pitcher: data.awayPitcherName,
+            predictedPitcher: props.predictedAwayPitcher,
             win: data.awayScore >= data.homeScore,
         };
 
@@ -213,6 +230,8 @@ export default React.memo(
                     <StandalonePitchers
                         awayPitcher={data.awayPitcherName}
                         homePitcher={data.homePitcherName}
+                        predictedAwayPitcher={props.predictedAwayPitcher}
+                        predictedHomePitcher={props.predictedHomePitcher}
                         className="flex flex-1"
                     />
 

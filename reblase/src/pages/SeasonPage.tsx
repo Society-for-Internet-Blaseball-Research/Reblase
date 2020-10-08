@@ -14,6 +14,8 @@ import { getOutcomes } from "../blaseball/outcome";
 import WeatherPicker from "../components/elements/WeatherPicker";
 import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
+import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
+import { PlayerID } from "blaseball-lib/common";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
 function groupByDay(games: ChronGame[]): GameDay[] {
@@ -35,23 +37,32 @@ function groupByDay(games: ChronGame[]): GameDay[] {
     return daysList;
 }
 
-const GamesList = React.memo((props: { days: GameDay[]; showFutureWeather: boolean }) => {
-    return (
-        <div>
-            {props.days.map(({ games, season, day }) => {
-                return (
-                    <DayTable
-                        key={day}
-                        season={season + 1}
-                        day={day + 1}
-                        games={games}
-                        showFutureWeather={props.showFutureWeather}
-                    />
-                );
-            })}
-        </div>
-    );
-});
+const GamesList = React.memo(
+    (props: { days: GameDay[]; players: BlaseballPlayer[]; teams: BlaseballTeam[]; showFutureWeather: boolean }) => {
+        const teamsMap: Record<PlayerID, BlaseballTeam> = {};
+        for (const team of props.teams) teamsMap[team.id!] = team;
+        const playersMap: Record<PlayerID, BlaseballPlayer> = {};
+        for (const player of props.players) playersMap[player.id!] = player;
+
+        return (
+            <div>
+                {props.days.map(({ games, season, day }) => {
+                    return (
+                        <DayTable
+                            key={day}
+                            season={season + 1}
+                            day={day + 1}
+                            games={games}
+                            teams={teamsMap}
+                            players={playersMap}
+                            showFutureWeather={props.showFutureWeather}
+                        />
+                    );
+                })}
+            </div>
+        );
+    }
+);
 
 function GamesListFetching(props: {
     season: number;
@@ -60,6 +71,9 @@ function GamesListFetching(props: {
     weather: number[] | null;
     showFutureGames: boolean;
     showFutureWeather: boolean;
+
+    allPlayers: BlaseballPlayer[];
+    allTeams: BlaseballTeam[];
 }) {
     let { games, error, isLoading } = useGameList({
         season: props.season - 1,
@@ -86,12 +100,29 @@ function GamesListFetching(props: {
     if (error) return <Error>{error}</Error>;
     if (isLoading) return <Loading />;
 
-    return <GamesList days={days} showFutureWeather={props.showFutureWeather} />;
+    return (
+        <GamesList
+            days={days}
+            players={props.allPlayers}
+            teams={props.allTeams}
+            showFutureWeather={props.showFutureWeather}
+        />
+    );
 }
 
 interface SeasonPageParams {
     season: string;
 }
+
+// const { data: teams, error: teamsError } = useSWR<BlaseballTeam[]>(blaseballApi.allTeams());
+// const { data: players, error: playersError } = useSWR<BlaseballPlayer[]>(() => {
+//     const pitchers = [];
+//     for (const team of teams ?? []) {
+//         pitchers.push(...team.rotation);
+//     }
+//     return pitchers.length ? blaseballApi.players(pitchers) : null;
+// });
+// if (error) return <Error>{error.toString()}</Error>;
 
 export function SeasonPage() {
     const location = useLocation();
@@ -105,7 +136,7 @@ export function SeasonPage() {
     let [showFutureGames, setShowFutureGames] = useState<boolean>(false);
     let [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
 
-    const { teams, error } = usePlayerTeamsList();
+    const { players, teams, error } = usePlayerTeamsList();
 
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
@@ -168,6 +199,8 @@ export function SeasonPage() {
                 weather={selectedWeather.length ? selectedWeather : null}
                 showFutureGames={showFutureGames}
                 showFutureWeather={showFutureWeather}
+                allPlayers={players.map((p) => p.data)}
+                allTeams={teams.map((p) => p.data)}
             />
         </Container>
     );

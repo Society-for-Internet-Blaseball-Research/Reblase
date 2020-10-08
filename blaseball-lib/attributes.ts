@@ -367,7 +367,12 @@ export interface AttributeInstance {
 }
 
 export function getAttribute(id: AttributeID): Attribute | null {
-    return attributeById[id] ? attributeById[id] : null;
+    return attributeById[id] ?? null;
+}
+
+export function hasAttribute(entity: BlaseballAttributes | BlaseballAttributesDeprecated, id: AttributeID) {
+    for (const attr of getAttributesFor(entity)) if (attr.attribute?.id === id) return true;
+    return false;
 }
 
 export function getAttributesFor(entity: BlaseballAttributes | BlaseballAttributesDeprecated) {

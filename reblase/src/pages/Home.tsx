@@ -15,7 +15,9 @@ function SingleDayGamesList(props: { season: number; day: number }) {
     return (
         <div className="flex flex-col">
             {games.map((game) => {
-                return <GameRow game={game} showWeather={true} />;
+                return (
+                    <GameRow game={game} showWeather={true} predictedAwayPitcher={null} predictedHomePitcher={null} />
+                );
             })}
         </div>
     );

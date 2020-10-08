@@ -9,6 +9,7 @@ import {
     PlayoffsID,
     SeasonID,
     TeamID,
+    TeamRoster,
 } from "./common";
 
 export interface BlaseballGame extends BlaseballEntity<GameID> {
@@ -99,7 +100,11 @@ export interface BlaseballPlayer extends BlaseballEntity<PlayerID>, BlaseballAtt
     consecutiveHits?: number;
 }
 
-export interface BlaseballTeam extends BlaseballEntity<TeamID>, BlaseballAttributes, BlaseballAttributesDeprecated {
+export interface BlaseballTeam
+    extends BlaseballEntity<TeamID>,
+        BlaseballAttributes,
+        BlaseballAttributesDeprecated,
+        TeamRoster {
     fullName: string;
     nickname: string;
     location: string;
