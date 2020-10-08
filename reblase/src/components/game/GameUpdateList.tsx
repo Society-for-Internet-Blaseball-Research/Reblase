@@ -1,15 +1,14 @@
-﻿import { isImportant } from "../../blaseball/update";
+﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
-import { getBattingTeam, getPitchingTeam } from "../../blaseball/team";
 
 import "../../style/GamePage.css";
 import Emoji from "../elements/Emoji";
-import { ChronGameUpdate } from "../../blaseball/chronicler";
-import { BlaseGame } from "../../blaseball/models";
+import { ChronGameUpdate } from "blaseball-lib/chronicler";
+import { BlaseballGame } from "blaseball-lib/models";
 
 interface UpdateProps {
-    evt: BlaseGame;
+    evt: BlaseballGame;
 }
 
 export const InningHeader = React.memo(function InningHeader(props: UpdateProps) {
@@ -63,7 +62,7 @@ function addInningHeaderRows(
         const payload = update.data;
         const row: Element = { type: "row", update };
 
-        if (filterImportant && !isImportant(payload)) continue;
+        if (filterImportant && !isGameUpdateImportant(payload.lastUpdate)) continue;
 
         if (!lastPayload || lastPayload.inning !== payload.inning || lastPayload.topOfInning !== payload.topOfInning) {
             // New inning, add header

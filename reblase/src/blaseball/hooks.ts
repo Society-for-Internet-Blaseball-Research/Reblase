@@ -3,15 +3,18 @@ import { useEffect, useMemo, useState } from "react";
 import {
     ChronGame,
     ChronGameUpdate,
-    chroniclerApi,
     ChronPlayer,
     ChronResponse,
     ChronTeam,
     ChronTemporalUpdate,
     GameListQuery,
+    GameListResponse,
     GameUpdatesQuery,
-} from "./chronicler";
-import { Simulation } from "./models";
+    GameUpdatesResponse,
+    chroniclerApi,
+} from "blaseball-lib/chronicler";
+import { blaseballApi } from "blaseball-lib/api";
+import { BlaseballSimData } from "blaseball-lib/models";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -20,7 +23,7 @@ interface GameListHookReturn {
 }
 
 export function useGameList(query: GameListQuery): GameListHookReturn {
-    const { data, error } = useSWR<ChronResponse<ChronGame>>(chroniclerApi.gameList(query));
+    const { data, error } = useSWR<GameListResponse>(chroniclerApi.gameList(query));
 
     return {
         games: data?.data ?? [],
@@ -38,7 +41,7 @@ interface GameUpdatesHookReturn {
 export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): GameUpdatesHookReturn {
     // First load of original data
     query.count = 1000; // should be enough, right? :)
-    const { data: initialData, error } = useSWR<ChronResponse<ChronGameUpdate>>(chroniclerApi.gameUpdates(query));
+    const { data: initialData, error } = useSWR<GameUpdatesResponse>(chroniclerApi.gameUpdates(query));
 
     // Updates added via autoupdating
     const [extraUpdates, setExtraUpdates] = useState<ChronGameUpdate[]>([]);
@@ -111,7 +114,7 @@ interface TemporalHookReturn {
 }
 
 export function useTemporal(): TemporalHookReturn {
-    const { data, error } = useSWR<ChronResponse<ChronTemporalUpdate>>(chroniclerApi.temporal);
+    const { data, error } = useSWR<ChronResponse<ChronTemporalUpdate>>(chroniclerApi.temporalUpdates());
 
     return {
         updates: data?.data ?? [],
@@ -120,18 +123,18 @@ export function useTemporal(): TemporalHookReturn {
     };
 }
 
-interface SimulationHookReturn {
-    data: Simulation;
+interface SimDataHookReturn {
+    data: BlaseballSimData | null;
     error: any;
-    isLoading: boolean
+    isLoading: boolean;
 }
 
-export function useSimulation(): SimulationHookReturn {
-    const {data, error} = useSWR<any>("https://api.sibr.dev/proxy/database/simulationData");
-    
+export function useSimulation(): SimDataHookReturn {
+    const { data, error } = useSWR<BlaseballSimData>(blaseballApi.simData());
+
     return {
-        data,
+        data: data ?? null,
         error,
         isLoading: !data && !error,
-    }
+    };
 }

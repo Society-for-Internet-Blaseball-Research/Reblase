@@ -2,13 +2,13 @@ import dayjs from "dayjs";
 import Tooltip from "rc-tooltip";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ChronGame } from "../../blaseball/chronicler";
-import { getOutcomesFromData, Outcome } from "../../blaseball/outcome";
-import { getWeatherById } from "../../blaseball/weather";
+import { ChronGame } from "blaseball-lib/chronicler";
+import { getOutcomes, Outcome } from "../../blaseball/outcome";
+import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "../elements/Twemoji";
 
 const Events = React.memo((props: { outcomes: string[] }) => {
-    const outcomes = getOutcomesFromData(props.outcomes);
+    const outcomes = getOutcomes(props.outcomes);
     if (!outcomes) return <></>;
 
     const style: Record<string, string> = {
@@ -81,12 +81,12 @@ const Duration = React.memo(
 );
 
 export const Weather = React.memo((props: { weather: number | null; className?: string }) => {
-    const weather = getWeatherById(props.weather ?? -1);
+    const weather = getWeather(props.weather ?? -1);
     if (!weather) return <Twemoji emoji={"\u{2753}"} className={props.className} />;
 
     return (
         <Tooltip placement="top" overlay={<span>{weather.name}</span>}>
-            <Twemoji emoji={weather.emoji} className={props.className} />
+            <Twemoji emoji={weather.emoji ?? "?"} className={props.className} />
         </Tooltip>
     );
 });

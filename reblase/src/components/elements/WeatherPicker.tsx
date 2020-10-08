@@ -1,7 +1,7 @@
 import React from "react";
 import Twemoji from "./Twemoji";
 import Select from "react-select";
-import { weatherTypes } from "../../blaseball/weather";
+import { allWeatherTypes } from "blaseball-lib/weather";
 
 export interface WeatherPickerProps {
     placeholder?: string;
@@ -10,25 +10,26 @@ export interface WeatherPickerProps {
 }
 
 export default function WeatherPicker(props: WeatherPickerProps) {
-    const items = Object.keys(weatherTypes).map((weatherId) => {
-        const weather = weatherTypes[parseInt(weatherId)]!;
-        return {
-            value: weatherId,
-            label: (
-                <span key={weatherId}>
-                    <Twemoji className="mr-1" emoji={weather.emoji} />
-                    {weather.name}
-                </span>
-            ),
-        };
-    });
+    const items = allWeatherTypes
+        .filter((w) => !w.forbidden)
+        .map((weather) => {
+            return {
+                value: weather.id,
+                label: (
+                    <span key={weather.name}>
+                        <Twemoji className="mr-1" emoji={weather.emoji ?? "?"} />
+                        {weather.name}
+                    </span>
+                ),
+            };
+        });
 
     return (
         <Select
             options={items}
             isMulti={true}
             placeholder={props.placeholder}
-            value={items.filter((item) => (props.selectedWeather ?? []).indexOf(parseInt(item.value)) !== -1)}
+            value={items.filter((item) => (props.selectedWeather ?? []).indexOf(item.value) !== -1)}
             onChange={(newItems, _) => {
                 const ids = ((newItems ?? []) as any[]).map((item) => parseInt(item.value));
                 if (props.setSelectedWeather) props.setSelectedWeather(ids);

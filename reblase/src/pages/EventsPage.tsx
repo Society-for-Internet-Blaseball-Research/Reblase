@@ -4,10 +4,10 @@ import { Loading } from "../components/elements/Loading";
 import { Container } from "../components/layout/Container";
 import { getOutcomes } from "../blaseball/outcome";
 import Error from "../components/elements/Error";
-import { getTeam, TeamInfo } from "../blaseball/team";
 import { Link } from "react-router-dom";
 import { useGameList, useTemporal } from "../blaseball/hooks";
 import dayjs from "dayjs";
+import { GameTeam, getAwayTeam, getHomeTeam } from "blaseball-lib/games";
 
 type TimedText = { text: string; timestamp: string };
 
@@ -25,8 +25,8 @@ interface GameEvent extends BaseEvent {
     game: string;
     season: number;
     day: number;
-    homeTeam: TeamInfo;
-    awayTeam: TeamInfo;
+    homeTeam: GameTeam;
+    awayTeam: GameTeam;
     text: string[];
 }
 
@@ -106,7 +106,7 @@ export function EventsPage() {
 
     const gameEvents: BlaseEvent[] = [];
     for (let game of games) {
-        const outcomes = getOutcomes(game.data);
+        const outcomes = getOutcomes(game.data.outcomes);
         for (let outcome of outcomes) {
             const lastEvent = gameEvents[gameEvents.length - 1];
             if (
@@ -128,8 +128,8 @@ export function EventsPage() {
                 game: game.gameId,
                 season: game.data.season,
                 day: game.data.day,
-                homeTeam: getTeam(game.data, "home"),
-                awayTeam: getTeam(game.data, "away"),
+                homeTeam: getHomeTeam(game.data),
+                awayTeam: getAwayTeam(game.data),
                 name: outcome.name,
                 text: [outcome.text],
                 color: outcome.color,

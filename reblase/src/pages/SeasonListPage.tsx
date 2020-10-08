@@ -5,7 +5,7 @@ import Error from "../components/elements/Error";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { useGameList } from "../blaseball/hooks";
-import { ChronGame } from "../blaseball/chronicler";
+import { ChronGame } from "blaseball-lib/chronicler";
 
 function SeasonRow(props: { game: ChronGame }) {
     const { startTime, data } = props.game;

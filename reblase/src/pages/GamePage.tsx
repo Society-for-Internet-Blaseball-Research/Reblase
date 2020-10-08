@@ -7,8 +7,8 @@ import { cache } from "swr";
 import Spinner from "../components/elements/Spinner";
 import Error from "../components/elements/Error";
 import { useGameUpdates } from "../blaseball/hooks";
-import { ChronGameUpdate } from "../blaseball/chronicler";
-import { BlaseGame } from "../blaseball/models";
+import { ChronGameUpdate } from "blaseball-lib/chronicler";
+import { BlaseballGame } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
 
 interface UpdatesListFetchingProps {
@@ -36,7 +36,7 @@ function UpdatesListFetching(props: UpdatesListFetchingProps) {
 }
 
 interface PayloadProps {
-    evt: BlaseGame;
+    evt: BlaseballGame;
 }
 
 const GameHeading = ({ evt }: PayloadProps) => {

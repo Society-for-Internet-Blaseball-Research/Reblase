@@ -1,5 +1,3 @@
-import { BlaseGame } from "./models";
-
 export interface Outcome {
     name: string;
     emoji: string;
@@ -28,7 +26,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Peanut", emoji: "\u{1F95C}", search: [/peanut/i], color: "orange" },
 ];
 
-export function getOutcomesFromData(outcomes: string[]): Outcome[] {
+export function getOutcomes(outcomes: string[]): Outcome[] {
     const foundOutcomes = [];
     for (const outcomeText of outcomes) {
         let foundType = null;
@@ -49,8 +47,4 @@ export function getOutcomesFromData(outcomes: string[]): Outcome[] {
     }
 
     return foundOutcomes;
-}
-
-export function getOutcomes(evt: BlaseGame): Outcome[] {
-    return getOutcomesFromData(evt.outcomes);
 }

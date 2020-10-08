@@ -7,7 +7,7 @@ import { Container } from "../components/layout/Container";
 import Error from "../components/elements/Error";
 import { cache } from "swr";
 import { useGameList, usePlayerTeamsList } from "../blaseball/hooks";
-import { ChronGame } from "../blaseball/chronicler";
+import { ChronGame } from "blaseball-lib/chronicler";
 import TeamPicker from "../components/elements/TeamPicker";
 import OutcomePicker from "../components/elements/OutcomePicker";
 import { getOutcomes } from "../blaseball/outcome";
@@ -73,7 +73,7 @@ function GamesListFetching(props: {
         let gamesFiltered = games;
         if (props.outcomes) {
             gamesFiltered = gamesFiltered.filter((game) => {
-                const gameOutcomes = getOutcomes(game.data);
+                const gameOutcomes = getOutcomes(game.data.outcomes);
                 for (const gameOutcome of gameOutcomes)
                     if (props.outcomes?.indexOf(gameOutcome.name) !== -1) return true;
                 return false;

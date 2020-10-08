@@ -1,9 +1,9 @@
 ﻿import dayjs from "dayjs";
 import React from "react";
-import { ChronGame } from "../../blaseball/chronicler";
 
 import "./DayTable.css";
 import GameRow from "./GameRow";
+import { ChronGame } from "blaseball-lib/chronicler";
 
 interface DayTableProps {
     games: ChronGame[];

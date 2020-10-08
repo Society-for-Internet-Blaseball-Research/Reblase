@@ -23,10 +23,11 @@ function SingleDayGamesList(props: { season: number; day: number }) {
 
 export function Home() {
     // Load games from the game list, or show error if there's an error, or loading if they're loading
-    const { data: simulation, error: simulationLoadingError, isLoading: simulationIsLoading } = useSimulation();
+    const { data: sim, error, isLoading } = useSimulation();
 
-    if (simulationIsLoading) return <Loading />;
-    if (simulationLoadingError) return <Error>{simulationLoadingError.toString()}</Error>;
+    if (error) return <Error>{error.toString()}</Error>;
+    if (isLoading || !sim) return <Loading />;
+
     return (
         <Container>
             <p className="mb-4">Hi! {"\u{1F44B}"} Select a season up top to view more games.</p>
@@ -34,12 +35,12 @@ export function Home() {
             <div>
                 <h3 className="text-2xl font-semibold">Current games</h3>
                 <h4 className="text-md text-gray-700 mb-2">
-                    Season {simulation.season + 1}, Day {simulation.day + 1}
+                    Season {sim.season + 1}, Day {sim.day + 1}
                 </h4>
 
-                {simulation && <SingleDayGamesList season={simulation.season} day={simulation.day} />}
-                <Link className="block mt-2" to={`/season/${simulation.season + 1}`}>
-                    View all Season {simulation.season + 1} games &rarr;
+                {sim && <SingleDayGamesList season={sim.season} day={sim.day} />}
+                <Link className="block mt-2" to={`/season/${sim.season + 1}`}>
+                    View all Season {sim.season + 1} games &rarr;
                 </Link>
             </div>
         </Container>

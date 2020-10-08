@@ -1,7 +1,15 @@
 import queryString from "query-string";
-import { BlaseGame, BlasePlayer, BlaseTeam, BlaseTemporal } from "./models";
+import { BlaseballGame, BlaseballPlayer, BlaseballTeam, BlaseballTemporal } from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
+
+export const chroniclerApi = {
+    gameList: (query: GameListQuery) => BASE_URL + "/games?" + queryString.stringify(query),
+    gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "/games/updates?" + queryString.stringify(query),
+    players: () => BASE_URL + "/players",
+    teams: () => BASE_URL + "/teams",
+    temporalUpdates: () => BASE_URL + "/temporal/updates",
+};
 
 export type GameListQuery = {
     season?: number;
@@ -21,14 +29,6 @@ export type GameUpdatesQuery = {
     count?: number;
 };
 
-export const chroniclerApi = {
-    gameList: (query: GameListQuery) => BASE_URL + "/games?" + queryString.stringify(query),
-    gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "/games/updates?" + queryString.stringify(query),
-    players: () => BASE_URL + "/players",
-    teams: () => BASE_URL + "/teams",
-    temporal: () => BASE_URL + "/temporal/updates",
-};
-
 export interface ChronResponse<T> {
     data: T[];
 }
@@ -41,6 +41,7 @@ export interface GameListResponse extends ChronResponse<ChronGame> {}
 export interface GameUpdatesResponse extends ChronResponse<ChronGameUpdate>, PagedResponse {}
 export interface PlayersResponse extends ChronResponse<ChronPlayer> {}
 export interface TeamsResponse extends ChronResponse<ChronTeam> {}
+export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate> {}
 
 export type Timestamp = string;
 export type PlayerPosition = "lineup" | "rotation" | "bullpen" | "bench";
@@ -49,14 +50,14 @@ export interface ChronGame {
     gameId: string;
     startTime: Timestamp | null;
     endTime: Timestamp | null;
-    data: BlaseGame;
+    data: BlaseballGame;
 }
 
 export interface ChronGameUpdate {
     gameId: string;
     hash: string;
     timestamp: Timestamp;
-    data: BlaseGame;
+    data: BlaseballGame;
 }
 
 export interface ChronPlayer {
@@ -67,14 +68,7 @@ export interface ChronPlayer {
     position: PlayerPosition | null;
     rosterIndex: number | null;
 
-    stars: {
-        batting: number;
-        pitching: number;
-        baserunning: number;
-        defense: number;
-    };
-
-    data: BlasePlayer;
+    data: BlaseballPlayer;
 }
 
 export interface ChronSiteUpdate {
@@ -88,7 +82,7 @@ export interface ChronSiteUpdate {
 export interface ChronTeam {
     id: string;
     lastUpdate: Timestamp;
-    data: BlaseTeam;
+    data: BlaseballTeam;
 }
 
 export interface ChronTributeUpdate {
@@ -104,12 +98,12 @@ export interface ChronEntityVersion<T> {
     data: T;
 }
 
-export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseTemporal> {}
+export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseballTemporal> {}
 
-export interface ChronPlayerUpdate extends ChronEntityVersion<BlasePlayer> {
+export interface ChronPlayerUpdate extends ChronEntityVersion<BlaseballPlayer> {
     playerId: string;
 }
 
-export interface ChronTeamUpdate extends ChronEntityVersion<BlaseTeam> {
+export interface ChronTeamUpdate extends ChronEntityVersion<BlaseballTeam> {
     teamId: string;
 }

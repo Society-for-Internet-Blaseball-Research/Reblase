@@ -3,9 +3,8 @@ import { CellProps, Column, ColumnInstance, useSortBy, UseSortByColumnProps, use
 import { Loading } from "../components/elements/Loading";
 import Error from "../components/elements/Error";
 import { Container } from "../components/layout/Container";
-import { Stars } from "../components/elements/Stars";
 import { usePlayerTeamsList } from "../blaseball/hooks";
-import { ChronPlayer } from "../blaseball/chronicler";
+import { ChronPlayer } from "blaseball-lib/chronicler";
 
 export function PlayersPage() {
     const { players, teamsObj, error, isLoading } = usePlayerTeamsList();
@@ -51,29 +50,34 @@ export function PlayersPage() {
             {
                 Header: "Batting",
                 id: "battingStars",
-                Cell: (props: CellProps<ChronPlayer>) => {
-                    return <Stars stars={props.row.original.stars?.batting ?? 0} />;
+                Cell: (_: CellProps<ChronPlayer>) => {
+                    return null;
+                    // return <Stars stars={props.row.original.stars?.batting ?? 0} />;
                 },
             },
             {
                 Header: "Pitching",
                 id: "pitchingStars",
-                Cell: (props: CellProps<ChronPlayer>) => {
-                    return <Stars stars={props.row.original.stars?.pitching ?? 0} />;
+                Cell: (_: CellProps<ChronPlayer>) => {
+                    return null;
+                    // return <Stars stars={props.row.original.stars?.pitching ?? 0} />;
                 },
             },
             {
                 Header: "Baserunning",
                 id: "baserunningStars",
-                Cell: (props: CellProps<ChronPlayer>) => {
-                    return <Stars stars={props.row.original.stars?.baserunning ?? 0} />;
+                Cell: (_: CellProps<ChronPlayer>) => {
+                    return null;
+                    // return <Stars stars={props.row.original.stars?.baserunning ?? 0} />;
                 },
             },
             {
                 Header: "Defense",
                 id: "defenseStars",
-                Cell: (props: CellProps<ChronPlayer>) => {
-                    return <Stars stars={props.row.original.stars?.defense ?? 0} />;
+                Cell: (_: CellProps<ChronPlayer>) => {
+                    return null;
+
+                    // return <Stars stars={props.row.original.stars?.defense ?? 0} />;
                 },
             },
             {

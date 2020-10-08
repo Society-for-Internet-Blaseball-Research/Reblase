@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "@tailwindcss/typography": "^0.2.0",
+        "blaseball-lib": "*",
         "dayjs": "^1.8.35",
         "query-string": "^6.13.2",
         "rc-tooltip": "^4.2.3",
@@ -31,6 +32,7 @@
         "@types/react-table": "^7.0.23",
         "@types/twemoji": "^12.1.1",
         "postcss-nested": "^4.2.3",
+        "tsconfig-paths-webpack-plugin": "^3.3.0",
         "typescript": "^3.8.0"
     },
     "scripts": {

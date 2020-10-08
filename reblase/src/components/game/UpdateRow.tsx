@@ -1,11 +1,10 @@
-﻿import { isImportant } from "../../blaseball/update";
-import { getBattingTeam } from "../../blaseball/team";
+﻿import { isGameUpdateImportant, getBattingTeam } from "blaseball-lib/games";
 import { Circles } from "../elements/Circles";
 import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import Emoji from "../elements/Emoji";
-import { BlaseGame } from "../../blaseball/models";
-import { ChronGameUpdate } from "../../blaseball/chronicler";
+import { BlaseballGame } from "blaseball-lib/models";
+import { ChronGameUpdate } from "blaseball-lib/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
 import { AiOutlineLink } from "react-icons/ai";
 
@@ -14,7 +13,7 @@ interface WrappedUpdateProps {
 }
 
 interface UpdateProps {
-    evt: BlaseGame;
+    evt: BlaseballGame;
 }
 
 const TimestampGrid = "col-start-4 col-end-4 lg:col-start-1 lg:col-end-1";
@@ -38,7 +37,7 @@ function Score({ evt }: UpdateProps) {
 }
 
 function GameLog({ evt }: UpdateProps) {
-    const fontWeight = isImportant(evt) ? "font-semibold" : "font-normal";
+    const fontWeight = isGameUpdateImportant(evt.lastUpdate) ? "font-semibold" : "font-normal";
     return <span className={`${GameLogGrid} ${fontWeight}`}>{evt.lastUpdate}</span>;
 }
 
