@@ -1,11 +1,13 @@
 import queryString from "query-string";
-import { BlaseballGame, BlaseballPlayer, BlaseballTeam, BlaseballTemporal } from "./models";
+import { BlaseballFight, BlaseballGame, BlaseballPlayer, BlaseballTeam, BlaseballTemporal } from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
 
 export const chroniclerApi = {
     gameList: (query: GameListQuery) => BASE_URL + "/games?" + queryString.stringify(query),
     gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "/games/updates?" + queryString.stringify(query),
+    fights: () => BASE_URL + "/fights",
+    fightUpdates: (query: FightUpdatesQuery) => BASE_URL + "/fights/updates?" + queryString.stringify(query),
     players: () => BASE_URL + "/players",
     playerUpdates: (query: PlayerUpdatesQuery) => BASE_URL + "/players/updates?" + queryString.stringify(query),
     teams: () => BASE_URL + "/teams",
@@ -35,6 +37,12 @@ export type GameUpdatesQuery = {
     count?: number;
 };
 
+export type FightUpdatesQuery = {
+    fight: string;
+    after?: string;
+    count?: number;
+};
+
 export interface ChronResponse<T> {
     data: T[];
 }
@@ -45,6 +53,8 @@ export interface PagedResponse {
 
 export interface GameListResponse extends ChronResponse<ChronGame> {}
 export interface GameUpdatesResponse extends ChronResponse<ChronGameUpdate>, PagedResponse {}
+export interface FightUpdatesResponse extends ChronResponse<ChronFightUpdate>, PagedResponse {}
+export interface FightsResponse extends ChronResponse<ChronFight> {}
 export interface PlayersResponse extends ChronResponse<ChronPlayer> {}
 export interface TeamsResponse extends ChronResponse<ChronTeam> {}
 export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate> {}
@@ -64,6 +74,19 @@ export interface ChronGameUpdate {
     hash: string;
     timestamp: Timestamp;
     data: BlaseballGame;
+}
+
+export interface ChronFightUpdate {
+    fightId: string;
+    hash: string;
+    timestamp: Timestamp;
+    data: BlaseballFight;
+}
+
+export interface ChronFight {
+    id: string;
+    lastUpdate: Timestamp;
+    data: BlaseballFight;
 }
 
 export interface ChronPlayer {

@@ -5,7 +5,7 @@ import Error from "../components/elements/Error";
 import { Container } from "../components/layout/Container";
 import { Loading } from "../components/elements/Loading";
 import { Link } from "react-router-dom";
-import GameRow from "../components/gamelist/GameRow";
+import { GameRow } from "../components/gamelist/GameRow";
 
 function SingleDayGamesList(props: { season: number; day: number }) {
     const { games, error, isLoading } = useGameList({ season: props.season, day: props.day });

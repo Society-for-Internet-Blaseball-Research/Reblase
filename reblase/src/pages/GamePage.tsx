@@ -1,39 +1,12 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
 
-import { Loading } from "../components/elements/Loading";
-import { GameUpdateList } from "../components/game/GameUpdateList";
+import { UpdatesListFetching } from "../components/game/GameUpdateList";
 import { cache } from "swr";
-import Spinner from "../components/elements/Spinner";
 import Error from "../components/elements/Error";
 import { useGameUpdates } from "../blaseball/hooks";
-import { ChronGameUpdate } from "blaseball-lib/chronicler";
 import { BlaseballGame } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
-
-interface UpdatesListFetchingProps {
-    isLoading: boolean;
-    updates: ChronGameUpdate[];
-    order: "asc" | "desc";
-    filterImportant: boolean;
-    autoRefresh: boolean;
-}
-
-function UpdatesListFetching(props: UpdatesListFetchingProps) {
-    return (
-        <div className="flex flex-col mt-2">
-            {props.autoRefresh && (
-                <span className="italic text-gray-600">
-                    <Spinner /> Live-updating...
-                </span>
-            )}
-
-            <GameUpdateList updates={props.updates} updateOrder={props.order} filterImportant={props.filterImportant} />
-
-            {props.isLoading && <Loading />}
-        </div>
-    );
-}
 
 interface PayloadProps {
     evt: BlaseballGame;

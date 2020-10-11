@@ -80,6 +80,21 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     repeatCount?: number;
 }
 
+export interface DamageResult {
+    dmgType: number;
+    teamTarget: string;
+    playerSource: string;
+    dmg: number;
+}
+
+export interface BlaseballFight extends BlaseballGame {
+    awayHp: string;
+    homeHp: string;
+    awayMaxHp: string;
+    homeMaxHp: string;
+    damageResults: string;
+}
+
 export interface BlaseballPlayer extends BlaseballEntity<PlayerID>, BlaseballAttributes, PlayerStats {
     name: string;
 

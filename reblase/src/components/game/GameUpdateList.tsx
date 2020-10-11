@@ -4,8 +4,36 @@ import { UpdateRow } from "./UpdateRow";
 
 import "../../style/GamePage.css";
 import Emoji from "../elements/Emoji";
-import { ChronGameUpdate } from "blaseball-lib/chronicler";
+import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
 import { BlaseballGame } from "blaseball-lib/models";
+import Spinner from "components/elements/Spinner";
+import { Loading } from "components/elements/Loading";
+
+type GameOrFight = ChronFightUpdate | ChronGameUpdate;
+
+interface UpdatesListFetchingProps {
+    isLoading: boolean;
+    updates: GameOrFight[];
+    order: "asc" | "desc";
+    filterImportant: boolean;
+    autoRefresh: boolean;
+}
+
+export function UpdatesListFetching(props: UpdatesListFetchingProps) {
+    return (
+        <div className="flex flex-col mt-2">
+            {props.autoRefresh && (
+                <span className="italic text-gray-600">
+                    <Spinner /> Live-updating...
+                </span>
+            )}
+
+            <GameUpdateList updates={props.updates} updateOrder={props.order} filterImportant={props.filterImportant} />
+
+            {props.isLoading && <Loading />}
+        </div>
+    );
+}
 
 interface UpdateProps {
     evt: BlaseballGame;
@@ -40,25 +68,23 @@ export const InningHeader = React.memo(function InningHeader(props: UpdateProps)
     );
 });
 
-interface GameUpdateListProps {
-    updates: ChronGameUpdate[];
-    updateOrder: "asc" | "desc";
-    filterImportant: boolean;
-}
-
 type Element =
-    | { type: "row"; update: ChronGameUpdate }
-    | { type: "heading"; update: ChronGameUpdate; inning: number; top: boolean };
+    | { type: "row"; update: GameOrFight }
+    | { type: "heading"; update: GameOrFight; inning: number; top: boolean };
 
-function addInningHeaderRows(
-    updates: ChronGameUpdate[],
+export function addInningHeaderRows(
+    updates: GameOrFight[],
     direction: "asc" | "desc",
     filterImportant: boolean
 ): Element[] {
     const elements: Element[] = [];
 
     let lastPayload = null;
+    let lastHash = null;
     for (const update of updates) {
+        // Basic dedupe
+        if (lastHash === update.hash) continue;
+
         const payload = update.data;
         const row: Element = { type: "row", update };
 
@@ -91,12 +117,26 @@ function addInningHeaderRows(
         elements.push(row);
 
         lastPayload = payload;
+        lastHash = update.hash;
     }
 
     return elements;
 }
 
-export function GameUpdateList(props: GameUpdateListProps) {
+export interface SecondaryUpdate<T> {
+    data: T;
+    timestamp: string;
+}
+
+interface GameUpdateListProps<TSecondary> {
+    updates: GameOrFight[];
+    updateOrder: "asc" | "desc";
+    filterImportant: boolean;
+    secondaryUpdates?: SecondaryUpdate<TSecondary>[];
+    renderSecondary?: (update: SecondaryUpdate<TSecondary>) => React.ReactNode;
+}
+
+export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProps<TSecondary>) {
     const updates = props.updateOrder === "desc" ? [...props.updates].reverse() : props.updates;
 
     const elements = useMemo(() => addInningHeaderRows(updates, props.updateOrder, props.filterImportant), [
@@ -108,9 +148,30 @@ export function GameUpdateList(props: GameUpdateListProps) {
     var grouped = [];
     for (const elem of elements) {
         if (elem.type === "heading") {
-            grouped.push({ firstUpdate: elem.update, updates: [] as ChronGameUpdate[] });
+            grouped.push({
+                firstUpdate: elem.update,
+                updates: [] as (
+                    | { type: "primary"; data: GameOrFight }
+                    | { type: "secondary"; data: SecondaryUpdate<TSecondary> }
+                )[],
+            });
         } else {
-            grouped[grouped.length - 1].updates.push(elem.update);
+            grouped[grouped.length - 1].updates.push({ type: "primary", data: elem.update });
+        }
+    }
+
+    if (props.secondaryUpdates) {
+        const remaining = [...props.secondaryUpdates] as SecondaryUpdate<TSecondary>[];
+        for (const group of grouped) {
+            for (let i = 0; i < group.updates.length; i++) {
+                const firstRemaining = remaining[0];
+                if (!firstRemaining) break;
+
+                const at = group.updates[i];
+                if (at.type === "primary" && firstRemaining.timestamp < at.data.timestamp) {
+                    group.updates.splice(i, 0, { type: "secondary", data: remaining.shift()! });
+                }
+            }
         }
     }
 
@@ -123,8 +184,20 @@ export function GameUpdateList(props: GameUpdateListProps) {
                     <InningHeader key={group.firstUpdate.hash + "_heading"} evt={group.firstUpdate.data} />
                     <div className="flex flex-col">
                         {group.updates.map((update) => {
-                            const highlight = update.hash === scrollTarget;
-                            return <UpdateRow key={update.hash + "_update"} update={update} highlight={highlight} />;
+                            if (update.type === "primary") {
+                                const highlight = update.data.hash === scrollTarget;
+                                return (
+                                    <UpdateRow
+                                        key={update.data.hash + "_update"}
+                                        update={update.data}
+                                        highlight={highlight}
+                                    />
+                                );
+                            } else if (props.renderSecondary) {
+                                return props.renderSecondary(update.data);
+                            } else {
+                                return null;
+                            }
                         })}
                     </div>
                 </div>

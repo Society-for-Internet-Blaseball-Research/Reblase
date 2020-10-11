@@ -8,6 +8,7 @@ import { Home } from "./pages/Home";
 import { EventsPage } from "./pages/EventsPage";
 import { SeasonListPage } from "./pages/SeasonListPage";
 import PlayerUpdatesPage from "pages/PlayerUpdatesPage";
+import BossfightPage from "pages/BossfightPage";
 // import { PlayersPage } from "./pages/PlayersPage";
 
 const swrConfig = {
@@ -21,6 +22,7 @@ export default function App() {
             <PageLayout>
                 <Switch>
                     <Route path="/game/:gameId" component={GamePage} />
+                    <Route path="/bossfight/:fightId" component={BossfightPage} />
                     <Route path="/seasons" component={SeasonListPage} />
                     <Route path="/season/:season" component={SeasonPage} />
                     <Route path="/events" component={EventsPage} />

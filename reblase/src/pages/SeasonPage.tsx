@@ -6,7 +6,7 @@ import { Loading } from "../components/elements/Loading";
 import { Container } from "../components/layout/Container";
 import Error from "../components/elements/Error";
 import { cache } from "swr";
-import { useGameList, usePlayerTeamsList } from "../blaseball/hooks";
+import { useFights, useGameList, usePlayerTeamsList } from "../blaseball/hooks";
 import { ChronGame } from "blaseball-lib/chronicler";
 import TeamPicker from "../components/elements/TeamPicker";
 import OutcomePicker from "../components/elements/OutcomePicker";
@@ -16,6 +16,8 @@ import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
 import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
+import { FightRow } from "components/gamelist/GameRow";
+import Twemoji from "components/elements/Twemoji";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
 function groupByDay(games: ChronGame[]): GameDay[] {
@@ -137,6 +139,8 @@ export function SeasonPage() {
     let [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
 
     const { players, teams, error } = usePlayerTeamsList();
+    let { fights } = useFights();
+    fights = fights.filter((f) => f.data.season + 1 === season);
 
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
@@ -191,6 +195,22 @@ export function SeasonPage() {
                     </Checkbox>
                 </div>
             </div>
+
+            {fights.length > 0 ? (
+                <div className="border-4 border-red-700 -mx-6 my-2 px-5 py-4">
+                    <div className="font-semibold">
+                        <Twemoji emoji={"\u{1F6A8}"} className="mr-1" />
+                        BOSS BATTLE
+                        <Twemoji emoji={"\u{1F6A8}"} className="ml-1" />
+                    </div>
+
+                    <div className="flex flex-col">
+                        {fights.map((f) => {
+                            return <FightRow fight={f} />;
+                        })}
+                    </div>
+                </div>
+            ) : null}
 
             <GamesListFetching
                 season={season}

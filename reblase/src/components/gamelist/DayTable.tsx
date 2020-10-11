@@ -2,7 +2,7 @@
 import React from "react";
 
 import "./DayTable.css";
-import GameRow from "./GameRow";
+import { GameRow } from "./GameRow";
 import { ChronGame } from "blaseball-lib/chronicler";
 import { predictGamePitcher } from "blaseball-lib/team";
 import { BlaseballGame, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";

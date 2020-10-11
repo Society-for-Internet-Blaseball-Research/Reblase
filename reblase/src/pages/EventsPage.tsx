@@ -37,18 +37,29 @@ interface TemporalEvent extends BaseEvent {
 
 type BlaseEvent = GameEvent | TemporalEvent;
 
-const temporalTypes = [
-    {
+interface TemporalType {
+    name: string;
+    color: string;
+    emoji: string;
+}
+
+const temporalTypes: Partial<Record<string, TemporalType>> = {
+    "-1": {
+        name: "Alert",
+        color: "red",
+        emoji: "\u{1F6A8}",
+    },
+    "0": {
         name: "The Peanut",
         color: "brown",
         emoji: "\u{1F95C}",
     },
-    {
+    "1": {
         name: "The Hall Monitor",
         color: "blue",
         emoji: "\u{1F991}",
     },
-];
+};
 
 const EventRow = ({ evt }: { evt: BlaseEvent }) => {
     return (
@@ -148,7 +159,7 @@ export function EventsPage() {
             continue;
         }
 
-        const type = temporalTypes[doc.gamma] ?? temporalTypes[0];
+        const type = temporalTypes[doc.gamma.toString()] ?? temporalTypes["0"]!;
 
         if (lastEvent && lastEvent.name === type.name) {
             lastEvent.text.push({ text: doc.zeta, timestamp: update.firstSeen });

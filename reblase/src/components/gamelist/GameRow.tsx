@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import Tooltip from "rc-tooltip";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ChronGame } from "blaseball-lib/chronicler";
+import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
 import { getOutcomes, Outcome } from "../../blaseball/outcome";
 import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "../elements/Twemoji";
@@ -160,15 +160,15 @@ const StandalonePitchers = React.memo(
     }
 );
 
-const SeasonDay = React.memo((props: { season: number; day: number; className?: string }) => {
+const SeasonDay = React.memo((props: { season: number; day: number | string; className?: string }) => {
     return (
         <div className={`text-sm font-semibold ${props.className}`}>
-            S{props.season + 1}/{props.day + 1}
+            S{props.season + 1}/{typeof props.day === "number" ? props.day + 1 : props.day}
         </div>
     );
 });
 
-export default React.memo(
+export const GameRow = React.memo(
     (props: {
         game: ChronGame;
         showWeather: boolean;
@@ -251,4 +251,66 @@ export default React.memo(
         );
     },
     (prev, next) => prev.game.gameId === next.game.gameId && prev.showWeather === next.showWeather
+);
+
+export const FightRow = React.memo(
+    (props: { fight: ChronFight }) => {
+        const { data } = props.fight;
+
+        const home = {
+            name: data.homeTeamNickname,
+            emoji: data.homeTeamEmoji,
+            score: data.homeScore,
+            pitcher: data.homePitcherName,
+            predictedPitcher: null,
+            win: data.homeScore >= data.awayScore,
+        };
+
+        const away = {
+            name: data.awayTeamNickname,
+            emoji: data.awayTeamEmoji,
+            score: data.awayScore,
+            pitcher: data.awayPitcherName,
+            predictedPitcher: null,
+            win: data.awayScore >= data.homeScore,
+        };
+
+        return (
+            <Link
+                to={`/bossfight/${props.fight.id}`}
+                className="flex flex-row px-2 py-2 border-b border-gray-300 space-x-2 items-baseline hover:bg-gray-200"
+            >
+                <div className="contents md:hidden">
+                    <TwoLineTeamScore home={home} away={away} />
+
+                    <div className="flex flex-col justify-center items-end">
+                        <div className="flex flex-row space-x-2">
+                            <SeasonDay season={data.season} day={"X"} className="text-right" />
+                        </div>
+
+                        <div className="flex flex-row justify-end items-baseline space-x-2">
+                            <Events outcomes={data.outcomes} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="hidden md:contents">
+                    <SeasonDay season={data.season} day={"X"} className="text-center w-8" />
+                    <OneLineTeamScore home={home} away={away} />
+                    <StandalonePitchers
+                        awayPitcher={data.awayPitcherName}
+                        homePitcher={data.homePitcherName}
+                        predictedAwayPitcher={null}
+                        predictedHomePitcher={null}
+                        className="flex flex-1"
+                    />
+
+                    <div className="flex flex-row justify-end items-baseline space-x-2">
+                        <Events outcomes={data.outcomes} />
+                    </div>
+                </div>
+            </Link>
+        );
+    },
+    (prev, next) => prev.fight.id === next.fight.id
 );

@@ -14,6 +14,11 @@ import {
     chroniclerApi,
     ChronPlayerUpdate,
     PlayerUpdatesQuery,
+    FightUpdatesQuery,
+    FightUpdatesResponse,
+    ChronFightUpdate,
+    FightsResponse,
+    ChronFight,
 } from "blaseball-lib/chronicler";
 import { blaseballApi } from "blaseball-lib/api";
 import { BlaseballSimData } from "blaseball-lib/models";
@@ -75,6 +80,22 @@ export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): G
     return {
         updates: allUpdates,
         isLoading: !initialData,
+        error,
+    };
+}
+
+interface FightUpdatesHookReturn {
+    updates: ChronFightUpdate[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useFightUpdates(query: FightUpdatesQuery): FightUpdatesHookReturn {
+    const { data, error } = useSWR<FightUpdatesResponse>(chroniclerApi.fightUpdates(query));
+
+    return {
+        updates: data?.data ?? [],
+        isLoading: !data,
         error,
     };
 }
@@ -149,4 +170,20 @@ export interface PlayerUpdatesHookReturn {
 export function usePlayerUpdates(query: PlayerUpdatesQuery): PlayerUpdatesHookReturn {
     const { data, error } = useSWR<ChronResponse<ChronPlayerUpdate>>(chroniclerApi.playerUpdates(query));
     return { updates: data?.data, error };
+}
+
+interface FightsHookReturn {
+    fights: ChronFight[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useFights(): FightsHookReturn {
+    const { data, error } = useSWR<FightsResponse>(chroniclerApi.fights());
+
+    return {
+        fights: data?.data ?? [],
+        isLoading: !data,
+        error,
+    };
 }

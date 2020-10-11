@@ -4,12 +4,12 @@ import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import Emoji from "../elements/Emoji";
 import { BlaseballGame } from "blaseball-lib/models";
-import { ChronGameUpdate } from "blaseball-lib/chronicler";
+import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
 import { AiOutlineLink } from "react-icons/ai";
 
 interface WrappedUpdateProps {
-    update: ChronGameUpdate;
+    update: ChronGameUpdate | ChronFightUpdate;
 }
 
 interface UpdateProps {
