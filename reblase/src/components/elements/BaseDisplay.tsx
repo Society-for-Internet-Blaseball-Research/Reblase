@@ -61,17 +61,22 @@ export default function BaseDisplay(props: BaseDisplayProps) {
     const highestOccupiedBase = Math.max(...props.basesOccupied);
     const baseCount = Math.max(highestOccupiedBase + 1, props.totalBases);
 
+    const allRunnerNames = props.baseRunnerNames
+        ? props.basesOccupied.map((base, idx) => ({ base, name: props.baseRunnerNames![idx] }))
+        : null;
+
     const baseElements = [];
     for (let i = 0; i < baseCount; i++) {
         const baseIndex = baseCount - i - 1;
         const runnerIndex = props.basesOccupied.indexOf(baseIndex);
+        const runnerNames = allRunnerNames?.filter(({ base }) => base === baseIndex)?.map(({ name }) => name);
         baseElements.push(
             <Base
                 key={i}
                 filled={runnerIndex !== -1}
                 baseX={baseSpacing * i}
                 baseY={[0, baseSpacing][baseIndex % 2]}
-                runnerName={props.baseRunnerNames ? props.baseRunnerNames[runnerIndex] : null}
+                runnerName={runnerNames ? runnerNames.join(", ") : null}
             />
         );
     }
