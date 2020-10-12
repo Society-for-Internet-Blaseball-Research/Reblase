@@ -138,7 +138,7 @@ export function SeasonPage() {
     let [showFutureGames, setShowFutureGames] = useState<boolean>(false);
     let [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
 
-    const { players, teams, error } = usePlayerTeamsList();
+    const { players, teams, error, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
     let { fights } = useFights();
     fights = fights.filter((f) => f.data.season + 1 === season);
 
@@ -146,6 +146,7 @@ export function SeasonPage() {
     useEffect(() => cache.clear(), [season]);
 
     if (error) return <Error>{error.toString()}</Error>;
+    if (isLoadingPlayerTeams) return <Loading />;
 
     return (
         <Container className={"mt-4"}>
