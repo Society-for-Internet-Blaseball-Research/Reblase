@@ -161,6 +161,8 @@ export function isGameUpdateImportant(update: string) {
         /they peck [\w\s]+ free!/,
         /Big Peanut/,
         /flock of Crows/,
+        /murder of Crows/,
+        /charms/,
     ]) {
         if (pattern.test(update)) return true;
     }
