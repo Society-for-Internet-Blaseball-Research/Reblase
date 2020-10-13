@@ -65,7 +65,9 @@ const Duration = React.memo(
             const endMoment = dayjs(props.endTime);
             const diff = endMoment.diff(startMoment);
 
-            duration = dayjs().hour(0).minute(0).second(0).millisecond(diff).format("mm:ss");
+            const seconds = Math.floor(diff / 1000) % 60;
+            const minutes = Math.floor(diff / 60000);
+            duration = minutes.toString().padStart(2, "0") + ":" + seconds.toString().padStart(2, "0");
         }
 
         const arrow = props.topOfInning ? "\u25B2" : "\u25BC";
