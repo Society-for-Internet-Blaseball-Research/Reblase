@@ -17,6 +17,7 @@ export const chroniclerApi = {
 export type PlayerUpdatesQuery = {
     player?: string;
     order?: "asc" | "desc";
+    count?: number;
 };
 
 export type GameListQuery = {
