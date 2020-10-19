@@ -19,12 +19,12 @@ export const allWeatherTypes = [
     },
     {
         id: 1,
-        name: "Sunny",
+        name: "Sun 2",
         // icon: WiDaySunny,
         emoji: "\u{2600}",
         background: "#db7900",
         color: "#fffec4",
-        forbidden: true,
+        forbidden: false,
     },
     {
         id: 2,
@@ -130,6 +130,14 @@ export const allWeatherTypes = [
         emoji: "\u{1F30A}",
         background: "#443561",
         color: "#61b3ff",
+        forbidden: false,
+    },
+    {
+        id: 14,
+        name: "Black Hole",
+        emoji: "\u{26AB}",
+        background: "#000000",
+        color: "#00374a",
         forbidden: false,
     },
 ];
