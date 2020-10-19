@@ -22,7 +22,9 @@ export interface GameTeam {
     pitcherName: PlayerID | null;
 
     totalBases: number;
+    maxBalls: number;
     maxStrikes: number;
+    maxOuts: number;
 }
 
 const nullIfEmpty = (s: string | null) => (s === "" ? null : s);
@@ -49,7 +51,9 @@ export function getHomeTeam(game: BlaseballGame): GameTeam {
         pitcherName: nullIfEmpty(game.homePitcherName),
 
         totalBases: game.homeBases ?? 4,
+        maxBalls: game.homeBalls ?? 4,
         maxStrikes: game.homeStrikes ?? 3,
+        maxOuts: game.homeOuts ?? 3,
     };
 }
 
@@ -75,7 +79,9 @@ export function getAwayTeam(game: BlaseballGame): GameTeam {
         pitcherName: game.awayPitcherName,
 
         totalBases: game.awayBases ?? 4,
+        maxBalls: game.awayBalls ?? 4,
         maxStrikes: game.awayStrikes ?? 3,
+        maxOuts: game.awayOuts ?? 3,
     };
 }
 

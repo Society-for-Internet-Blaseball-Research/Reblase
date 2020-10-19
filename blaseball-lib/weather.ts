@@ -135,6 +135,7 @@ export const allWeatherTypes = [
     {
         id: 14,
         name: "Black Hole",
+        // icon: GiVortex
         emoji: "\u{26AB}",
         background: "#000000",
         color: "#00374a",

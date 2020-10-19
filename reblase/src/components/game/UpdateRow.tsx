@@ -56,23 +56,15 @@ function Batter({ evt }: UpdateProps) {
     );
 }
 
-const Balls = ({ evt }: UpdateProps) => <Circles label="Balls" amount={evt.atBatBalls} total={3} />;
-
-const Strikes = ({ evt }: UpdateProps) => {
-    const totalStrikes = getBattingTeam(evt).maxStrikes;
-    return <Circles label="Strikes" amount={evt.atBatStrikes} total={totalStrikes - 1} />;
-};
-
-const Outs = ({ evt }: UpdateProps) => <Circles label="Outs" amount={evt.halfInningOuts} total={2} />;
-
 function AtBatInfo({ evt }: UpdateProps) {
+    const battingTeam = getBattingTeam(evt);
     return (
         <div className={`${AtBatGrid} flex flex-row items-center space-x-2`}>
             <BlaseRunners evt={evt} />
             <span className="flex space-x-1">
-                <Balls evt={evt} />
-                <Strikes evt={evt} />
-                <Outs evt={evt} />
+                <Circles label="Balls" amount={evt.atBatBalls} total={battingTeam.maxBalls - 1} />
+                <Circles label="Strikes" amount={evt.atBatStrikes} total={battingTeam.maxStrikes - 1} />
+                <Circles label="Outs" amount={evt.halfInningOuts} total={battingTeam.maxOuts - 1} />
             </span>
         </div>
     );

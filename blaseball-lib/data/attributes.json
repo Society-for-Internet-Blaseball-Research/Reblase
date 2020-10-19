@@ -1,0 +1,642 @@
+[
+    {
+        "id": "EXTRA_STRIKE",
+        "color": "#f77c9f",
+        "textColor": "#f77c9f",
+        "background": "#8c1839",
+        "title": "The Fourth Strike",
+        "description": "Those with the Fourth Strike will get an extra strike in each at bat."
+    },
+    {
+        "id": "SHAME_PIT",
+        "color": "#b96dbd",
+        "textColor": "#b96dbd",
+        "background": "#3d1539",
+        "title": "Targeted Shame",
+        "description": "Teams with Targeted Shame will start with negative runs the game after being shamed."
+    },
+    {
+        "id": "HOME_FIELD",
+        "color": "#f9ff54",
+        "textColor": "#f9ff54",
+        "background": "#4f9c30",
+        "title": "Home Field Advantage",
+        "description": "Teams with Home Field Advantage will start each home game with one run."
+    },
+    {
+        "id": "FIREPROOF",
+        "color": "#a5c5f0",
+        "textColor": "#a5c5f0",
+        "background": "#4c77b0",
+        "title": "Fireproof",
+        "description": "A Fireproof player can not be incinerated."
+    },
+    {
+        "id": "ALTERNATE",
+        "color": "#fffd85",
+        "textColor": "#fffd85",
+        "background": "#404040",
+        "title": "Alternate",
+        "description": "This player is an Alternate..."
+    },
+    {
+        "id": "SOUNDPROOF",
+        "color": "#c92080",
+        "textColor": "#c92080",
+        "background": "#000000",
+        "title": "Soundproof",
+        "description": "A Soundproof player can not be caught in Feedback's reality flickers."
+    },
+    {
+        "id": "SHELLED",
+        "color": "#fffd85",
+        "textColor": "#fffd85",
+        "background": "#404040",
+        "title": "Shelled",
+        "description": "A Shelled player is trapped in a big Peanut is unable to bat or pitch."
+    },
+    {
+        "id": "REVERBERATING",
+        "color": "#61b3ff",
+        "textColor": "#61b3ff",
+        "background": "#756773",
+        "title": "Reverberating",
+        "description": "A Reverberating player has a small chance of batting again after each of their At-Bats end."
+    },
+    {
+        "id": "BLOOD_DONOR",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#52050f",
+        "title": "Blood Donor",
+        "description": "In the Blood Bath, this team will donate Stars to a division opponent that finished behind them in the standings."
+    },
+    {
+        "id": "BLOOD_THIEF",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#52050f",
+        "title": "Blood Thief",
+        "description": "In the Blood Bath, this team will steal Stars from a division opponent that finished ahead of them in the standings."
+    },
+    {
+        "id": "BLOOD_PITY",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#52050f",
+        "title": "Blood Pity",
+        "description": "In the Blood Bath, this team must give Stars to the team that finished last in their division."
+    },
+    {
+        "id": "BLOOD_WINNER",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#52050f",
+        "title": "Blood Winner",
+        "description": "In the Blood Bath, this team must give Stars to the team that finished first in their division."
+    },
+    {
+        "id": "BLOOD_FAITH",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#52050f",
+        "title": "Blood Faith",
+        "description": "In the Blood Bath, this player will receive a small boost to a random stat."
+    },
+    {
+        "id": "BLOOD_LAW",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#52050f",
+        "title": "Blood Law",
+        "description": "In the Blood Bath, this team will gain or lose Stars depending on how low or high they finish in their division."
+    },
+    {
+        "id": "BLOOD_CHAOS",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#52050f",
+        "title": "Blood Chaos",
+        "description": "In the Blood Bath, each player on this team will gain or lose a random amount of Stars."
+    },
+    {
+        "id": "RETURNED",
+        "color": "#fbff8a",
+        "textColor": "#fbff8a",
+        "background": "#1b1c80",
+        "title": "Returned",
+        "description": "This player has Returned from the void. At the end of each season, this player has a chance of being called back to the Void."
+    },
+    {
+        "id": "INWARD",
+        "color": "#d3d8de",
+        "textColor": "#d3d8de",
+        "background": "#38080d",
+        "title": "Inward",
+        "description": "This player has turned Inward."
+    },
+    {
+        "id": "MARKED",
+        "color": "#eaabff",
+        "textColor": "#eaabff",
+        "background": "#1b1c80",
+        "title": "Unstable",
+        "description": "Unstable players have a much higher chance of being incinerated in a Solar Eclipse."
+    },
+    {
+        "id": "PARTY_TIME",
+        "color": "#ff66f9",
+        "textColor": "#ff66f9",
+        "background": "#fff947",
+        "title": "Party Time",
+        "description": "This team is mathematically eliminated from the Postseason, and will occasionally receive permanent stats boost in their games."
+    },
+    {
+        "id": "LIFE_OF_PARTY",
+        "color": "#fff45e",
+        "textColor": "#fff45e",
+        "background": "#9141ba",
+        "title": "Life of the Party",
+        "description": "This team gets 10% more from their Party Time stat boosts."
+    },
+    {
+        "id": "DEBT_ZERO",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#1b1c80",
+        "title": "Debt",
+        "description": "This player must fulfill a debt."
+    },
+    {
+        "id": "DEBT",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#363738",
+        "title": "Refinanced Debt",
+        "description": "This player must fulfill a debt."
+    },
+    {
+        "id": "DEBT_TWO",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#612273",
+        "title": "Consolidated Debt",
+        "description": "This player must fulfill a debt."
+    },
+    {
+        "id": "SPICY",
+        "color": "#9e0022",
+        "textColor": "#9e0022",
+        "background": "#d15700",
+        "title": "Spicy",
+        "description": "Spicy batters will be Red Hot when they get three consecutive hits."
+    },
+    {
+        "id": "HEATING_UP",
+        "color": "#9e0022",
+        "textColor": "#9e0022",
+        "background": "#d15700",
+        "title": "Heating Up...",
+        "description": "This batter needs one more consecutive hit to enter Fire mode. This mod will disappear if the batter gets out."
+    },
+    {
+        "id": "ON_FIRE",
+        "color": "#fff982",
+        "textColor": "#fff982",
+        "background": "#e32600",
+        "title": "Red Hot!",
+        "description": "Red Hot! This player's batting is greatly boosted. This mod will disappear if the batter gets out."
+    },
+    {
+        "id": "HONEY_ROASTED",
+        "color": "#ffda75",
+        "textColor": "#ffda75",
+        "background": "#b5831f",
+        "title": "Honey Roasted",
+        "description": "This player has been Honey-Roasted."
+    },
+    {
+        "id": "FIRST_BORN",
+        "color": "#fffea8",
+        "textColor": "#fffea8",
+        "background": "#517063",
+        "title": "First Born",
+        "description": "This player was the first born from the New Field of Eggs."
+    },
+    {
+        "id": "SUPERALLERGIC",
+        "color": "#bd224e",
+        "textColor": "#bd224e",
+        "background": "#45003d",
+        "title": "Superallergic",
+        "description": "This player is Superallergic"
+    },
+    {
+        "id": "SUPERYUMMY",
+        "color": "#ffdb59",
+        "textColor": "#ffdb59",
+        "background": "#c96faa",
+        "title": "Superyummy",
+        "description": "This player seriously loves peanuts"
+    },
+    {
+        "id": "EXTRA_BASE",
+        "color": "#d9d9d9",
+        "textColor": "#d9d9d9",
+        "background": "#4a001a",
+        "title": "Fifth Base",
+        "description": "This team must run five bases instead of four in order to score."
+    },
+    {
+        "id": "BLESS_OFF",
+        "color": "#e0cafa",
+        "textColor": "#e0cafa",
+        "background": "#7d58a8",
+        "title": "Bless Off",
+        "description": "This team cannot win any Blessings in the upcoming Election."
+    },
+    {
+        "id": "NON_IDOLIZED",
+        "color": "#fffaba",
+        "textColor": "#fffaba",
+        "background": "#540e43",
+        "title": "Idol Immune",
+        "description": "Idol Immune players cannot be Idolized by Fans."
+    },
+    {
+        "id": "GRAVITY",
+        "color": "#759bc9",
+        "textColor": "#759bc9",
+        "background": "#4c5052",
+        "title": "Gravity",
+        "description": "This player cannot be affected by Reverb."
+    },
+    {
+        "id": "ELECTRIC",
+        "color": "#fff199",
+        "textColor": "#fff199",
+        "background": "#04144a",
+        "title": "Electric",
+        "description": "Electric teams have a chance of zapping away Strikes."
+    },
+    {
+        "id": "DOUBLE_PAYOUTS",
+        "color": "#fffaba",
+        "textColor": "#fffaba",
+        "background": "#786600",
+        "title": "Super Idol",
+        "description": "This player will earn Fans double the rewards from all Idol Pendants."
+    },
+    {
+        "id": "FIRE_PROTECTOR",
+        "color": "#c4ff85",
+        "textColor": "#c4ff85",
+        "background": "#1f474f",
+        "title": "Fire Protector",
+        "description": "This player will protect their team from incinerations."
+    },
+    {
+        "id": "RECEIVER",
+        "color": "#ff007b",
+        "textColor": "#ff007b",
+        "background": "#383838",
+        "title": "Receiver",
+        "description": "This player is a Receiver."
+    },
+    {
+        "id": "FLICKERING",
+        "color": "#ff007b",
+        "textColor": "#ff007b",
+        "background": "#383838",
+        "title": "Flickering",
+        "description": "Flickering players have a much higher chance of being Feedbacked to their opponent."
+    },
+    {
+        "id": "GROWTH",
+        "color": "#52a17b",
+        "textColor": "#52a17b",
+        "background": "#13422b",
+        "title": "Growth",
+        "description": "Growth teams will play better as the season goes on, up to a 5% global boost by season's end."
+    },
+    {
+        "id": "BASE_INSTINCTS",
+        "color": "#dedede",
+        "textColor": "#dedede",
+        "background": "#329c98",
+        "title": "Base Instincts",
+        "description": "Batters with Base Instincts will have a chance of heading past first base when getting walked."
+    },
+    {
+        "id": "STABLE",
+        "color": "#91b5a3",
+        "textColor": "#91b5a3",
+        "background": "#335980",
+        "title": "Stable",
+        "description": "Stable players cannot be made Unstable."
+    },
+    {
+        "id": "AFFINITY_FOR_CROWS",
+        "color": "#cb80d9",
+        "textColor": "#cb80d9",
+        "background": "#240c36",
+        "title": "Affinity for Crows",
+        "description": "Players with Affinity for Crows will hit and pitch 50% better during Birds weather."
+    },
+    {
+        "id": "CURSE_OF_CROWS",
+        "color": "#915387",
+        "textColor": "#915387",
+        "background": "#3d2830",
+        "title": "Curse of Crows",
+        "description": "This team or player will be occasionally attacked by Birds."
+    },
+    {
+        "id": "SQUIDDISH",
+        "color": "#5988ff",
+        "textColor": "#5988ff",
+        "background": "#163073",
+        "title": "Squiddish",
+        "description": "When a Squiddish player is incinerated, they'll be replaced by a random Hall of Flame player."
+    },
+    {
+        "id": "CRUNCHY",
+        "color": "#f5eb5d",
+        "textColor": "#f5eb5d",
+        "background": "#de8123",
+        "title": "Crunchy",
+        "description": "The Honey-Roasted players on a Crunchy team will hit 100% better and with +200% Power."
+    },
+    {
+        "id": "PITY",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Pity",
+        "description": "This team is holding back, out of Pity."
+    },
+    {
+        "id": "GOD",
+        "color": "#ff4d90",
+        "textColor": "#ff4d90",
+        "background": "#fffc57",
+        "title": "God",
+        "description": "This team will start with 1,000x the amount of Team Spirit"
+    },
+    {
+        "id": "REPEATING",
+        "color": "#61b3ff",
+        "textColor": "#61b3ff",
+        "background": "#3d5982",
+        "title": "Repeating",
+        "description": "In Reverb Weather, this player will Repeat."
+    },
+    {
+        "id": "SUBJECTION",
+        "color": "#d16f6f",
+        "textColor": "#d16f6f",
+        "background": "#2e2f33",
+        "title": "Subjection",
+        "description": "Players leaving a team with Subjection will gain the Liberated modification."
+    },
+    {
+        "id": "LIBERATED",
+        "color": "#90eb07",
+        "textColor": "#90eb07",
+        "background": "#07a1a3",
+        "title": "Liberated",
+        "description": "Liberated players will be guaranteed extra bases when they get a hit."
+    },
+    {
+        "id": "FIRE_EATER",
+        "color": "#f50a31",
+        "textColor": "#f50a31",
+        "background": "#e3d514",
+        "title": "Fire Eater",
+        "description": "Fire Eaters swallow fire instead of being incinerated."
+    },
+    {
+        "id": "MAGMATIC",
+        "color": "#e63200",
+        "textColor": "#e63200",
+        "background": "#6b0004",
+        "title": "Magmatic",
+        "description": "Magmatic players are guaranteed to hit a home run in their next At Bat."
+    },
+    {
+        "id": "LOYALTY",
+        "color": "#ff61a5",
+        "textColor": "#ff61a5",
+        "background": "#2c1240",
+        "title": "Loyalty",
+        "description": "Players leaving a team with Loyalty will gain the Saboteur modification."
+    },
+    {
+        "id": "SABOTEUR",
+        "color": "#6b6a6a",
+        "textColor": "#6b6a6a",
+        "background": "#240c36",
+        "title": "Saboteur",
+        "description": "A Saboteur has a chance of intentionally failing."
+    },
+    {
+        "id": "CREDIT_TO_THE_TEAM",
+        "color": "#fffaba",
+        "textColor": "#fffaba",
+        "background": "#786600",
+        "title": "Credit to the Team",
+        "description": "This player will earn Fans 5x the rewards from all Idol Pendants."
+    },
+    {
+        "id": "LOVE",
+        "color": "#ff2b6b",
+        "textColor": "#ff2b6b",
+        "background": "#732652",
+        "title": "Charm",
+        "description": "Players with Charm have a chance of convincing their opponents to fail."
+    },
+    {
+        "id": "PEANUT_RAIN",
+        "color": "#fff199",
+        "textColor": "#fff199",
+        "background": "#04144a",
+        "title": "Peanut Rain",
+        "description": "This Team weaponizes Peanut weather against their enemies."
+    },
+    {
+        "id": "FLINCH",
+        "color": "#219ccc",
+        "textColor": "#219ccc",
+        "background": "#5e5e5e",
+        "title": "Flinch",
+        "description": "Hitters with Flinch cannot swing until a strike has been thrown in the At Bat."
+    },
+    {
+        "id": "WILD",
+        "color": "#219ccc",
+        "textColor": "#219ccc",
+        "background": "#361a57",
+        "title": "Mild",
+        "description": "Pitchers with Mild have a chance of throwing a Mild Pitch."
+    },
+    {
+        "id": "DESTRUCTION",
+        "color": "#ff8a24",
+        "textColor": "#ff8a24",
+        "background": "#802d00",
+        "title": "Destruction",
+        "description": "Teams with Destruction will add a bunch of Curses to their Opponent when defeating them in battle."
+    },
+    {
+        "id": "SIPHON",
+        "color": "#e30000",
+        "textColor": "#e30000",
+        "background": "#2b0000",
+        "title": "Siphon",
+        "description": "Siphons will steal blood more often in Blooddrain and use it in more ways."
+    },
+    {
+        "id": "FLIICKERRRIIING",
+        "color": "#80fffb",
+        "textColor": "#80fffb",
+        "background": "#383838",
+        "title": "Fliickerrriiing",
+        "description": "Fliickerrriiing players are Flickering a lot."
+    },
+    {
+        "id": "FRIEND_OF_CROWS",
+        "color": "#ff7ae7",
+        "textColor": "#ff7ae7",
+        "background": "#570026",
+        "title": "Friend of Crows",
+        "description": "In Birds weather, pitchers with Friend of Crows will encourage the Birds to attack hitters."
+    },
+    {
+        "id": "BLASERUNNING",
+        "color": "#fffaa3",
+        "textColor": "#fffaa3",
+        "background": "#570026",
+        "title": "Blaserunning",
+        "description": "Blaserunners will score .2 Runs for their Team whenever they steal a base."
+    },
+    {
+        "id": "WALK_IN_THE_PARK",
+        "color": "#faff9c",
+        "textColor": "#faff9c",
+        "background": "#275c2a",
+        "title": "Walk in the Park",
+        "description": "Those with Walk in the Park will walk to first base on one less Ball."
+    },
+    {
+        "id": "BIRD_SEED",
+        "color": "#1e0036",
+        "textColor": "#dca8f7",
+        "background": "#dca8f7",
+        "title": "Bird Seed",
+        "description": "Birds like to eat Bird Seed. They'll peck those with Bird Seed out of peanut shells more often. Because they like to eat Bird Seed."
+    },
+    {
+        "id": "HAUNTED",
+        "color": "#b59c9c",
+        "textColor": "#b59c9c",
+        "background": "#1c1c1c",
+        "title": "Haunted",
+        "description": "Haunted players will occasionally be Inhabited."
+    },
+    {
+        "id": "TRAVELING",
+        "color": "#cfebff",
+        "textColor": "#cfebff",
+        "background": "#1c1c1c",
+        "title": "Traveling",
+        "description": "Traveling teams will play 5% better in Away games."
+    },
+    {
+        "id": "SEALANT",
+        "color": "#eded91",
+        "textColor": "#eded91",
+        "background": "#571f26",
+        "title": "Sealant",
+        "description": "Players with Sealant cannot have blood drained in Blooddrain."
+    },
+    {
+        "id": "O_NO",
+        "color": "#cffff0",
+        "textColor": "#cffff0",
+        "background": "#485099",
+        "title": "0 No",
+        "description": "Players with 0 No cannot be struck out when there are 0 Balls in the Count."
+    },
+    {
+        "id": "FAIRNESS",
+        "color": "#12b300",
+        "textColor": "#12b300",
+        "background": "#ffdb0f",
+        "title": "Total Fairness",
+        "description": "This Season, each team will win only one Blessing, and will be Happy with what they get."
+    },
+    {
+        "id": "ESCAPE",
+        "color": "#ffe521",
+        "textColor": "#ffe521",
+        "background": "#0d0d0d",
+        "title": "Pending",
+        "description": "The players on this Team are Pending..."
+    },
+    {
+        "id": "UNFLAMED",
+        "color": "#eaabff",
+        "textColor": "#eaabff",
+        "background": "#1b1c80",
+        "title": "Chaotic",
+        "description": "The Unstable players on a Chaotic team will hit 100% better."
+    },
+    {
+        "id": "TRIBUTE",
+        "color": "#dbce6e",
+        "textColor": "#dbce6e",
+        "background": "#362803",
+        "title": "Tribute",
+        "description": "When Hall of Flame players join this team, they'll add their Tribute as Team Spirit."
+    },
+    {
+        "id": "SQUIDDEST",
+        "color": "#e6eaeb",
+        "textColor": "#e6eaeb",
+        "background": "#163073",
+        "title": "Squiddest",
+        "description": "This Team is the Squiddest. When a player joins the Team, they'll become Squiddish."
+    },
+    {
+        "id": "CONTAINMENT",
+        "color": "#91ab91",
+        "textColor": "#91ab91",
+        "background": "#023802",
+        "title": "Containment",
+        "description": "When an Unstable player on this team is incinerated, the Instability cannot chain to their opponent."
+    },
+    {
+        "id": "RETIRED",
+        "color": "#d3ede5",
+        "textColor": "#d3ede5",
+        "background": "#000e33",
+        "title": "Released",
+        "description": ""
+    },
+    {
+        "id": "RESTING",
+        "color": "#5988ff",
+        "textColor": "#5988ff",
+        "background": "#163073",
+        "title": "Resting",
+        "description": ""
+    },
+    {
+        "id": "INHABITING",
+        "color": "#b59c9c",
+        "textColor": "#b59c9c",
+        "background": "#1c1c1c",
+        "title": "Inhabiting",
+        "description": "This player is temporarily Inhabiting a Haunted player."
+    }
+]

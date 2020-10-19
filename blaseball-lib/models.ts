@@ -24,15 +24,14 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
 
     inning: number;
     topOfInning: boolean;
+    playCount?: number;
     shame: boolean;
 
     awayOdds: number;
     homeOdds: number;
 
-    awayStrikes: number;
     awayScore: number;
     awayTeamBatterCount: number;
-    homeStrikes: number;
     homeScore: number;
     homeTeamBatterCount: number;
 
@@ -49,6 +48,10 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     homePitcherName: string | null;
     homeBatter: PlayerID | null;
     homeBatterName: string | null;
+    awayBases?: number;
+    awayBalls?: number;
+    awayStrikes: number;
+    awayOuts?: number;
 
     awayTeam: TeamID;
     awayTeamName: string;
@@ -62,6 +65,10 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     homeTeamColor: string;
     homeTeamEmoji: string;
     homeTeamSecondaryColor?: string;
+    homeBases?: number;
+    homeBalls?: number;
+    homeStrikes: number;
+    homeOuts?: number;
 
     baserunnerCount: number;
     basesOccupied: number[];
@@ -75,8 +82,6 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
 
     seriesIndex: number;
     seriesLength: number;
-    homeBases?: number;
-    awayBases?: number;
     repeatCount?: number;
 }
 
