@@ -14,7 +14,7 @@ interface OutcomeType {
 
 export const outcomeTypes: OutcomeType[] = [
     { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "gray" },
-    { name: "Chain", emoji: "\u{1F517}", search: [/The Instability chains/i], color: "grey" },
+    { name: "Chain", emoji: "\u{1F517}", search: [/The Instability chains/i], color: "gray" },
     { name: "Reverb", emoji: "\u{1F30A}", search: [/reverb/i], color: "blue" },
     { name: "Beaned", emoji: "\u{1F3AF}", search: [/hits [\w\s]+ with a pitch/], color: "blue" },
     { name: "Feedback", emoji: "\u{1F3A4}", search: [/feedback/i], color: "pink" },
@@ -25,6 +25,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Birds", emoji: "\u{1F426}", search: [/The Birds pecked/i], color: "purple" },
     { name: "Peanut", emoji: "\u{1F95C}", search: [/peanut/i], color: "orange" },
     { name: "Sun 2", emoji: "\u{1F31E}", search: [/Sun 2/i], color: "orange" },
+    { name: "Black Hole", emoji: "\u{26AB}", search: [/Black Hole/i], color: "gray" },
 ];
 
 export function getOutcomes(outcomes: string[]): Outcome[] {
@@ -41,7 +42,7 @@ export function getOutcomes(outcomes: string[]): Outcome[] {
         if (foundType) {
             const outcome = {
                 ...foundType,
-                text: outcomeText,
+                text: outcomeText.trim(),
             };
             foundOutcomes.push(outcome);
         }

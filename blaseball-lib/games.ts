@@ -170,6 +170,7 @@ export function isGameUpdateImportant(update: string) {
         /murder of Crows/,
         /charms/,
         /Sun 2 smiles/,
+        /Black Hole swallows/,
     ]) {
         if (pattern.test(update)) return true;
     }
