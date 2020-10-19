@@ -24,6 +24,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Flickering", emoji: "\u{26A1}", search: [/Flickering/i], color: "blue" },
     { name: "Birds", emoji: "\u{1F426}", search: [/The Birds pecked/i], color: "purple" },
     { name: "Peanut", emoji: "\u{1F95C}", search: [/peanut/i], color: "orange" },
+    { name: "Sun 2", emoji: "\u{1F31E}", search: [/Sun 2/i], color: "orange" },
 ];
 
 export function getOutcomes(outcomes: string[]): Outcome[] {
