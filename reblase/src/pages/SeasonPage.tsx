@@ -89,7 +89,7 @@ function GamesListFetching(props: {
         let gamesFiltered = games;
         if (props.outcomes) {
             gamesFiltered = gamesFiltered.filter((game) => {
-                const gameOutcomes = getOutcomes(game.data.outcomes);
+                const gameOutcomes = getOutcomes(game.data.outcomes, game.data.shame, game.data.awayTeamNickname);
                 for (const gameOutcome of gameOutcomes)
                     if (props.outcomes?.indexOf(gameOutcome.name) !== -1) return true;
                 return false;

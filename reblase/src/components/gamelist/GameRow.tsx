@@ -7,8 +7,8 @@ import { getOutcomes, Outcome } from "../../blaseball/outcome";
 import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "../elements/Twemoji";
 
-const Events = React.memo((props: { outcomes: string[] }) => {
-    const outcomes = getOutcomes(props.outcomes);
+const Events = React.memo((props: { outcomes: string[], shame: boolean, awayTeam: string }) => {
+    const outcomes = getOutcomes(props.outcomes, props.shame, props.awayTeam);
     if (!outcomes) return <></>;
 
     const style: Record<string, string> = {
@@ -214,7 +214,7 @@ export const GameRow = React.memo(
                         </div>
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
-                            <Events outcomes={data.outcomes} />
+                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
                             <Duration
                                 gameId={props.game.gameId}
                                 startTime={props.game.startTime}
@@ -238,7 +238,7 @@ export const GameRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes} />
+                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
                         <Duration
                             gameId={props.game.gameId}
                             startTime={props.game.startTime}
@@ -291,7 +291,7 @@ export const FightRow = React.memo(
                         </div>
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
-                            <Events outcomes={data.outcomes} />
+                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
                         </div>
                     </div>
                 </div>
@@ -308,7 +308,7 @@ export const FightRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes} />
+                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
                     </div>
                 </div>
             </Link>
