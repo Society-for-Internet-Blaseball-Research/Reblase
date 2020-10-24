@@ -8,7 +8,7 @@ export function PageLayout(props: { children: React.ReactNode }) {
 
             {props.children}
 
-            <div className="text-sm text-center my-4 italic text-gray-600">
+            <div className="text-sm text-center my-4 italic text-gray-600 dark:text-gray-400">
                 Brought to you by the {"\u{1f36c}"} Breath Mints.
                 <br />
                 <a href="https://twitter.com/floofstrid">Author</a> (@Ske#6201) |{" "}

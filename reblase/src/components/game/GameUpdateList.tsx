@@ -23,7 +23,7 @@ export function UpdatesListFetching(props: UpdatesListFetchingProps) {
     return (
         <div className="flex flex-col mt-2">
             {props.autoRefresh && (
-                <span className="italic text-gray-600">
+                <span className="italic text-gray-600 dark:text-gray-400">
                     <Spinner /> Live-updating...
                 </span>
             )}

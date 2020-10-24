@@ -36,7 +36,7 @@ export function Home() {
 
             <div>
                 <h3 className="text-2xl font-semibold">Current games</h3>
-                <h4 className="text-md text-gray-700 mb-2">
+                <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
                     Season {sim.season + 1}, Day {sim.day + 1}
                 </h4>
 

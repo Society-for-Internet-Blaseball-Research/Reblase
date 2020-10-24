@@ -19,11 +19,11 @@ function SeasonRow(props: { game: ChronGame }) {
     const target = `/season/${displaySeasonNumber}`;
     return (
         <Link
-            className="flex px-4 py-2 border-b border-solid border-gray-300 items-center hover:bg-gray-200"
+            className="flex px-4 py-2 border-b border-solid border-gray-300 dark:border-gray-700 items-center hover:bg-gray-200 dark-hover:bg-gray-800"
             to={target}
         >
             <span className="text-lg font-semibold">Season {displaySeasonNumber}</span>
-            <span className="text-gray-700 ml-4 mr-auto">
+            <span className="text-gray-700 dark:text-gray-300 ml-4 mr-auto">
                 {startDate?.format(dateFormat) ?? "TBD"} - {endDate?.format(dateFormat) ?? "TBD"}
             </span>
             <span className="text-semibold">View games</span>

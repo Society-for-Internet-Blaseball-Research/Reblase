@@ -40,7 +40,7 @@ export const DayTable = function DayTable(props: DayTableProps) {
                 <span className="font-semibold">
                     Season {props.season}, Day {props.day}
                 </span>
-                <span className="flex-1 text-right lg:text-left text-sm text-gray-700">
+                <span className="flex-1 text-right lg:text-left text-sm text-gray-700 dark:text-gray-300">
                     {timestamp?.format("YYYY-MM-DD HH:mm")}
                 </span>
             </div>

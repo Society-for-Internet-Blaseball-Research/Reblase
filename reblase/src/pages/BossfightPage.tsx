@@ -61,7 +61,7 @@ function BossfightUpdateList(props: { fightUpdates: ChronFightUpdate[]; temporal
     const renderSecondary = (upd: SecondaryUpdate<BossfightSecondary>) => {
         if (upd.data.type === "temporal") {
             return (
-                <div key={upd.timestamp + "_temporal"} className="p-2 border-b border-gray-300">
+                <div key={upd.timestamp + "_temporal"} className="p-2 border-b border-gray-300 dark:border-gray-700">
                     <Twemoji emoji={"\u{1F95C}"} />
                     <span className="ml-2 font-semibold">{upd.data.data.doc?.zeta}</span>
                 </div>
@@ -87,7 +87,7 @@ function BossfightUpdateList(props: { fightUpdates: ChronFightUpdate[]; temporal
                     : upd.data.fight.awayMaxHp
             );
             return (
-                <div key={upd.timestamp + "_damage"} className="p-2 border-b border-gray-300 flex flex-row">
+                <div key={upd.timestamp + "_damage"} className="p-2 border-b border-gray-300 dark:border-gray-700 flex flex-row">
                     <div>
                         <span className="font-semibold">
                             <Twemoji emoji={"\u{1F6A8}"} className="mr-2" />
@@ -96,7 +96,7 @@ function BossfightUpdateList(props: { fightUpdates: ChronFightUpdate[]; temporal
                         took <span className="font-semibold">{upd.data.damage.dmg.toLocaleString()}</span> damage!{" "}
                     </div>
                     <div className="text-right flex-1">
-                        <span className="text-gray-800 mr-1">
+                        <span className="text-gray-800 dark:text-gray-200 mr-1">
                             <Twemoji emoji={teamEmoji} /> {teamHp.toLocaleString()} (
                             {Math.round((teamHp / teamMaxHp) * 100).toLocaleString()}
                             %)
