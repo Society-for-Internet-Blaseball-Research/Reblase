@@ -11,9 +11,14 @@ const Events = React.memo((props: { outcomes: string[], shame: boolean, awayTeam
     const outcomes = getOutcomes(props.outcomes, props.shame, props.awayTeam);
     if (!outcomes) return <></>;
 
-    const style: Record<string, string> = ["red", "orange", "blue", "pink", "purple", "gray"].reduce((acc, color) => {
-        return { ...acc, [color]: `bg-${color}-200 text-${color}-800 dark:bg-${color}-900 dark:text-${color}-200` };
-    }, {});
+    const style: Record<string, string> = {
+        red: "bg-red-200 dark:bg-red-900 text-red-800 dark:text-red-200",
+        orange: "bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200",
+        blue: "bg-blue-200 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
+        pink: "bg-pink-200 dark:bg-pin-900 text-pink-800 dark:text-pin-200",
+        purple: "bg-purple-200 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
+        gray: "bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200",
+    };
 
     const outcomesByType: Record<string, Outcome[]> = {};
     for (const outcome of outcomes) {
