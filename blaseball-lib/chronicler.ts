@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { BlaseballFight, BlaseballGame, BlaseballPlayer, BlaseballTeam, BlaseballTemporal } from "./models";
+import { BlaseballFight, BlaseballGame, BlaseballPlayer, BlaseballTeam, BlaseballTemporal, CauldronGameEvent } from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
 
@@ -61,6 +61,12 @@ export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate> {}
 
 export type Timestamp = string;
 export type PlayerPosition = "lineup" | "rotation" | "bullpen" | "bench";
+
+export interface CauldronEvent {
+    gameId: string;
+    timestamp: Timestamp;
+    data: CauldronGameEvent;
+}
 
 export interface ChronGame {
     gameId: string;

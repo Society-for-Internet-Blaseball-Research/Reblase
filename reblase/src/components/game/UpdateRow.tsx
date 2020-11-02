@@ -3,7 +3,7 @@ import { Circles } from "../elements/Circles";
 import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import Emoji from "../elements/Emoji";
-import { BlaseballGame } from "blaseball-lib/models";
+import { BlaseballGame, CauldronGameEvent } from "blaseball-lib/models";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
 import { AiOutlineLink } from "react-icons/ai";
@@ -23,8 +23,12 @@ const BatterGrid = "col-start-2 col-end-2 justify-self-start lg:col-start-4 lg:c
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
 const LinkGrid = "hidden lg:block lg:col-start-6 lg:col-end-6";
 
-function Timestamp({ update }: WrappedUpdateProps) {
-    const updateTime = dayjs(update.timestamp);
+interface TimestampProps {
+    timestamp : string;
+}
+
+function Timestamp( {timestamp}:TimestampProps ) {
+    const updateTime = dayjs(timestamp);
     const time = updateTime.format("mm:ss");
 
     return <span className={`${TimestampGrid} text-gray-700`}>{time}</span>;
@@ -123,7 +127,7 @@ export const UpdateRow = React.memo(
                 style={{ gridTemplateColumns: "auto auto 1fr" }}
             >
                 <GameLog evt={evt} />
-                <Timestamp update={update} />
+                <Timestamp timestamp={update.timestamp} />
                 <Score evt={evt} />
                 <Batter evt={evt} />
                 <AtBatInfo evt={evt} />
@@ -136,3 +140,28 @@ export const UpdateRow = React.memo(
         return oldProps.update.hash === newProps.update.hash && oldProps.highlight === newProps.highlight;
     }
 );
+
+function EventText(props: { event : CauldronGameEvent}) {
+    const row = props.event;
+    
+    return (
+        <span className="col-start-5 col-end-5 lg:col-start-5 lg:col-end-5">
+            {row.event_text.map((s) => <p>{s}</p>)}
+        </span>
+    )
+}
+
+export function CauldronItem(props: {item : CauldronGameEvent}) {
+    const row = props.item;
+    
+    return (
+        <div
+            className="grid grid-cols-6 grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300"
+            style={{gridTemplateColumns: "auto auto 1fr" }}
+        >
+            <span className="col-start-1 col-end-1 lg:col-start-1 lg:col-end-1">{row.top_of_inning ? "Top of " : "Bottom of "}{row.inning+1}</span>
+            <span className="col-start-2 col-end-2 lg:col-start-2 lg:col-end-2 font-semibold"> {row.event_type}</span>
+            <EventText event={row}/>
+            <Timestamp timestamp={row.perceived_at}/>
+        </div>);
+}
