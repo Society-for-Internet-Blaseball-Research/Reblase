@@ -11,7 +11,7 @@ const EventTypeGrid = "col-start-3 col-end-3 lg:col-start-3 lg:col-end-3";
 const EventTextGrid = "col-start-4 col-end-4 justify-self-start lg:col-start-4 lg:col-end-4 lg:justify-self-start row-span-2";
 const BatterGrid = "col-start-5 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5 lg:justify-self-end";
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
-const LinkGrid = "hidden lg:block lg:col-start-6 lg:col-end-6";
+const JsonInfoGrid = "col-start-6 col-end-6 lg:col-start-6 lg:col-end-6";
 
 interface PlayerTeamUpdateProps {
     evt: CauldronGameEvent;
@@ -73,6 +73,7 @@ function AtBatInfo({ evt, players, teams }: PlayerTeamUpdateProps) {
         </div>
     );
 }
+
 function BlaseRunners({ evt, players, teams }: PlayerTeamUpdateProps) {
     if(!players || !teams)
         return <p/>;
@@ -117,6 +118,59 @@ function BlaseRunners({ evt, players, teams }: PlayerTeamUpdateProps) {
     );
 }
 
+interface JsonInfoProps extends PlayerTeamUpdateProps
+{
+    visible: boolean
+}
+
+interface JsonInfoState
+{
+    visible: boolean;
+    info: string[];
+}
+
+class JsonInfo extends React.Component<JsonInfoProps, JsonInfoState> {
+    constructor(props : JsonInfoProps) {
+        super(props);
+        
+        let info:string[] = []
+        let key: keyof CauldronGameEvent;
+    
+        for(key in props.evt)
+        {
+            if(key != "event_text" &&
+                key != "base_runners" &&
+                key != "additional_context"
+            )
+            {
+                info.push(`${key}: ${props.evt[key]}`);
+            }
+        }
+        info.sort();
+
+        this.state = { visible: false, info: info };
+    }
+
+    toggle() {
+        this.setState({
+            visible: !this.state.visible
+        });
+    }
+    
+    render() {
+        return (
+        <div className={`${JsonInfoGrid} relative`}>
+            <button className="btn btn-block" onClick={this.toggle.bind(this)}>🛈</button>
+            <div className={`z-50 absolute text-xs p-2 bg-gray-200 right-0 ${this.state.visible ? "block" :"hidden"}`}>
+                {this.state.info.map(x => {
+                    return <p key={x}>{x}</p>
+                })}
+            </div>
+        </div>
+        )
+    }
+}
+
 interface CauldronRowParams {
     item: CauldronGameEvent;
     teams: BlaseballTeam[];
@@ -127,15 +181,20 @@ export function CauldronRow({item, teams, players} : CauldronRowParams) {
     const row = item;
     
     return (
-        <div
-            className="grid grid-rows-2 grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300"
-            style={{gridTemplateColumns: "auto auto 150px 1fr" }}
-        >
-            <Timestamp timestamp={row.perceived_at}/>
-            <Score evt={item} />
-            <EventType evt={item}/>
-            <EventText evt={row} />
-            <Batter evt={item} teams={teams} players={players} />
-            <AtBatInfo evt={item} teams={teams} players={players}/>
+        <div>
+            <div
+                className="grid grid-rows-2 grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300"
+                style={{gridTemplateColumns: "auto auto 150px 1fr" }}
+            >
+                <Timestamp timestamp={row.perceived_at}/>
+                <Score evt={item} />
+                <EventType evt={item}/>
+                <EventText evt={row} />
+                <Batter evt={item} teams={teams} players={players} />
+                <AtBatInfo evt={item} teams={teams} players={players}/>
+                <JsonInfo evt={item} teams={teams} players={players} visible={true}/>
+                
+            </div>
+
         </div>);
 }
