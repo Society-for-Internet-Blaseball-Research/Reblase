@@ -93,7 +93,7 @@ function BlaseRunners({ evt, players, teams }: PlayerTeamUpdateProps) {
             basesOccupiedBefore.push(runner.base_before_play-1);
             baseRunnerNamesBefore.push(name);
         }
-        if(runner.base_after_play <= basesIncludingHome)
+        if(runner.base_after_play < basesIncludingHome)
         {
             basesOccupiedAfter.push(runner.base_after_play-1);
             baseRunnerNamesAfter.push(name);
@@ -107,7 +107,7 @@ function BlaseRunners({ evt, players, teams }: PlayerTeamUpdateProps) {
                 baseRunnerNames={baseRunnerNamesBefore}
                 totalBases={basesIncludingHome - 1}
             />
-            ➡️
+            🡆
             <BaseDisplay
                 basesOccupied={basesOccupiedAfter}
                 baseRunnerNames={baseRunnerNamesAfter}
