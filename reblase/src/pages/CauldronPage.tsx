@@ -1,21 +1,27 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
-
 import { CauldronListFetching } from "../components/game/CauldronEventList";
 import { cache } from "swr";
 import Error from "../components/elements/Error";
-import { useCauldronGameEvents, useGameUpdates } from "../blaseball/hooks";
-import { BlaseballGame } from "blaseball-lib/models";
+import { useCauldronGameEvents, usePlayerTeamsList } from "../blaseball/hooks";
 import { Link } from "react-router-dom";
+import { BlaseballTeam, CauldronGameEvent } from "blaseball-lib/models";
 
 interface PayloadProps {
-    evt: BlaseballGame;
+    teams: BlaseballTeam[];
+    evt: CauldronGameEvent;
 }
 
-const GameHeading = ({ evt }: PayloadProps) => {
+const GameHeading = ({ teams, evt }: PayloadProps) => {
     const location = useLocation();
 
+    if(!evt)
+        return <p/>;
+
     const displaySeasonNumber = evt.season + 1;
+
+    const awayTeamName = teams.find(x => x.id === evt.batter_team_id)?.fullName;
+    const homeTeamName = teams.find(x => x.id === evt.pitcher_team_id)?.fullName;
 
     return (
         <>
@@ -27,9 +33,9 @@ const GameHeading = ({ evt }: PayloadProps) => {
                     Season {displaySeasonNumber}, Day {evt.day + 1}
                 </h2>
                 <h3>
-                    <strong>{evt.awayTeamName}</strong>
+                    <strong>{awayTeamName}</strong>
                     <small> vs. </small>
-                    <strong>{evt.homeTeamName}</strong>
+                    <strong>{homeTeamName}</strong>
                 </h3>
             </Link>
         </>
@@ -60,34 +66,6 @@ const CheckBox = (props: { value: boolean; onChange: (newValue: boolean) => void
     </label>
 );
 
-const GamePageOptions = (props: GamePageOptionsProps) => {
-    return (
-        <div className="flex flex-row mt-2">
-            <CheckBox
-                value={props.options.reverse}
-                onChange={(reverse) => props.setOptions({ ...props.options, reverse })}
-            >
-                Latest first
-            </CheckBox>
-
-            <CheckBox
-                value={props.options.onlyImportant}
-                onChange={(onlyImportant) => props.setOptions({ ...props.options, onlyImportant })}
-            >
-                Only important
-            </CheckBox>
-
-            {!props.gameComplete && (
-                <CheckBox
-                    value={props.options.autoUpdate}
-                    onChange={(autoUpdate) => props.setOptions({ ...props.options, autoUpdate })}
-                >
-                    Live refresh
-                </CheckBox>
-            )}
-        </div>
-    );
-};
 
 type GamePageParams = { gameId?: string };
 export function CauldronPage() {
@@ -95,6 +73,11 @@ export function CauldronPage() {
 
     // Never reuse caches across multiple games, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [gameId]);
+
+    const { players: allPlayers, teams: allTeams, error: teamsError, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
+ 
+    const teams = allTeams.map(x => x.data);
+    const players = allPlayers.map(x => x.data);
 
     const [options, setOptions] = useState<GamePageOptions>({
         reverse: false,
@@ -111,19 +94,19 @@ export function CauldronPage() {
     };
 
     const { events, error } = useCauldronGameEvents(query);
-    //const { updates, error, isLoading } = useGameUpdates(query, options.autoUpdate);
+
     if (error) return <Error>{error.toString()}</Error>;
 
-     const last = events[events.length - 1];
+    const first = events[0];
 
     // TODO: components
     return (
         <div className="container mx-auto px-4">
-            {/* {<GameHeading evt={last} />}
-
-            <GamePageOptions options={options} setOptions={setOptions} gameComplete={last?.gameComplete ?? true} /> */}
+            <GameHeading teams={teams} evt={first} />
 
             <CauldronListFetching
+                teams={teams}
+                players={players}
                 events={events}
                 order={options.reverse ? "desc" : "asc"}
             />
