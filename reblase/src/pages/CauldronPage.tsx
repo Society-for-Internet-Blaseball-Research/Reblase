@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
 
-import { CauldronListFetching } from "../components/game/GameUpdateList";
+import { CauldronListFetching } from "../components/game/CauldronEventList";
 import { cache } from "swr";
 import Error from "../components/elements/Error";
 import { useCauldronGameEvents, useGameUpdates } from "../blaseball/hooks";

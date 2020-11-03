@@ -1,7 +1,6 @@
 ﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
 import React, { useMemo } from "react";
-import { UpdateRow, CauldronItem } from "./UpdateRow";
-
+import { UpdateRow } from "./UpdateRow";
 import "../../style/GamePage.css";
 import Emoji from "../elements/Emoji";
 import { ChronFightUpdate, ChronGameUpdate, CauldronEvent } from "blaseball-lib/chronicler";
@@ -36,18 +35,7 @@ export function UpdatesListFetching(props: UpdatesListFetchingProps) {
     );
 }
 
-interface CauldronListFetchingProps {
-    events: CauldronGameEvent[];
-    order: "asc" | "desc";
-}
 
-export function CauldronListFetching(props: CauldronListFetchingProps) {
-    return (
-        <div className="flex flex-col mt-2">
-            <CauldronEventList events={props.events} eventOrder={props.order} />
-        </div>
-    )
-}
 
 interface UpdateProps {
     evt: BlaseballGame;
@@ -137,23 +125,6 @@ export function addInningHeaderRows(
     return elements;
 }
 
-
-interface CauldronEventListProps {
-    events: CauldronGameEvent[];
-    eventOrder: "asc" | "desc";
-}
-
-export function CauldronEventList(props: CauldronEventListProps) {
-    const events = props.eventOrder === "desc" ? [...props.events].reverse() : props.events;
-
-    return (
-        <div className="flex flex-col">
-            {events.map((e) => {
-                return (<CauldronItem item={e}/>)
-            })} 
-        </div>
-    )
-}
 
 
 export interface SecondaryUpdate<T> {

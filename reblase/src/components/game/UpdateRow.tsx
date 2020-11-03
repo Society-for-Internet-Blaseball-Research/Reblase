@@ -27,7 +27,7 @@ interface TimestampProps {
     timestamp : string;
 }
 
-function Timestamp( {timestamp}:TimestampProps ) {
+export function Timestamp( {timestamp}:TimestampProps ) {
     const updateTime = dayjs(timestamp);
     const time = updateTime.format("mm:ss");
 
@@ -141,27 +141,3 @@ export const UpdateRow = React.memo(
     }
 );
 
-function EventText(props: { event : CauldronGameEvent}) {
-    const row = props.event;
-    
-    return (
-        <span className="col-start-5 col-end-5 lg:col-start-5 lg:col-end-5">
-            {row.event_text.map((s) => <p>{s}</p>)}
-        </span>
-    )
-}
-
-export function CauldronItem(props: {item : CauldronGameEvent}) {
-    const row = props.item;
-    
-    return (
-        <div
-            className="grid grid-cols-6 grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300"
-            style={{gridTemplateColumns: "auto auto 1fr" }}
-        >
-            <span className="col-start-1 col-end-1 lg:col-start-1 lg:col-end-1">{row.top_of_inning ? "Top of " : "Bottom of "}{row.inning+1}</span>
-            <span className="col-start-2 col-end-2 lg:col-start-2 lg:col-end-2 font-semibold"> {row.event_type}</span>
-            <EventText event={row}/>
-            <Timestamp timestamp={row.perceived_at}/>
-        </div>);
-}
