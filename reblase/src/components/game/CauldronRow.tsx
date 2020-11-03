@@ -5,6 +5,7 @@ import Emoji from "../elements/Emoji";
 import { Circles } from "../elements/Circles";
 import { CauldronEvent } from "blaseball-lib/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
+import Tooltip from "rc-tooltip";
 
 const ScoreGrid = "col-start-2 col-end-2 lg:col-start-2 lg:col-end-2";
 const EventTypeGrid = "col-start-3 col-end-3 lg:col-start-3 lg:col-end-3";
@@ -12,6 +13,7 @@ const EventTextGrid = "col-start-4 col-end-4 justify-self-start lg:col-start-4 l
 const BatterGrid = "col-start-5 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5 lg:justify-self-end";
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
 const JsonInfoGrid = "col-start-6 col-end-6 lg:col-start-6 lg:col-end-6";
+const ErrorsGrid = "col-start-1 col-span-3 row-start-2";
 
 interface PlayerTeamUpdateProps {
     evt: CauldronGameEvent;
@@ -26,7 +28,7 @@ interface SimpleUpdateProps {
 function EventText({evt} : SimpleUpdateProps) {
     
     return (
-        <span className={`${EventTextGrid}`}>
+        <span className={`text-sm ${EventTextGrid}`}>
             {evt.event_text.map((s) => <p>{s}</p>)}
         </span>
     )
@@ -55,9 +57,12 @@ function Batter({ evt, teams, players }: PlayerTeamUpdateProps) {
 }
 
 function EventType({evt}:SimpleUpdateProps) {
+
+    var display = evt.event_type.replace(/_/g, " ");
+
     return (
         <span className={`${EventTypeGrid} font-semibold`}>
-            {evt.event_type}
+            {display}
         </span>
         );
 }
@@ -78,7 +83,7 @@ function BlaseRunners({ evt, players, teams }: PlayerTeamUpdateProps) {
     if(!players || !teams)
         return <p/>;
 
-    const basesIncludingHome = (evt.top_of_inning ? evt.away_base_count : evt.home_base_count) ?? 4;
+    const basesIncludingHome = (evt.top_of_inning ? evt.away_base_count+1 : evt.home_base_count+1) ?? 4;
 
     let basesOccupiedBefore = [];
     let baseRunnerNamesBefore = [];
@@ -161,7 +166,7 @@ class JsonInfo extends React.Component<JsonInfoProps, JsonInfoState> {
         return (
         <div className={`${JsonInfoGrid} relative`}>
             <button className="btn btn-block" onClick={this.toggle.bind(this)}>🛈</button>
-            <div className={`z-50 absolute text-xs p-2 bg-gray-200 right-0 ${this.state.visible ? "block" :"hidden"}`}>
+            <div className={`rounded w-auto z-50 absolute text-xs p-2 bg-gray-200 right-0 ${this.state.visible ? "block" :"hidden"}`}>
                 {this.state.info.map(x => {
                     return <p key={x}>{x}</p>
                 })}
@@ -169,6 +174,51 @@ class JsonInfo extends React.Component<JsonInfoProps, JsonInfoState> {
         </div>
         )
     }
+}
+
+interface ErrorProps {
+    text: string
+    type: string
+}
+
+function Error({text, type} : ErrorProps) {
+    let color = "red";
+    if(type === 'Fixed')
+        color = "blue";
+
+    return (
+        <Tooltip placement="top" overlay={<span>{text}</span>}>
+            <span className={`text-sm bg-${color}-200 rounded px-2 py-1 inline-flex items-center justify-center`}>
+                {type}
+            </span>
+        </Tooltip>
+    );
+}
+
+function Errors({evt} : SimpleUpdateProps) {
+    if(!evt.parsing_error && !evt.fixed_error)
+        return <div className={`${ErrorsGrid}`}/>;
+
+    let allErrors = [];
+
+    for(var err of evt.parsing_error_list)
+    {
+        allErrors.push({type:"Parsing", text:err});
+    }
+    for(var err of evt.fixed_error_list)
+    {
+        allErrors.push({type: "Fixed", text:err});
+    }
+
+    return (
+    <div className={`${ErrorsGrid}`}>
+        {
+            allErrors.map(x => {
+                return <Error type={x.type} text={x.text}/>
+            })
+        }
+    </div>
+    );
 }
 
 interface CauldronRowParams {
@@ -189,6 +239,7 @@ export function CauldronRow({item, teams, players} : CauldronRowParams) {
                 <Timestamp timestamp={row.perceived_at}/>
                 <Score evt={item} />
                 <EventType evt={item}/>
+                <Errors evt={item}/>
                 <EventText evt={row} />
                 <Batter evt={item} teams={teams} players={players} />
                 <AtBatInfo evt={item} teams={teams} players={players}/>
