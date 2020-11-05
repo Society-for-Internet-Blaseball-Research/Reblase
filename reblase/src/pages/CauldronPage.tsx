@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
 import { CauldronListFetching } from "../components/game/CauldronEventList";
 import { cache } from "swr";
@@ -44,48 +44,26 @@ const GameHeading = ({ teams, evt }: PayloadProps) => {
 
 interface GamePageOptions {
     reverse: boolean;
-    autoUpdate: boolean;
-    onlyImportant: boolean;
 }
 
-interface GamePageOptionsProps {
-    options: GamePageOptions;
-    setOptions: (opts: GamePageOptions) => void;
-    gameComplete: boolean;
-}
 
-const CheckBox = (props: { value: boolean; onChange: (newValue: boolean) => void; children?: ReactNode }) => (
-    <label className="block mr-4 text-md">
-        <input
-            className="mr-2 h-4 align-middle"
-            type="checkbox"
-            checked={props.value}
-            onChange={(e) => props.onChange(e.target.checked)}
-        />
-        <span>{props.children}</span>
-    </label>
-);
-
-
-type GamePageParams = { gameId?: string };
+type CauldronPageParams = { gameId?: string };
 export function CauldronPage() {
-    const { gameId } = useParams<GamePageParams>();
+    const { gameId } = useParams<CauldronPageParams>();
 
     // Never reuse caches across multiple games, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [gameId]);
 
-    const { players: allPlayers, teams: allTeams, error: teamsError, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
+    const { players: allPlayers, teams: allTeams } = usePlayerTeamsList();
  
     const teams = allTeams.map(x => x.data);
     const players = allPlayers.map(x => x.data);
 
     const [options, setOptions] = useState<GamePageOptions>({
         reverse: false,
-        autoUpdate: false,
-        onlyImportant: false,
     });
 
-    if (options.autoUpdate && !options.reverse) setOptions({ ...options, reverse: true });
+    if (options.reverse) setOptions({ ...options, reverse: true });
 
     const query = {
         gameId: gameId ?? "null",
@@ -99,7 +77,6 @@ export function CauldronPage() {
 
     const first = events[0];
 
-    // TODO: components
     return (
         <div className="container mx-auto px-4">
             <GameHeading teams={teams} evt={first} />

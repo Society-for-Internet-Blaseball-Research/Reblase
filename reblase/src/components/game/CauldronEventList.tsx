@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { CauldronGameEvent, BlaseballTeam, BlaseballPlayer } from "blaseball-lib/models";
 import { CauldronRow } from "./CauldronRow";
 import Emoji from "../elements/Emoji";
@@ -9,6 +9,7 @@ interface EventProps {
     evt: CauldronGameEvent;
 }
 
+// Stolen from GameUpdateList
 export function InningHeader(props: EventProps) {
     if(!props.teams || !props.evt)
         return <p/>;
@@ -50,13 +51,13 @@ type CauldronElement =
     | { type: "row"; event: CauldronGameEvent }
     | { type: "heading"; event: CauldronGameEvent, inning: number; top: boolean };
 
+// Stolen and modified from GameUpdateList
 export function addInningHeaderRows(
     events: CauldronGameEvent[],
 ): CauldronElement[] {
     const elements: CauldronElement[] = [];
 
     let lastPayload = null;
-    let lastHash = null;
     for (const event of events) {
 
         const payload = event;
@@ -111,7 +112,7 @@ export function CauldronEventList({teams, players, events, eventOrder}: Cauldron
     return (
         <div className="flex flex-col">
             {elements.map((e) => {
-                if(e.type == "heading")
+                if(e.type === "heading")
                     return <InningHeader key={e.event.event_index+"_header"} teams={teams} evt={e.event} />
                 else
                     return (<CauldronRow item={e.event} teams={teams} players={players} key={e.event.event_index}/>)

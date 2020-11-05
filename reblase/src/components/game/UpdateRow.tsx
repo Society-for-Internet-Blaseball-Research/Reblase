@@ -3,7 +3,7 @@ import { Circles } from "../elements/Circles";
 import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
 import Emoji from "../elements/Emoji";
-import { BlaseballGame, CauldronGameEvent } from "blaseball-lib/models";
+import { BlaseballGame } from "blaseball-lib/models";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
 import { AiOutlineLink } from "react-icons/ai";

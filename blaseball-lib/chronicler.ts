@@ -62,12 +62,6 @@ export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate> {}
 export type Timestamp = string;
 export type PlayerPosition = "lineup" | "rotation" | "bullpen" | "bench";
 
-export interface CauldronEvent {
-    gameId: string;
-    timestamp: Timestamp;
-    data: CauldronGameEvent;
-}
-
 export interface ChronGame {
     gameId: string;
     startTime: Timestamp | null;

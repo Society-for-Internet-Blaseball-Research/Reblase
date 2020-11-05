@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { BlaseballTeam, BlaseballPlayer, CauldronGameEvent } from "blaseball-lib/models";
 import { Timestamp } from "./UpdateRow"
 import Emoji from "../elements/Emoji";
 import { Circles } from "../elements/Circles";
-import { CauldronEvent } from "blaseball-lib/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
 import Tooltip from "rc-tooltip";
 
@@ -15,18 +14,20 @@ const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-
 const JsonInfoGrid = "col-start-6 col-end-6 lg:col-start-6 lg:col-end-6";
 const ErrorsGrid = "col-start-1 col-span-3 row-start-2";
 
+// components that need team/player info
 interface PlayerTeamUpdateProps {
     evt: CauldronGameEvent;
     teams: BlaseballTeam[];
     players: BlaseballPlayer[];
 }
 
+// simple components that only need the event
 interface SimpleUpdateProps {
     evt: CauldronGameEvent;
 }
 
-function EventText({evt} : SimpleUpdateProps) {
-    
+// The list of all stuff that happened on this game event
+function EventText({evt} : SimpleUpdateProps) {   
     return (
         <span className={`text-sm ${EventTextGrid}`}>
             {evt.event_text.map((s,i) => <p key={i}>{s}</p>)}
@@ -34,12 +35,14 @@ function EventText({evt} : SimpleUpdateProps) {
     )
 }
 
+// The score; ripped from UpdateRow
 function Score({ evt }: SimpleUpdateProps) {
     return (
         <span className={`${ScoreGrid} tag font-semibold bg-gray-200`}>{`${evt.away_score} - ${evt.home_score}`}</span>
     );
 }
 
+// Batter information; ripped from UpdateRow
 function Batter({ evt, teams, players }: PlayerTeamUpdateProps) {
     const player = players.find(x => x.id === evt.batter_id)?.name;
     const team = teams.find(x => x.id === evt.batter_team_id) ?? teams[0];
@@ -56,8 +59,10 @@ function Batter({ evt, teams, players }: PlayerTeamUpdateProps) {
     );
 }
 
+// What event happened
 function EventType({evt}:SimpleUpdateProps) {
 
+    // Make it more naturally readable by replacing underscores with spaces
     var display = evt.event_type.replace(/_/g, " ");
 
     return (
@@ -67,7 +72,10 @@ function EventType({evt}:SimpleUpdateProps) {
         );
 }
 
+// Outs; ripped from UpdateRow
 const Outs = ({ evt }: SimpleUpdateProps) => <Circles label="Outs" amount={evt.outs_before_play} total={2} />;
+
+// AtBatInfo; ripped and modified from UpdateRow
 function AtBatInfo({ evt, players, teams }: PlayerTeamUpdateProps) {
     return (
         <div className={`${AtBatGrid} flex flex-row items-center space-x-2`}>
@@ -79,6 +87,7 @@ function AtBatInfo({ evt, players, teams }: PlayerTeamUpdateProps) {
     );
 }
 
+// Baserunners; ripped and highly modified from UpdateRow
 function BlaseRunners({ evt, players, teams }: PlayerTeamUpdateProps) {
     if(!players || !teams)
         return <p/>;
@@ -113,7 +122,7 @@ function BlaseRunners({ evt, players, teams }: PlayerTeamUpdateProps) {
                 baseRunnerNames={baseRunnerNamesBefore}
                 totalBases={basesIncludingHome - 1}
             />
-            🡆
+            {"\uD83E\uDC46"}
             <BaseDisplay
                 basesOccupied={basesOccupiedAfter}
                 baseRunnerNames={baseRunnerNamesAfter}
@@ -143,9 +152,9 @@ class JsonInfo extends React.Component<JsonInfoProps, JsonInfoState> {
     
         for(key in props.evt)
         {
-            if(key != "event_text" &&
-                key != "base_runners" &&
-                key != "additional_context"
+            if(key !== "event_text" &&
+                key !== "base_runners" &&
+                key !== "additional_context"
             )
             {
                 info.push(`${key}: ${props.evt[key]}`);
@@ -165,7 +174,7 @@ class JsonInfo extends React.Component<JsonInfoProps, JsonInfoState> {
     render() {
         return (
         <div className={`${JsonInfoGrid} relative`}>
-            <button className="btn btn-block" onClick={this.toggle.bind(this)}>🛈</button>
+            <button className="btn btn-block" onClick={this.toggle.bind(this)}>{"\uD83D\uDEC8"}</button>
             <div className={`rounded w-auto z-50 absolute text-xs p-2 bg-gray-200 right-0 ${this.state.visible ? "block" :"hidden"}`}>
                 {this.state.info.map(x => {
                     return <p key={x}>{x}</p>
@@ -205,9 +214,9 @@ function Errors({evt} : SimpleUpdateProps) {
     {
         allErrors.push({type:"Parsing", text:err});
     }
-    for(var err of evt.fixed_error_list)
+    for(var err2 of evt.fixed_error_list)
     {
-        allErrors.push({type: "Fixed", text:err});
+        allErrors.push({type: "Fixed", text:err2});
     }
 
     return (
