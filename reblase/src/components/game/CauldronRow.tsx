@@ -172,13 +172,26 @@ class JsonInfo extends React.Component<JsonInfoProps, JsonInfoState> {
     }
     
     render() {
+        let half = this.state.info.length / 2;
+        let col1 = this.state.info.slice(0, half);
+        let col2 = this.state.info.slice(half);
         return (
         <div className={`${JsonInfoGrid} relative`}>
             <button className="btn btn-block" onClick={this.toggle.bind(this)}>{"\uD83D\uDEC8"}</button>
             <div className={`rounded w-auto z-50 absolute text-xs p-2 bg-gray-200 right-0 ${this.state.visible ? "block" :"hidden"}`}>
-                {this.state.info.map(x => {
-                    return <p key={x}>{x}</p>
-                })}
+                <div className="grid grid-cols-2 gap-1"
+                style={{gridTemplateColumns: "300px 300px" }}>
+                    <div className="col-start-1">
+                        {col1.map(x => {
+                            return <p key={x}>{x}</p>
+                        })}
+                    </div>
+                    <div className="col-start-2">
+                        {col2.map(x => {
+                            return <p key={x}>{x}</p>
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
         )
