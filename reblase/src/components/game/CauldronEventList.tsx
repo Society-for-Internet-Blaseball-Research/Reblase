@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { CauldronGameEvent, BlaseballTeam, BlaseballPlayer } from "blaseball-lib/models";
 import { CauldronRow } from "./CauldronRow";
 import Emoji from "../elements/Emoji";
-import { getBattingTeam } from "blaseball-lib/games";
+import { Loading } from "components/elements/Loading";
 
 interface EventProps {
     teams: BlaseballTeam[];
@@ -68,23 +68,6 @@ export function addInningHeaderRows(
             elements.push(header);
         }
 
-        // // Reorder accounting for the early pitching events we get
-        // if (direction === "asc") {
-        //     if (payload.lastevent.endsWith("batting.") && elements.length > 2) {
-        //         const [heading, prevevent] = elements.splice(-2);
-        //         elements.push(prevevent, heading);
-        //     }
-        // } else {
-        //     if (elements.length > 3) {
-        //         const [prevPrevevent, prevevent, heading] = elements.splice(-3);
-        //         if (heading.type === "heading" && prevPrevevent.event.data.lastevent.endsWith("batting.")) {
-        //             elements.push(prevPrevevent, heading, prevevent);
-        //         } else {
-        //             elements.push(prevPrevevent, prevevent, heading);
-        //         }
-        //     }
-        // }
-
         // Add the row
         elements.push(row);
 
@@ -97,16 +80,18 @@ export function addInningHeaderRows(
 
 
 interface CauldronListFetchingProps {
+    isLoading: boolean;
     teams: BlaseballTeam[];
     players: BlaseballPlayer[];
     events: CauldronGameEvent[];
     order: "asc" | "desc";
 }
 
-export function CauldronListFetching({teams, players, events, order}: CauldronListFetchingProps) {
+export function CauldronListFetching({isLoading, teams, players, events, order}: CauldronListFetchingProps) {
     return (
         <div className="flex flex-col mt-2">
             <CauldronEventList teams={teams} players={players} events={events} eventOrder={order} />
+            {isLoading && <Loading />}
         </div>
     )
 }

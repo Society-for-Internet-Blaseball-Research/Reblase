@@ -93,7 +93,7 @@ export function CauldronPage() {
         baseRunners: true,
     };
 
-    const { events, error } = useCauldronGameEvents(query);
+    const { events, error, isLoading } = useCauldronGameEvents(query);
 
     if (error) return <Error>{error.toString()}</Error>;
 
@@ -105,6 +105,7 @@ export function CauldronPage() {
             <GameHeading teams={teams} evt={first} />
 
             <CauldronListFetching
+                isLoading={isLoading}
                 teams={teams}
                 players={players}
                 events={events}

@@ -29,7 +29,7 @@ function EventText({evt} : SimpleUpdateProps) {
     
     return (
         <span className={`text-sm ${EventTextGrid}`}>
-            {evt.event_text.map((s) => <p>{s}</p>)}
+            {evt.event_text.map((s,i) => <p key={i}>{s}</p>)}
         </span>
     )
 }
@@ -213,8 +213,8 @@ function Errors({evt} : SimpleUpdateProps) {
     return (
     <div className={`${ErrorsGrid}`}>
         {
-            allErrors.map(x => {
-                return <Error type={x.type} text={x.text}/>
+            allErrors.map((x,i) => {
+                return <Error key={i} type={x.type} text={x.text}/>
             })
         }
     </div>

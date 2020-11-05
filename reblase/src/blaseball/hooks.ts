@@ -43,6 +43,7 @@ export function useGameList(query: GameListQuery): GameListHookReturn {
 interface CauldronEventsHookReturn {
     events: CauldronGameEvent[];
     error: any;
+    isLoading: boolean;
 }
 
 export function useCauldronGameEvents(query: CauldronEventsQuery): CauldronEventsHookReturn {
@@ -52,6 +53,7 @@ export function useCauldronGameEvents(query: CauldronEventsQuery): CauldronEvent
     return {
         events: gameEventList?.results ?? [],
         error,
+        isLoading: !gameEventList,
     };
 }
 
