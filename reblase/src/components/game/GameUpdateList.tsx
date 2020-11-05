@@ -1,6 +1,7 @@
 ﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
+
 import "../../style/GamePage.css";
 import Emoji from "../elements/Emoji";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";

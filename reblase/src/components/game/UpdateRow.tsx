@@ -23,7 +23,7 @@ const BatterGrid = "col-start-2 col-end-2 justify-self-start lg:col-start-4 lg:c
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
 const LinkGrid = "hidden lg:block lg:col-start-6 lg:col-end-6";
 
- function Timestamp( {update}:WrappedUpdateProps ) {
+ function Timestamp({ update }:WrappedUpdateProps ) {
     const updateTime = dayjs(update.timestamp);
     const time = updateTime.format("mm:ss");
 
