@@ -87,79 +87,6 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
 }
 
 
-export interface CauldronGameEvent extends BlaseballEntity<CauldronEventID> {
-    game_id: GameID;
-    perceived_at: string;
-    event_type: string;
-    event_index: number;
-    inning: number;
-    top_of_inning: boolean;
-    outs_before_play: number;
-    batter_id: PlayerID;
-    batter_team_id: TeamID;
-    pitcher_id: PlayerID;
-    pitcher_team_id: TeamID;
-    home_score: number;
-    away_score: number;
-    home_strike_count: number;
-    away_strike_count: number;
-    batter_count: number;
-    pitches: string[];
-    total_strikes: number;
-    total_balls: number;
-    total_fouls: number;
-    is_leadoff: boolean;
-    is_pinch_hit: boolean;
-    lineup_position: number;
-    is_last_event_for_plate_appearance: boolean;
-    bases_hit: number;
-    runs_batted_in: number;
-    is_sacrifice_hit: boolean;
-    is_sacrifice_fly: boolean;
-    outs_on_play: boolean;
-    is_double_play: boolean;
-    is_triple_play: boolean;
-    is_wild_pitch: boolean;
-    batted_ball_type: string;
-    is_bunt: boolean;
-    errors_on_play: boolean;
-    batter_base_after_play: number;
-    is_last_game_event: boolean;
-    event_text: string[];
-    additional_context: string;
-    season: number;
-    day: number;
-    parsing_error: boolean;
-    parsing_error_list: string[];
-    fixed_error: boolean;
-    fixed_error_list: string[];
-    home_ball_count: number;
-    away_ball_count: number;
-    home_base_count: number;
-    away_base_count: number;
-    base_runners: CauldronBaseRunner[];
-    outcomes: CauldronOutcome[];
-}
-
-export interface CauldronBaseRunner extends BlaseballEntity<number> {
-    game_event_id: CauldronEventID;
-    runner_id: PlayerID;
-    responsible_pitcher_id: PlayerID;
-    base_before_play: number;
-    base_after_play: number;
-    was_base_stolen: boolean;
-    was_caught_stealing: boolean;
-    was_picked_off: boolean;
-    runner_scored: boolean;
-}
-
-export interface CauldronOutcome {
-    game_event_id: CauldronEventID;
-    entity_id: string;
-    event_type: string;
-    original_text: string;
-}
-
 export interface DamageResult {
     dmgType: number;
     teamTarget: string;
@@ -265,4 +192,80 @@ export interface BlaseballSimData extends BlaseballEntity<"thisidisstaticyo"> {
     doTheThing?: boolean;
     eatTheRich?: boolean;
     unlockedInterviews?: boolean;
+}
+
+//////////////////////////////////////////////////
+// Models for dealing with Cauldron Game Events
+
+export interface CauldronGameEvent extends BlaseballEntity<CauldronEventID> {
+    game_id: GameID;
+    perceived_at: string;
+    event_type: string;
+    event_index: number;
+    inning: number;
+    top_of_inning: boolean;
+    outs_before_play: number;
+    batter_id: PlayerID;
+    batter_team_id: TeamID;
+    pitcher_id: PlayerID;
+    pitcher_team_id: TeamID;
+    home_score: number;
+    away_score: number;
+    home_strike_count: number;
+    away_strike_count: number;
+    batter_count: number;
+    pitches: string[];
+    total_strikes: number;
+    total_balls: number;
+    total_fouls: number;
+    is_leadoff: boolean;
+    is_pinch_hit: boolean;
+    lineup_position: number;
+    is_last_event_for_plate_appearance: boolean;
+    bases_hit: number;
+    runs_batted_in: number;
+    is_sacrifice_hit: boolean;
+    is_sacrifice_fly: boolean;
+    outs_on_play: boolean;
+    is_double_play: boolean;
+    is_triple_play: boolean;
+    is_wild_pitch: boolean;
+    batted_ball_type: string;
+    is_bunt: boolean;
+    errors_on_play: boolean;
+    batter_base_after_play: number;
+    is_last_game_event: boolean;
+    event_text: string[];
+    additional_context: string;
+    season: number;
+    day: number;
+    parsing_error: boolean;
+    parsing_error_list: string[];
+    fixed_error: boolean;
+    fixed_error_list: string[];
+    home_ball_count: number;
+    away_ball_count: number;
+    home_base_count: number;
+    away_base_count: number;
+    base_runners: CauldronBaseRunner[];
+    outcomes: CauldronOutcome[];
+}
+
+export interface CauldronBaseRunner extends BlaseballEntity<number> {
+    game_event_id: CauldronEventID;
+    runner_id: PlayerID;
+    responsible_pitcher_id: PlayerID;
+    base_before_play: number;
+    base_after_play: number;
+    was_base_stolen: boolean;
+    was_caught_stealing: boolean;
+    was_picked_off: boolean;
+    runner_scored: boolean;
+}
+
+export interface CauldronOutcome {
+    game_event_id: CauldronEventID;
+    entity_id: string;
+    event_type: string;
+    original_text: string;
 }

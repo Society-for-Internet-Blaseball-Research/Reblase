@@ -46,7 +46,6 @@ interface GamePageOptions {
     reverse: boolean;
 }
 
-
 type CauldronPageParams = { gameId?: string };
 export function CauldronPage() {
     const { gameId } = useParams<CauldronPageParams>();

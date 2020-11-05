@@ -40,23 +40,6 @@ export function useGameList(query: GameListQuery): GameListHookReturn {
     };
 }
 
-interface CauldronEventsHookReturn {
-    events: CauldronGameEvent[];
-    error: any;
-    isLoading: boolean;
-}
-
-export function useCauldronGameEvents(query: CauldronEventsQuery): CauldronEventsHookReturn {
-    
-    const { data: gameEventList, error } = useSWR<CauldronEventsResponse>(cauldronApi.gameEvents(query));
-
-    return {
-        events: gameEventList?.results ?? [],
-        error,
-        isLoading: !gameEventList,
-    };
-}
-
 interface GameUpdatesHookReturn {
     updates: ChronGameUpdate[];
     error: any;
@@ -203,5 +186,23 @@ export function useFights(): FightsHookReturn {
         fights: data?.data ?? [],
         isLoading: !data,
         error,
+    };
+}
+
+// Cauldron Game Events
+interface CauldronEventsHookReturn {
+    events: CauldronGameEvent[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useCauldronGameEvents(query: CauldronEventsQuery): CauldronEventsHookReturn {
+    
+    const { data: gameEventList, error } = useSWR<CauldronEventsResponse>(cauldronApi.gameEvents(query));
+
+    return {
+        events: gameEventList?.results ?? [],
+        error,
+        isLoading: !gameEventList,
     };
 }
