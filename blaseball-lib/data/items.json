@@ -1,0 +1,82 @@
+[
+    {
+        "id": "FIREPROOF",
+        "name": "Fireproof Jacket",
+        "attr": "FIREPROOF"
+    },
+    {
+        "id": "GUNBLADE_A",
+        "name": "The Dial Tone",
+        "attr": "NONE"
+    },
+    {
+        "id": "GUNBLADE_B",
+        "name": "Vibe Check",
+        "attr": "NONE"
+    },
+    {
+        "id": "MUSHROOM",
+        "name": "Mushroom",
+        "attr": "NONE"
+    },
+    {
+        "id": "GRAPPLING_HOOK",
+        "name": "Grappling Hook",
+        "attr": "NONE"
+    },
+    {
+        "id": "HEADPHONES",
+        "name": "Noise-Cancelling Headphones",
+        "attr": "SOUNDPROOF"
+    },
+    {
+        "id": "ENGLAND_MEMORABILIA",
+        "name": "Bangers & Smash",
+        "attr": "NONE"
+    },
+    {
+        "id": "ARM_CANNON",
+        "name": "Literal Arm Cannon",
+        "attr": "NONE"
+    },
+    {
+        "id": "SHRINK_RAY",
+        "name": "Shrink Ray",
+        "attr": "NONE"
+    },
+    {
+        "id": "GRAVITY_BOOTS",
+        "name": "Gravity Boots",
+        "attr": "GRAVITY"
+    },
+    {
+        "id": "BIRDSONG",
+        "name": "Birdsong",
+        "attr": "NONE"
+    },
+    {
+        "id": "NIGHT_VISION_GOGGLES",
+        "name": "Night Vision Goggles",
+        "attr": "NONE"
+    },
+    {
+        "id": "SAWED_OFF_BAT",
+        "name": "The Iffey Jr.",
+        "attr": "FIRE_PROTECTOR"
+    },
+    {
+        "id": "SCORPLERS_JACKET",
+        "name": "Scorpler's Jacket",
+        "attr": "FIREPROOF"
+    },
+    {
+        "id": "INKY_BLAGONBALL",
+        "name": "The 2-Blood Blagonball",
+        "attr": "NONE"
+    },
+    {
+        "id": "AN_ACTUAL_AIRPLANE",
+        "name": "An Actual Airplane",
+        "attr": "BLASERUNNING"
+    }
+]

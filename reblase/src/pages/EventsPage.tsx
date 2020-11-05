@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useGameList, useTemporal } from "../blaseball/hooks";
 import dayjs from "dayjs";
 import { GameTeam, getAwayTeam, getHomeTeam } from "blaseball-lib/games";
+import Twemoji from "components/elements/Twemoji";
 
 type TimedText = { text: string; timestamp: string };
 
@@ -43,22 +44,38 @@ interface TemporalType {
     emoji: string;
 }
 
-const temporalTypes: Partial<Record<string, TemporalType>> = {
-    "-1": {
+const temporalTypes = {
+    siteAlert: {
         name: "Alert",
         color: "red",
         emoji: "\u{1F6A8}",
     },
-    "0": {
+    peanut: {
         name: "The Peanut",
         color: "brown",
         emoji: "\u{1F95C}",
     },
-    "1": {
+    squid: {
         name: "The Hall Monitor",
         color: "blue",
         emoji: "\u{1F991}",
     },
+    coin: {
+        name: "Boss",
+        color: "yellow",
+        emoji: "\u{1FA99}",
+    },
+    unknown: {
+        name: "???",
+        color: "black",
+        emoji: "\u{2753}",
+    },
+};
+const temporalTypeByGamma: Partial<Record<number, TemporalType>> = {
+    [-1]: temporalTypes.siteAlert,
+    0: temporalTypes.peanut,
+    1: temporalTypes.squid,
+    2: temporalTypes.coin,
 };
 
 const EventRow = ({ evt }: { evt: BlaseEvent }) => {
@@ -76,7 +93,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
             ) : (
                 <div className="flex">
                     <div className="text-sm font-semibold flex-1">
-                        {evt.emoji} {evt.name}
+                        <Twemoji emoji={evt.emoji} /> {evt.name}
                     </div>
                     <div className="text-sm">{dayjs(evt.timestamp).format("YYYY-MM-DD")}</div>
                 </div>
@@ -159,7 +176,7 @@ export function EventsPage() {
             continue;
         }
 
-        const type = temporalTypes[doc.gamma.toString()] ?? temporalTypes["0"]!;
+        const type = temporalTypeByGamma[doc.gamma] ?? temporalTypes.unknown;
 
         if (lastEvent && lastEvent.name === type.name) {
             lastEvent.text.push({ text: doc.zeta, timestamp: update.firstSeen });

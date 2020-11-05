@@ -38,7 +38,7 @@ export function calculateDefenseSkill(stats: DefenseStats): number {
     return (
         Math.pow(stats.omniscience, 0.2) *
         Math.pow(stats.tenaciousness, 0.2) *
-        Math.pow(stats.watchfulness, 0.2) *
+        Math.pow(stats.watchfulness, 0.1) *
         Math.pow(stats.anticapitalism, 0.1) *
         Math.pow(stats.chasiness, 0.1)
     );

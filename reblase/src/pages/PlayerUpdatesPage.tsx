@@ -105,7 +105,7 @@ export default function PlayerUpdatesPage() {
     const { playerId } = useParams<{ playerId: string }>();
     const [selectedUpdate, setSelectedUpdate] = useState<string | null>(null);
 
-    const { updates, error } = usePlayerUpdates({ player: playerId });
+    const { updates, error } = usePlayerUpdates({ player: playerId, count: 1000 });
 
     if (error) return <Error>{error.toString()}</Error>;
     if (!updates) return <Loading />;
