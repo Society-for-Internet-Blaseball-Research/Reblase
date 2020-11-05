@@ -1,11 +1,12 @@
 import React from "react";
 import { BlaseballTeam, BlaseballPlayer, CauldronGameEvent } from "blaseball-lib/models";
-import { Timestamp } from "./UpdateRow"
+import dayjs from "dayjs";
 import Emoji from "../elements/Emoji";
 import { Circles } from "../elements/Circles";
 import BaseDisplay from "../elements/BaseDisplay";
 import Tooltip from "rc-tooltip";
 
+const TimestampGrid = "col-start-4 col-end-4 lg:col-start-1 lg:col-end-1";
 const ScoreGrid = "col-start-2 col-end-2 lg:col-start-2 lg:col-end-2";
 const EventTypeGrid = "col-start-3 col-end-3 lg:col-start-3 lg:col-end-3";
 const EventTextGrid = "col-start-4 col-end-4 justify-self-start lg:col-start-4 lg:col-end-4 lg:justify-self-start row-span-2";
@@ -24,6 +25,13 @@ interface PlayerTeamUpdateProps {
 // simple components that only need the event
 interface SimpleUpdateProps {
     evt: CauldronGameEvent;
+}
+
+export function Timestamp( {evt}:SimpleUpdateProps ) {
+    const updateTime = dayjs(evt.perceived_at);
+    const time = updateTime.format("mm:ss");
+
+    return <span className={`${TimestampGrid} text-gray-700`}>{time}</span>;
 }
 
 // The list of all stuff that happened on this game event
@@ -250,7 +258,6 @@ interface CauldronRowParams {
 }
 
 export function CauldronRow({item, teams, players} : CauldronRowParams) {
-    const row = item;
     
     return (
         <div>
@@ -258,11 +265,11 @@ export function CauldronRow({item, teams, players} : CauldronRowParams) {
                 className="grid grid-rows-2 grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300"
                 style={{gridTemplateColumns: "auto auto 150px 1fr" }}
             >
-                <Timestamp timestamp={row.perceived_at}/>
+                <Timestamp evt={item}/>
                 <Score evt={item} />
                 <EventType evt={item}/>
                 <Errors evt={item}/>
-                <EventText evt={row} />
+                <EventText evt={item} />
                 <Batter evt={item} teams={teams} players={players} />
                 <AtBatInfo evt={item} teams={teams} players={players}/>
                 <JsonInfo evt={item} teams={teams} players={players} visible={true}/>

@@ -23,12 +23,8 @@ const BatterGrid = "col-start-2 col-end-2 justify-self-start lg:col-start-4 lg:c
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
 const LinkGrid = "hidden lg:block lg:col-start-6 lg:col-end-6";
 
-interface TimestampProps {
-    timestamp : string;
-}
-
-export function Timestamp( {timestamp}:TimestampProps ) {
-    const updateTime = dayjs(timestamp);
+ function Timestamp( {update}:WrappedUpdateProps ) {
+    const updateTime = dayjs(update.timestamp);
     const time = updateTime.format("mm:ss");
 
     return <span className={`${TimestampGrid} text-gray-700`}>{time}</span>;
@@ -119,7 +115,7 @@ export const UpdateRow = React.memo(
                 style={{ gridTemplateColumns: "auto auto 1fr" }}
             >
                 <GameLog evt={evt} />
-                <Timestamp timestamp={update.timestamp} />
+                <Timestamp update={update} />
                 <Score evt={evt} />
                 <Batter evt={evt} />
                 <AtBatInfo evt={evt} />

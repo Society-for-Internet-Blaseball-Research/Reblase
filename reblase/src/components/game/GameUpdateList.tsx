@@ -7,7 +7,6 @@ import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
 import { BlaseballGame } from "blaseball-lib/models";
 import Spinner from "components/elements/Spinner";
 import { Loading } from "components/elements/Loading";
-import { AiFillPropertySafety } from "react-icons/ai";
 
 type GameOrFight = ChronFightUpdate | ChronGameUpdate;
 
@@ -34,8 +33,6 @@ export function UpdatesListFetching(props: UpdatesListFetchingProps) {
         </div>
     );
 }
-
-
 
 interface UpdateProps {
     evt: BlaseballGame;
@@ -124,8 +121,6 @@ export function addInningHeaderRows(
 
     return elements;
 }
-
-
 
 export interface SecondaryUpdate<T> {
     data: T;
