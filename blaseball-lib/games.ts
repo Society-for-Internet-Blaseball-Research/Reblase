@@ -171,8 +171,15 @@ export function isGameUpdateImportant(update: string) {
         /charms/,
         /Sun 2 smiles/,
         /Black Hole swallows/,
+        /is Beaned by/,
+        /is Percolated/,
     ]) {
         if (pattern.test(update)) return true;
     }
     return false;
+}
+
+export function displaySeason(seasonNumber: number) {
+    if (seasonNumber === -1) return "\u2615";
+    return (seasonNumber + 1).toString();
 }
