@@ -232,7 +232,7 @@ export const GameRow = React.memo(
                 </div>
 
                 <div className="hidden md:contents">
-                    <SeasonDay season={data.season} day={data.day} className="text-center w-8" />
+                    <SeasonDay season={data.season} day={data.day} className="text-center w-10" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
                         awayPitcher={data.awayPitcherName}
