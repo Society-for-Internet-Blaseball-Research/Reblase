@@ -7,12 +7,16 @@
             lg: "1024px",
             xl: "1200px",
         },
-        extend: {},
     },
     variants: {
-        backgroundColor: ["responsive", "odd", "hover", "focus"],
+        backgroundColor: ({ after }) => after(["odd", "dark", "dark-hover"]),
+        borderColor: ({ after }) => after(["dark"]),
+        display: ({ after }) => after(["dark"]),
+        textColor: ({ after }) => after(["dark", "dark-hover"]),
     },
-    plugins: [],
+    plugins: [
+        require('tailwindcss-dark-mode')(),
+    ],
     future: {
         removeDeprecatedGapUtilities: true,
         purgeLayersByDefault: true,

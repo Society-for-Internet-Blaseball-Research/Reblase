@@ -8,7 +8,7 @@ export function PageLayout(props: { children: React.ReactNode }) {
 
             {props.children}
 
-            <div className="text-sm text-center my-4 italic text-gray-600">
+            <div className="text-sm text-center my-4 italic text-gray-600 dark:text-gray-400">
                 {/* Brought to you by the {"\u{1f36c}"} Breath Mints. */}
                 Brought to you by the{" "}
                 <a href="https://www.blaseball.com/team/d2634113-b650-47b9-ad95-673f8e28e687">

@@ -80,7 +80,7 @@ const temporalTypeByGamma: Partial<Record<number, TemporalType>> = {
 
 const EventRow = ({ evt }: { evt: BlaseEvent }) => {
     return (
-        <div className="border-b border-gray-300 py-2">
+        <div className="border-b border-gray-300 dark:border-gray-700 py-2">
             {evt.type === "game" ? (
                 <div className="flex">
                     <Link to={`/game/${evt.game}`} className="text-sm font-semibold flex-1">
@@ -106,7 +106,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
                     <ul>
                         {evt.text.map((line, idx) => (
                             <li key={idx}>
-                                <span className="text text-gray-700 tabular-nums mr-2">
+                                <span className="text text-gray-700 dark:text-gray-300 tabular-nums mr-2">
                                     {dayjs(line.timestamp).format("HH:mm")}
                                 </span>
                                 {line.text}
@@ -117,7 +117,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
             </p>
 
             {evt.type === "game" && (
-                <span className="text-sm text-gray-700 float-right">
+                <span className="text-sm text-gray-700 dark:text-gray-300 float-right">
                     {evt.awayTeam.nickname} vs. {evt.homeTeam.nickname}
                 </span>
             )}

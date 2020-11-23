@@ -27,12 +27,12 @@ function Timestamp({ update }: WrappedUpdateProps) {
     const updateTime = dayjs(update.timestamp);
     const time = updateTime.format("mm:ss");
 
-    return <span className={`${TimestampGrid} text-gray-700`}>{time}</span>;
+    return <span className={`${TimestampGrid} text-gray-700 dark:text-gray-300`}>{time}</span>;
 }
 
 function Score({ evt }: UpdateProps) {
     return (
-        <span className={`${ScoreGrid} tag font-semibold bg-gray-200`}>{`${evt.awayScore} - ${evt.homeScore}`}</span>
+        <span className={`${ScoreGrid} tag font-semibold bg-gray-200 dark:bg-gray-800`}>{`${evt.awayScore} - ${evt.homeScore}`}</span>
     );
 }
 
@@ -49,7 +49,7 @@ function Batter({ evt }: UpdateProps) {
         return <span className={`${BatterGrid}`} />;
 
     return (
-        <span className={`${BatterGrid} text-sm bg-gray-200 rounded px-2 py-1 inline-flex items-center justify-center`}>
+        <span className={`${BatterGrid} text-sm bg-gray-200 dark:bg-gray-800 rounded px-2 py-1 inline-flex items-center justify-center`}>
             <Emoji emoji={team.emoji} />
             <span className="ml-1">{team.batterName}</span>
         </span>
@@ -88,7 +88,7 @@ interface UpdateRowProps extends WrappedUpdateProps {
 function UpdateLink(props: { hash: string }) {
     const href = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + props.hash;
     return (
-        <a href={href} className={`${LinkGrid} -mr-16 pl-4 cursor-pointer text-lg text-gray-500 hover:text-gray-900`}>
+        <a href={href} className={`${LinkGrid} -mr-16 pl-4 cursor-pointer text-lg text-gray-500 hover:text-gray-900 dark-hover:text-gray-100`}>
             <AiOutlineLink />
         </a>
     );
@@ -109,8 +109,8 @@ export const UpdateRow = React.memo(
             <div
                 ref={highlight ? scrollRef : undefined}
                 className={
-                    "grid grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300 " +
-                    (highlight ? "bg-yellow-200" : "")
+                    "grid grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300 dark:border-gray-700" +
+                    (highlight ? " bg-yellow-200 dark:bg-gray-900" : "")
                 }
                 style={{ gridTemplateColumns: "auto auto 1fr" }}
             >

@@ -132,10 +132,10 @@ export default function PlayerUpdatesPage() {
                             const changes = prevUpdate && getChangesBetween(prevUpdate.state, state);
                             return (
                                 <tr
-                                    className={`even:bg-gray-100 border-b border-t cursor-pointer ${
+                                    className={`even:bg-gray-100 border-b border-t border-gray-300 dark:border-gray-700 cursor-pointer ${
                                         selectedUpdate === update.id
-                                            ? "bg-blue-500 text-white"
-                                            : "border-gray-300 hover:bg-gray-200"
+                                            ? "bg-blue-500 dark:bg-blue-700 text-white"
+                                            : "hover:bg-gray-200 dark-hover:bg-gray-800"
                                     }`}
                                     onClick={() => setSelectedUpdate(update.id)}
                                 >

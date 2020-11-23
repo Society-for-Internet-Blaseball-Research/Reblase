@@ -1,5 +1,6 @@
 import React from "react";
 import { outcomeTypes } from "../../blaseball/outcome";
+import { selectTheme } from "../../blaseball/select";
 import Twemoji from "./Twemoji";
 import Select from "react-select";
 
@@ -25,6 +26,7 @@ export default function OutcomePicker(props: OutcomePickerProps) {
     return (
         <Select
             options={items}
+            theme={selectTheme}
             isMulti={true}
             placeholder={props.placeholder}
             value={items.filter((item) => (props.selectedOutcomes ?? []).indexOf(item.value) !== -1)}

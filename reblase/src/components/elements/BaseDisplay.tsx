@@ -31,9 +31,9 @@ const Base = (props: {
             />
             <rect
                 strokeWidth="1"
-                stroke="black"
+                stroke="var(--theme-black)"
                 z="1"
-                fill={props.filled ? "black" : "white"}
+                fill={props.filled ? "var(--theme-black)" : "var(--theme-white)"}
                 x={-baseSize / 2}
                 y={-baseSize / 2}
                 width={baseSize}
