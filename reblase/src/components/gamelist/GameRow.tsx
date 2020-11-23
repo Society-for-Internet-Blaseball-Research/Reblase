@@ -6,8 +6,9 @@ import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
 import { getOutcomes, Outcome } from "../../blaseball/outcome";
 import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "../elements/Twemoji";
+import { displaySeason } from "blaseball-lib/games";
 
-const Events = React.memo((props: { outcomes: string[], shame: boolean, awayTeam: string }) => {
+const Events = React.memo((props: { outcomes: string[]; shame: boolean; awayTeam: string }) => {
     const outcomes = getOutcomes(props.outcomes, props.shame, props.awayTeam);
     if (!outcomes) return <></>;
 
@@ -163,9 +164,13 @@ const StandalonePitchers = React.memo(
 );
 
 const SeasonDay = React.memo((props: { season: number; day: number | string; className?: string }) => {
+    // todo: clean up eugh
+    let seasonText = displaySeason(props.season);
+    if (parseInt(seasonText)) seasonText = "S" + seasonText;
+
     return (
         <div className={`text-sm font-semibold ${props.className}`}>
-            S{props.season + 1}/{typeof props.day === "number" ? props.day + 1 : props.day}
+            {seasonText}/{typeof props.day === "number" ? props.day + 1 : props.day}
         </div>
     );
 });
@@ -227,7 +232,7 @@ export const GameRow = React.memo(
                 </div>
 
                 <div className="hidden md:contents">
-                    <SeasonDay season={data.season} day={data.day} className="text-center w-8" />
+                    <SeasonDay season={data.season} day={data.day} className="text-center w-10" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
                         awayPitcher={data.awayPitcherName}

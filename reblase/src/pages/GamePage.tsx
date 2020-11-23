@@ -7,6 +7,7 @@ import Error from "../components/elements/Error";
 import { useGameUpdates } from "../blaseball/hooks";
 import { BlaseballGame } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
+import { displaySeason } from "blaseball-lib/games";
 
 interface PayloadProps {
     evt: BlaseballGame;
@@ -15,16 +16,14 @@ interface PayloadProps {
 const GameHeading = ({ evt }: PayloadProps) => {
     const location = useLocation();
 
-    const displaySeasonNumber = evt.season + 1;
-
     return (
         <>
             <p className="mb-2">
-                <Link to={`/season/${displaySeasonNumber}`}>&larr; Back to Season {displaySeasonNumber}</Link>
+                <Link to={`/season/${evt.season + 1}`}>&larr; Back to Season {displaySeason(evt.season)}</Link>
             </p>
             <Link to={location.pathname}>
                 <h2 className="text-3xl font-semibold">
-                    Season {displaySeasonNumber}, Day {evt.day + 1}
+                    Season {displaySeason(evt.season)}, Day {evt.day + 1}
                 </h2>
                 <h3>
                     <strong>{evt.awayTeamName}</strong>

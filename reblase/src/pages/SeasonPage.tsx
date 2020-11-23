@@ -18,6 +18,7 @@ import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
 import { FightRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
+import { displaySeason } from "blaseball-lib/games";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
 function groupByDay(games: ChronGame[]): GameDay[] {
@@ -52,8 +53,8 @@ const GamesList = React.memo(
                     return (
                         <DayTable
                             key={day}
-                            season={season + 1}
-                            day={day + 1}
+                            season={season}
+                            day={day}
                             games={games}
                             teams={teamsMap}
                             players={playersMap}
@@ -78,7 +79,7 @@ function GamesListFetching(props: {
     allTeams: BlaseballTeam[];
 }) {
     let { games, error, isLoading } = useGameList({
-        season: props.season - 1,
+        season: props.season,
         started: !props.showFutureGames ? true : undefined,
         team: props.teams ? props.teams.join(",") : undefined,
         weather: props.weather ? props.weather.join(",") : undefined,
@@ -130,7 +131,7 @@ export function SeasonPage() {
     const location = useLocation();
 
     let { season: seasonStr } = useParams<SeasonPageParams>();
-    const season = parseInt(seasonStr);
+    const season = parseInt(seasonStr) - 1;
 
     let [selectedTeams, setSelectedTeams] = useState<string[]>([]);
     let [selectedOutcomes, setSelectedOutcomes] = useState<string[]>([]);
@@ -140,7 +141,7 @@ export function SeasonPage() {
 
     const { players, teams, error, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
     let { fights } = useFights();
-    fights = fights.filter((f) => f.data.season + 1 === season);
+    fights = fights.filter((f) => f.data.season === season);
 
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
@@ -154,7 +155,7 @@ export function SeasonPage() {
                 <Link to="/seasons">&larr; Back to Seasons</Link>
             </p>
             <h2 className="text-2xl font-semibold mb-4">
-                <Link to={location.pathname}>Games in Season {season}</Link>
+                <Link to={location.pathname}>Games in Season {displaySeason(season)}</Link>
             </h2>
 
             <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">

@@ -6,6 +6,7 @@ import { GameRow } from "./GameRow";
 import { ChronGame } from "blaseball-lib/chronicler";
 import { predictGamePitcher } from "blaseball-lib/team";
 import { BlaseballGame, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
+import { displaySeason } from "blaseball-lib/games";
 
 interface DayTableProps {
     games: ChronGame[];
@@ -38,7 +39,7 @@ export const DayTable = function DayTable(props: DayTableProps) {
         <>
             <div className="flex flex-row items-baseline mt-4 space-x-2">
                 <span className="font-semibold">
-                    Season {props.season}, Day {props.day}
+                    Season {displaySeason(props.season)}, Day {props.day + 1}
                 </span>
                 <span className="flex-1 text-right lg:text-left text-sm text-gray-700 dark:text-gray-300">
                     {timestamp?.format("YYYY-MM-DD HH:mm")}

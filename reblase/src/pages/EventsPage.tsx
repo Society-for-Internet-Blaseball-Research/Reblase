@@ -7,7 +7,7 @@ import Error from "../components/elements/Error";
 import { Link } from "react-router-dom";
 import { useGameList, useTemporal } from "../blaseball/hooks";
 import dayjs from "dayjs";
-import { GameTeam, getAwayTeam, getHomeTeam } from "blaseball-lib/games";
+import { displaySeason, GameTeam, getAwayTeam, getHomeTeam } from "blaseball-lib/games";
 import Twemoji from "components/elements/Twemoji";
 
 type TimedText = { text: string; timestamp: string };
@@ -87,7 +87,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
                         {evt.emoji} {evt.name}
                     </Link>
                     <Link to={`/game/${evt.game}`} className="text-sm">
-                        Season <strong>{evt.season + 1}</strong>, Day <strong>{evt.day + 1}</strong>
+                        Season <strong>{displaySeason(evt.season)}</strong>, Day <strong>{evt.day + 1}</strong>
                     </Link>
                 </div>
             ) : (
