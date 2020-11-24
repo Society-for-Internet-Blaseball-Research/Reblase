@@ -19,8 +19,8 @@ import {
     ChronFightUpdate,
     FightsResponse,
     ChronFight,
+    SimResponse,
 } from "blaseball-lib/chronicler";
-import { blaseballApi } from "blaseball-lib/api";
 import { BlaseballSimData } from "blaseball-lib/models";
 
 interface GameListHookReturn {
@@ -153,10 +153,10 @@ interface SimDataHookReturn {
 }
 
 export function useSimulation(): SimDataHookReturn {
-    const { data, error } = useSWR<BlaseballSimData>(blaseballApi.simData());
+    const { data, error } = useSWR<SimResponse>(chroniclerApi.simUpdates({ order: "desc", count: 1 }));
 
     return {
-        data: data ?? null,
+        data: data?.data[0]?.data ?? null,
         error,
         isLoading: !data && !error,
     };

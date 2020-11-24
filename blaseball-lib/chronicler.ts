@@ -1,5 +1,12 @@
 import queryString from "query-string";
-import { BlaseballFight, BlaseballGame, BlaseballPlayer, BlaseballTeam, BlaseballTemporal } from "./models";
+import {
+    BlaseballFight,
+    BlaseballGame,
+    BlaseballPlayer,
+    BlaseballSimData,
+    BlaseballTeam,
+    BlaseballTemporal,
+} from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
 
@@ -12,6 +19,7 @@ export const chroniclerApi = {
     playerUpdates: (query: PlayerUpdatesQuery) => BASE_URL + "/players/updates?" + queryString.stringify(query),
     teams: () => BASE_URL + "/teams",
     temporalUpdates: () => BASE_URL + "/temporal/updates",
+    simUpdates: (query: SimUpdatesQuery) => BASE_URL + "/sim/updates?" + queryString.stringify(query),
 };
 
 export type PlayerUpdatesQuery = {
@@ -44,6 +52,11 @@ export type FightUpdatesQuery = {
     count?: number;
 };
 
+export type SimUpdatesQuery = {
+    order?: "asc" | "desc";
+    count?: number;
+};
+
 export interface ChronResponse<T> {
     data: T[];
 }
@@ -59,6 +72,7 @@ export interface FightsResponse extends ChronResponse<ChronFight> {}
 export interface PlayersResponse extends ChronResponse<ChronPlayer> {}
 export interface TeamsResponse extends ChronResponse<ChronTeam> {}
 export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate> {}
+export interface SimResponse extends ChronResponse<ChronSimUpdate> {}
 
 export type Timestamp = string;
 export type PlayerPosition = "lineup" | "rotation" | "bullpen" | "bench";
@@ -129,6 +143,8 @@ export interface ChronEntityVersion<T> {
 }
 
 export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseballTemporal> {}
+
+export interface ChronSimUpdate extends ChronEntityVersion<BlaseballSimData> {}
 
 export interface ChronPlayerUpdate extends ChronEntityVersion<BlaseballPlayer> {
     playerId: string;
