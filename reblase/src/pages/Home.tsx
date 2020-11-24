@@ -31,7 +31,7 @@ export function Home() {
     if (error) return <Error>{error.toString()}</Error>;
     if (isLoading || !sim) return <Loading />;
 
-    const season = sim.phase === 13 ? -1 : sim.season;
+    const season = sim.phase >= 12 && sim.phase <= 15 ? -1 : sim.season;
 
     return (
         <Container>
