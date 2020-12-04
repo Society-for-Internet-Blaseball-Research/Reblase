@@ -12,8 +12,8 @@ export function Circles({ amount, total, label }: CirclesProps) {
 
     const radius = 7;
     const radiusInner = 4;
-    const color = "#444";
-    const colorInner = "#111";
+    const color = "var(--theme-gray-700)";
+    const colorInner = "var(--theme-gray-900)";
 
     const circleCount = Math.max(amount, total);
     const circles = [];

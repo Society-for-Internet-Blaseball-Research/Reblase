@@ -141,6 +141,30 @@ export const allWeatherTypes = [
         color: "#00374a",
         forbidden: false,
     },
+    {
+        id: 15,
+        name: "Coffee",
+        emoji: "\u{2615}",
+        background: "#9a7b4f",
+        color: "#511c00",
+        forbidden: false,
+    },
+    {
+        id: 16,
+        name: "Coffee 2",
+        emoji: "\u{1F375}",
+        background: "#44c97c",
+        color: "#2e1406",
+        forbidden: false,
+    },
+    {
+        id: 17,
+        name: "Coffee 3s",
+        emoji: "3\u{FE0F}\u{20E3}", // keycap 3
+        background: "#5fa9f1",
+        color: "#cc527a",
+        forbidden: false,
+    },
 ];
 
 export function getWeather(id: number): WeatherType | null {

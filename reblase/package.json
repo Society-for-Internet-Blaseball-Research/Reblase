@@ -21,6 +21,7 @@
         "react-tooltip": "^4.2.10",
         "swr": "^0.3.1",
         "tailwindcss": "^1.8.6",
+        "tailwindcss-dark-mode": "^1.1.7",
         "twemoji": "^13.0.1"
     },
     "devDependencies": {

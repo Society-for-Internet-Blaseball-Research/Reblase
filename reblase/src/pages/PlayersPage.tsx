@@ -94,7 +94,7 @@ export function PlayersPage() {
                             {attrs.map((a) => {
                                 const text = display[a] ?? a;
                                 return (
-                                    <span key={a} className="tag tag-sm bg-gray-300">
+                                    <span key={a} className="tag tag-sm bg-gray-300 dark:bg-gray-700">
                                         {text}
                                     </span>
                                 );
@@ -136,7 +136,7 @@ export function PlayersPage() {
         <Container>
             <table {...table.getTableProps()}>
                 <thead>
-                    <tr className="bg-gray-100 border-b border-gray-300">
+                    <tr className="bg-gray-100 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
                         {(table.allColumns as (ColumnInstance<ChronPlayer> & UseSortByColumnProps<ChronPlayer>)[]).map(
                             (column) => (
                                 <th className="px-4 py-2" {...column.getHeaderProps(column.getSortByToggleProps())}>
@@ -151,7 +151,7 @@ export function PlayersPage() {
                     {table.rows.map((row) => {
                         table.prepareRow(row);
                         return (
-                            <tr className="border-t border-b border-gray-300" {...row.getRowProps()}>
+                            <tr className="border-t border-b border-gray-300 dark:border-gray-700" {...row.getRowProps()}>
                                 {row.cells.map((cell) => {
                                     return (
                                         <td

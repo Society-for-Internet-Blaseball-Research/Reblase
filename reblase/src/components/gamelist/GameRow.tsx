@@ -6,18 +6,19 @@ import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
 import { getOutcomes, Outcome } from "../../blaseball/outcome";
 import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "../elements/Twemoji";
+import { displaySeason } from "blaseball-lib/games";
 
-const Events = React.memo((props: { outcomes: string[], shame: boolean, awayTeam: string }) => {
+const Events = React.memo((props: { outcomes: string[]; shame: boolean; awayTeam: string }) => {
     const outcomes = getOutcomes(props.outcomes, props.shame, props.awayTeam);
     if (!outcomes) return <></>;
 
     const style: Record<string, string> = {
-        red: "bg-red-200 text-red-800",
-        orange: "bg-orange-200 text-orange-800",
-        blue: "bg-blue-200 text-blue-800",
-        pink: "bg-pink-200 text-pink-800",
-        purple: "bg-purple-200 text-purple-800",
-        gray: "bg-gray-200 text-gray-800",
+        red: "bg-red-200 dark:bg-red-900 text-red-800 dark:text-red-200",
+        orange: "bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200",
+        blue: "bg-blue-200 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
+        pink: "bg-pink-200 dark:bg-pin-900 text-pink-800 dark:text-pin-200",
+        purple: "bg-purple-200 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
+        gray: "bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200",
     };
 
     const outcomesByType: Record<string, Outcome[]> = {};
@@ -73,7 +74,7 @@ const Duration = React.memo(
         const arrow = props.topOfInning ? "\u25B2" : "\u25BC";
 
         return (
-            <Link className="text-center text-sm tabular-nums text-gray-700" to={`/game/${props.gameId}`}>
+            <Link className="text-center text-sm tabular-nums text-gray-700 dark:text-gray-300" to={`/game/${props.gameId}`}>
                 <span className="w-4 inline-block text-right mr-1">{props.inning + 1}</span>
                 <span className="text-xs pr-2 border-r border-gray-500 mr-2">{arrow}</span>
                 {duration}
@@ -109,7 +110,7 @@ const TeamScoreLine = React.memo((props: { team: TeamData }) => {
             <span className={props.team.win ? "font-semibold" : "font-normal"}>
                 <Twemoji emoji={props.team.emoji} className="mr-1" /> {props.team.name}
             </span>
-            <span className="text-sm text-gray-700 italic">
+            <span className="text-sm text-gray-700 dark:text-gray-300 italic">
                 {props.team.pitcher ? props.team.pitcher : `${props.team.predictedPitcher} (est.)`}
             </span>
         </div>
@@ -132,7 +133,7 @@ const OneLineTeamScore = React.memo((props: { away: TeamData; home: TeamData; cl
                 {props.away.name}
                 <Twemoji emoji={props.away.emoji} className="text-base ml-2" />
             </div>
-            <div className="w-16 text-sm text-center font-semibold bg-gray-200 rounded-sm tabular-nums tracking-tight">
+            <div className="w-16 text-sm text-center font-semibold bg-gray-200 dark:bg-gray-800 rounded-sm tabular-nums tracking-tight">
                 {props.away.score}&ensp;-&ensp;{props.home.score}
             </div>
             <div className={`w-40 text-sm ${props.home.win ? "font-semibold" : "font-normal"}`}>
@@ -152,7 +153,7 @@ const StandalonePitchers = React.memo(
         className?: string;
     }) => {
         return (
-            <div className={`text-sm text-gray-700 italic ${props.className}`}>
+            <div className={`text-sm text-gray-700 dark:text-gray-300 italic ${props.className}`}>
                 {props.awayPitcher ? props.awayPitcher : props.predictedAwayPitcher}
                 {" / "}
                 {props.homePitcher ? props.homePitcher : props.predictedHomePitcher}
@@ -163,9 +164,13 @@ const StandalonePitchers = React.memo(
 );
 
 const SeasonDay = React.memo((props: { season: number; day: number | string; className?: string }) => {
+    // todo: clean up eugh
+    let seasonText = displaySeason(props.season);
+    if (parseInt(seasonText)) seasonText = "S" + seasonText;
+
     return (
         <div className={`text-sm font-semibold ${props.className}`}>
-            S{props.season + 1}/{typeof props.day === "number" ? props.day + 1 : props.day}
+            {seasonText}/{typeof props.day === "number" ? props.day + 1 : props.day}
         </div>
     );
 });
@@ -202,7 +207,7 @@ export const GameRow = React.memo(
         return (
             <Link
                 to={`/game/${props.game.gameId}`}
-                className="flex flex-row px-2 py-2 border-b border-gray-300 space-x-2 items-baseline hover:bg-gray-200"
+                className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 dark-hover:bg-gray-800"
             >
                 <div className="contents md:hidden">
                     <TwoLineTeamScore home={home} away={away} />
@@ -227,7 +232,7 @@ export const GameRow = React.memo(
                 </div>
 
                 <div className="hidden md:contents">
-                    <SeasonDay season={data.season} day={data.day} className="text-center w-8" />
+                    <SeasonDay season={data.season} day={data.day} className="text-center w-10" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
                         awayPitcher={data.awayPitcherName}
@@ -280,7 +285,7 @@ export const FightRow = React.memo(
         return (
             <Link
                 to={`/bossfight/${props.fight.id}`}
-                className="flex flex-row px-2 py-2 border-b border-gray-300 space-x-2 items-baseline hover:bg-gray-200"
+                className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 dark-hover:bg-gray-800"
             >
                 <div className="contents md:hidden">
                     <TwoLineTeamScore home={home} away={away} />

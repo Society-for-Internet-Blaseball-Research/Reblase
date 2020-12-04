@@ -1,4 +1,5 @@
 import React from "react";
+import { selectTheme } from "../../blaseball/select";
 import Select from "react-select";
 import { ChronTeam } from "blaseball-lib/chronicler";
 import Twemoji from "./Twemoji";
@@ -26,6 +27,7 @@ export default function TeamPicker(props: TeamPickerProps) {
     return (
         <Select
             options={items}
+            theme={selectTheme}
             isMulti={true}
             placeholder={props.placeholder}
             value={items.filter((item) => (props.selectedTeams ?? []).indexOf(item.value) !== -1)}

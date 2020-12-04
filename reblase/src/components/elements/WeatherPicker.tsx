@@ -1,4 +1,5 @@
 import React from "react";
+import { selectTheme } from "../../blaseball/select";
 import Twemoji from "./Twemoji";
 import Select from "react-select";
 import { allWeatherTypes } from "blaseball-lib/weather";
@@ -27,6 +28,7 @@ export default function WeatherPicker(props: WeatherPickerProps) {
     return (
         <Select
             options={items}
+            theme={selectTheme}
             isMulti={true}
             placeholder={props.placeholder}
             value={items.filter((item) => (props.selectedWeather ?? []).indexOf(item.value) !== -1)}
