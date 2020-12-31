@@ -1,9 +1,0 @@
-.DayTable {
-    grid-template-columns: 1fr auto auto auto;
-}
-
-@screen lg {
-    .DayTable {
-        grid-template-columns: auto auto auto auto auto 1fr auto auto auto auto;
-    }
-}
