@@ -4,13 +4,16 @@ import {
     BlaseballAttributesDeprecated,
     BlaseballEntity,
     GameID,
+    GameStatsheetID,
     LeagueID,
     PlayerID,
     PlayerStats,
+    PlayerStatsheetID,
     PlayoffsID,
     SeasonID,
     TeamID,
     TeamRoster,
+    TeamStatsheetID,
 } from "./common";
 
 export interface BlaseballGame extends BlaseballEntity<GameID> {
@@ -190,4 +193,47 @@ export interface BlaseballSimData extends BlaseballEntity<"thisidisstaticyo"> {
     doTheThing?: boolean;
     eatTheRich?: boolean;
     unlockedInterviews?: boolean;
+}
+
+export interface BlaseballGameStats extends BlaseballEntity<GameStatsheetID> {
+    awayTeamRunsByInning: number[];
+    homeTeamRunsByInning: number[];
+    awayTeamStats: TeamStatsheetID;
+    homeTeamStats: TeamStatsheetID;
+}
+
+export interface BlaseballTeamStats extends BlaseballEntity<TeamStatsheetID> {
+    playerStats: PlayerStatsheetID[];
+    name: string;
+    teamId: TeamID;
+}
+
+export interface BlaseballPlayerStats extends BlaseballEntity<PlayerStatsheetID> {
+    playerId?: PlayerID;
+    teamId?: TeamID;
+    team: string,
+    name: string,
+    atBats?: number,
+    caughtStealing?: number,
+    doubles?: number,
+    earnedRuns?: number,
+    groundIntoDp?: number,
+    hits?: number,
+    hitsAllowed?: number,
+    homeRuns?: number,
+    losses?: number,
+    outsRecorded?: number,
+    rbis?: number,
+    runs?: number,
+    stolenBases?: number,
+    strikeouts?: number,
+    struckouts?: number,
+    triples?: number,
+    walks?: number,
+    walksIssued?: number,
+    wins?: number,
+    hitByPitch?: number,
+    hitBatters?: number,
+    quadruples?: number,
+    pitchesThrown?: number,
 }

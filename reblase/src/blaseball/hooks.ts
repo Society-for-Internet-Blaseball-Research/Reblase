@@ -2,6 +2,7 @@ import useSWR from "swr";
 import { useEffect, useMemo, useState } from "react";
 import {
     ChronGame,
+    ChronGameStats,
     ChronGameUpdate,
     ChronPlayer,
     ChronResponse,
@@ -9,6 +10,8 @@ import {
     ChronTemporalUpdate,
     GameListQuery,
     GameListResponse,
+    GameStatsQuery,
+    GameStatsResponse,
     GameUpdatesQuery,
     GameUpdatesResponse,
     chroniclerApi,
@@ -81,6 +84,22 @@ export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): G
         updates: allUpdates,
         isLoading: !initialData,
         error,
+    };
+}
+
+interface GameStatsHookReturn {
+    stats: ChronGameStats[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useGameStats(query: GameStatsQuery): GameStatsHookReturn {
+    const { data, error } = useSWR<GameStatsResponse>(chroniclerApi.gameStats(query));
+
+    return {
+        stats: data?.data ?? [],
+        error,
+        isLoading: !data,
     };
 }
 

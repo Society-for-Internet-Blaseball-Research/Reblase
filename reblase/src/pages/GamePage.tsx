@@ -2,9 +2,10 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
 
 import { UpdatesListFetching } from "../components/game/GameUpdateList";
+import { BoxScore } from "../components/game/BoxScore";
 import { cache } from "swr";
 import Error from "../components/elements/Error";
-import { useGameUpdates } from "../blaseball/hooks";
+import { useGameStats, useGameUpdates } from "../blaseball/hooks";
 import { BlaseballGame } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
 import { displaySeason } from "blaseball-lib/games";
@@ -108,6 +109,7 @@ export function GamePage() {
         started: true,
     };
     const { updates, error, isLoading } = useGameUpdates(query, options.autoUpdate);
+    const gameStats = useGameStats({ game: gameId ?? "null" });
     if (error) return <Error>{error.toString()}</Error>;
 
     const last = updates[updates.length - 1]?.data;
@@ -120,6 +122,8 @@ export function GamePage() {
             {last && <GameHeading evt={last} />}
 
             <GamePageOptions options={options} setOptions={setOptions} gameComplete={last?.gameComplete ?? true} />
+
+            {last && <BoxScore game={last} {...gameStats} />}
 
             <UpdatesListFetching
                 updates={updates}
