@@ -23,7 +23,7 @@ function DataCell(props: { children: ReactNode, header?: boolean, classes?: stri
     const Tag = props.header ? "th" : "td";
     const className = [
         props.bold ? "font-bold" : "font-normal",
-        "text-center", "px-4", "py-2",
+        "text-center", "px-3", "lg:px-4", "py-2",
         "border", "border-gray-300", "dark:border-gray-700",
         ...(props.classes ?? [])
     ].join(" ");
@@ -47,8 +47,8 @@ function TopRow(props: { innings: number }) {
         <tr>
             <HeaderCell>&nbsp;</HeaderCell>
             {[...Array(props.innings)].map((_, idx) => <HeaderCell key={idx} classes={["w-12"]}>{idx + 1}</HeaderCell>)}
-            <HeaderCell bold={true} classes={["w-12"]}><abbr title="Runs">R</abbr></HeaderCell>
-            <HeaderCell bold={true} classes={["w-12"]}><abbr title="Hits">H</abbr></HeaderCell>
+            <HeaderCell bold={true} classes={["w-12"]}>R</HeaderCell>
+            <HeaderCell bold={true} classes={["w-12"]}>H</HeaderCell>
         </tr>
     );
 }
@@ -64,7 +64,10 @@ function ScoreRow(props: { game: BlaseballGame, stats: ChronGameStats, innings: 
 
     return (
         <tr>
-            <HeaderCell bold={won}><Emoji emoji={emoji} /> {name}</HeaderCell>
+            <HeaderCell bold={won}>
+                <Emoji emoji={emoji} />
+                <span className="hidden lg:inline">{name}</span>
+            </HeaderCell>
             {[...Array(innings)].map((_, idx) => <DataCell key={idx}>{runsByInning[idx] ?? (game.gameComplete ? "X" : null)}</DataCell>)}
             <DataCell bold={true}>{runsByInning.reduce((acc, n) => acc + n, 0)}</DataCell>
             <DataCell bold={true}>{playerStats.reduce((acc, sheet) => acc + (sheet.hits ?? 0), 0)}</DataCell>
@@ -89,11 +92,14 @@ export function BoxScore(props: BoxScoreProps) {
     const innings = Math.max(9, stats.gameStats.awayTeamRunsByInning.length);
 
     return (
-        <table className="Boxscore table-fixed m-auto mt-4">
-            <tbody>
-                <TopRow innings={innings} />
-                {[true, false].map((away) => <ScoreRow key={away ? "away" : "home"} game={game} stats={stats} innings={innings} away={away} />)}
-            </tbody>
-        </table>
+        <div className="overflow-x-auto whitespace-no-wrap mt-4 w-screen -mx-4 pl-4 sm:w-full sm:mx-0 sm:pl-0">
+            <table className="table-fixed mx-auto inline-block sm:table">
+                <tbody>
+                    <TopRow innings={innings} />
+                    {[true, false].map((away) => <ScoreRow key={away ? "away" : "home"} game={game} stats={stats} innings={innings} away={away} />)}
+                </tbody>
+            </table>
+            <div className="inline-block w-4 sm:hidden"></div>
+        </div>
     );
 }
