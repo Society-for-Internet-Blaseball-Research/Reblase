@@ -46,7 +46,7 @@ function TopRow(props: { innings: number }) {
     return (
         <tr>
             <HeaderCell>&nbsp;</HeaderCell>
-            {[...Array(props.innings)].map((_, idx) => <HeaderCell classes={["w-12"]}>{idx + 1}</HeaderCell>)}
+            {[...Array(props.innings)].map((_, idx) => <HeaderCell key={idx} classes={["w-12"]}>{idx + 1}</HeaderCell>)}
             <HeaderCell bold={true} classes={["w-12"]}><abbr title="Runs">R</abbr></HeaderCell>
             <HeaderCell bold={true} classes={["w-12"]}><abbr title="Hits">H</abbr></HeaderCell>
         </tr>
@@ -65,7 +65,7 @@ function ScoreRow(props: { game: BlaseballGame, stats: ChronGameStats, innings: 
     return (
         <tr>
             <HeaderCell bold={won}><Emoji emoji={emoji} /> {name}</HeaderCell>
-            {[...Array(innings)].map((_, idx) => <DataCell>{runsByInning[idx] ?? (game.gameComplete ? "X" : null)}</DataCell>)}
+            {[...Array(innings)].map((_, idx) => <DataCell key={idx}>{runsByInning[idx] ?? (game.gameComplete ? "X" : null)}</DataCell>)}
             <DataCell bold={true}>{runsByInning.reduce((acc, n) => acc + n, 0)}</DataCell>
             <DataCell bold={true}>{playerStats.reduce((acc, sheet) => acc + (sheet.hits ?? 0), 0)}</DataCell>
         </tr>
@@ -92,7 +92,7 @@ export function BoxScore(props: BoxScoreProps) {
         <table className="Boxscore table-fixed m-auto mt-4">
             <tbody>
                 <TopRow innings={innings} />
-                {[true, false].map((away) => <ScoreRow game={game} stats={stats} innings={innings} away={away} />)}
+                {[true, false].map((away) => <ScoreRow key={away ? "away" : "home"} game={game} stats={stats} innings={innings} away={away} />)}
             </tbody>
         </table>
     );
