@@ -1,23 +1,10 @@
 import React, { ReactNode } from "react";
 
 import Emoji from "../elements/Emoji";
-import { ChronGameStats } from "blaseball-lib/chronicler";
+import { GameStatsHookReturn } from "../../blaseball/hooks";
 import { BlaseballGame, BlaseballGameStats, BlaseballTeamStats, BlaseballPlayerStats } from "blaseball-lib/models";
 import Error from "components/elements/Error";
 import { Loading } from "components/elements/Loading";
-
-interface Stats {
-    gameStats: BlaseballGameStats,
-    teamStats?: BlaseballTeamStats,
-    playerStats: BlaseballPlayerStats[],
-}
-
-function filterStats(stats: ChronGameStats, away: boolean): Stats {
-    const teamStats = stats.teamStats.find(
-        (sheet) => sheet.id === stats.gameStats[away ? "awayTeamStats" : "homeTeamStats"]);
-    const playerStats = stats.playerStats.filter((sheet) => teamStats?.playerStats.some((id) => sheet.id === id));
-    return { ...stats, teamStats, playerStats };
-}
 
 function DataCell(props: { children: ReactNode, header?: boolean, classes?: string[], bold?: boolean }) {
     const Tag = props.header ? "th" : "td";
@@ -53,9 +40,10 @@ function TopRow(props: { innings: number }) {
     );
 }
 
-function ScoreRow(props: { game: BlaseballGame, stats: ChronGameStats, innings: number, away: boolean }) {
-    const { game, stats, innings, away } = props;
-    const { gameStats, playerStats } = filterStats(stats, away);
+function ScoreRow(props: { game: BlaseballGame, stats: Stats, innings: number }) {
+    const { game, stats, innings } = props;
+    const away = stats.gameStats.awayTeamStats === stats.teamStats?.id;
+    const { gameStats, playerStats } = props.stats;
 
     const emoji = game[away ? "awayTeamEmoji" : "homeTeamEmoji"];
     const name = game[away ? "awayTeamName" : "homeTeamName"];
@@ -75,28 +63,38 @@ function ScoreRow(props: { game: BlaseballGame, stats: ChronGameStats, innings: 
     );
 }
 
-interface BoxScoreProps {
+interface Stats {
+    away: boolean,
+    gameStats: BlaseballGameStats,
+    teamStats?: BlaseballTeamStats,
+    playerStats: BlaseballPlayerStats[],
+}
+
+interface BoxScoreProps extends GameStatsHookReturn {
     game: BlaseballGame;
-    stats: ChronGameStats[];
-    error: any;
-    isLoading: boolean;
 }
 
 export function BoxScore(props: BoxScoreProps) {
     if (props.error) return <Error>{props.error.toString()}</Error>;
 
-    const stats = props.stats[props.stats.length - 1];
-    if (stats === undefined) return props.isLoading ? <Loading /> : null;
+    const chronStats = props.stats[props.stats.length - 1];
+    if (chronStats === undefined) return props.isLoading ? <Loading /> : null;
 
     const game = props.game;
-    const innings = Math.max(9, stats.gameStats.awayTeamRunsByInning.length);
+    const innings = Math.max(9, chronStats.gameStats.awayTeamRunsByInning.length);
+    const stats = [true, false].map((away): Stats => {
+        const gameStats = chronStats.gameStats;
+        const teamStats = chronStats.teamStats.find((sheet) => sheet.id === gameStats[away ? "awayTeamStats" : "homeTeamStats"]);
+        const playerStats = chronStats.playerStats.filter((sheet) => teamStats?.playerStats.some((id) => sheet.id === id));
+        return { away, gameStats, teamStats, playerStats };
+    });
 
     return (
         <div className="overflow-x-auto whitespace-no-wrap mt-4 w-screen -mx-4 pl-4 sm:w-full sm:mx-0 sm:pl-0">
             <table className="table-fixed mx-auto inline-block sm:table">
                 <tbody>
                     <TopRow innings={innings} />
-                    {[true, false].map((away) => <ScoreRow key={away ? "away" : "home"} game={game} stats={stats} innings={innings} away={away} />)}
+                    {stats.map((s) => <ScoreRow key={s.gameStats.id} game={game} stats={s} innings={innings} />)}
                 </tbody>
             </table>
             <div className="inline-block w-4 sm:hidden"></div>

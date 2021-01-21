@@ -87,7 +87,7 @@ export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): G
     };
 }
 
-interface GameStatsHookReturn {
+export interface GameStatsHookReturn {
     stats: ChronGameStats[];
     error: any;
     isLoading: boolean;
