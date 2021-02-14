@@ -6,6 +6,9 @@ import {
     BlaseballSimData,
     BlaseballTeam,
     BlaseballTemporal,
+    BlaseballGameStats,
+    BlaseballTeamStats,
+    BlaseballPlayerStats,
 } from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
@@ -13,6 +16,7 @@ export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
 export const chroniclerApi = {
     gameList: (query: GameListQuery) => BASE_URL + "/games?" + queryString.stringify(query),
     gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "/games/updates?" + queryString.stringify(query),
+    gameStats: (query: GameStatsQuery) => BASE_URL + "/games/stats?" + queryString.stringify(query),
     fights: () => BASE_URL + "/fights",
     fightUpdates: (query: FightUpdatesQuery) => BASE_URL + "/fights/updates?" + queryString.stringify(query),
     players: () => BASE_URL + "/players",
@@ -46,6 +50,10 @@ export type GameUpdatesQuery = {
     count?: number;
 };
 
+export type GameStatsQuery = {
+    game: string;
+};
+
 export type FightUpdatesQuery = {
     fight: string;
     after?: string;
@@ -67,6 +75,7 @@ export interface PagedResponse {
 
 export interface GameListResponse extends ChronResponse<ChronGame> {}
 export interface GameUpdatesResponse extends ChronResponse<ChronGameUpdate>, PagedResponse {}
+export interface GameStatsResponse extends ChronResponse<ChronGameStats> {}
 export interface FightUpdatesResponse extends ChronResponse<ChronFightUpdate>, PagedResponse {}
 export interface FightsResponse extends ChronResponse<ChronFight> {}
 export interface PlayersResponse extends ChronResponse<ChronPlayer> {}
@@ -89,6 +98,14 @@ export interface ChronGameUpdate {
     hash: string;
     timestamp: Timestamp;
     data: BlaseballGame;
+}
+
+export interface ChronGameStats {
+    gameId: string;
+    timestamp: Timestamp;
+    gameStats: BlaseballGameStats;
+    teamStats: BlaseballTeamStats[];
+    playerStats: BlaseballPlayerStats[];
 }
 
 export interface ChronFightUpdate {
