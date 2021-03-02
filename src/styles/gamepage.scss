@@ -1,0 +1,124 @@
+.UpdateTable {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.UpdateRow {
+    display: grid;
+    column-gap: 0.5rem;
+
+    border-bottom: 1px solid $gray-300;
+    padding: 0.5rem 0;
+
+    @include media-breakpoint-up(xs) {
+        grid-template-rows: auto auto;
+        grid-template-columns: auto 1fr auto auto auto;
+        grid-template-areas:
+            "log log log log time"
+            "score batter bases state state";
+    }
+
+    @include media-breakpoint-up(md) {
+        grid-template-columns: auto auto 1fr auto auto auto;
+        grid-template-areas: "time score log batter bases state";
+    }
+
+    .time {
+        grid-area: time;
+
+        text-align: center;
+    }
+
+    .score {
+        grid-area: score;
+
+        justify-self: start;
+        text-align: center;
+    
+        font-size: $font-size-sm;
+        font-weight: $font-weight-bold;
+        font-variant-numeric: tabular-nums;
+    
+        span {
+            background-color: $gray-200;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+    }
+
+    .log {
+        grid-area: log;
+    }
+
+    .batter {
+        grid-area: batter;
+
+        font-size: $font-size-sm;
+        span {
+            background-color: $gray-200;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+    }
+
+    .bases {
+        grid-area: bases;
+    }
+
+    .state {
+        grid-area: state;
+
+        // Spacing between the circle groups
+        span:not(:last-child) {
+            margin-right: 0.5rem;        
+        }
+    }
+}
+
+.Circle {
+    width: 18;
+    height: 18;
+
+    .outer {
+        stroke-width: 1.2;
+        stroke: $gray-700;
+        fill: none;
+    }
+
+    .inner {
+        fill: $gray-900;
+    }
+}
+
+.Bases {
+    padding-right: 6px;
+
+    .base {
+        margin-right: -6px;
+    
+        g {
+            transform: rotate(45deg);
+        }
+        
+        &.up {
+            transform: translateY(-8px);
+        }
+    
+        &.down {
+            transform: translateY(4px);
+        }
+    
+        rect {
+            stroke-width: 1;
+            stroke: black;
+            fill: white;
+    
+            &.filled {
+                fill: black;
+            }
+        }
+    }    
+}
