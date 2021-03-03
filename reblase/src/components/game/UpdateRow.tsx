@@ -21,13 +21,19 @@ const ScoreGrid = "col-start-1 col-end-1 lg:col-start-2 lg:col-end-2";
 const GameLogGrid = "col-start-1 col-end-4 lg:col-start-3 lg:col-end-3";
 const BatterGrid = "col-start-2 col-end-2 justify-self-start lg:col-start-4 lg:col-end-4 lg:justify-self-end";
 const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
-const LinkGrid = "hidden lg:block lg:col-start-6 lg:col-end-6";
 
 function Timestamp({ update }: WrappedUpdateProps) {
     const updateTime = dayjs(update.timestamp);
     const time = updateTime.format("mm:ss");
 
-    return <span className={`${TimestampGrid} text-gray-700 dark:text-gray-300`}>{time}</span>;
+    const linkHref =
+        window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + update.hash;
+
+    return (
+        <a href={linkHref} className={`${TimestampGrid} text-gray-700 dark:text-gray-300`}>
+            {time}
+        </a>
+    );
 }
 
 function Score({ evt }: UpdateProps) {
@@ -94,18 +100,6 @@ interface UpdateRowProps extends WrappedUpdateProps {
     highlight: boolean;
 }
 
-function UpdateLink(props: { hash: string }) {
-    const href = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + props.hash;
-    return (
-        <a
-            href={href}
-            className={`${LinkGrid} -mr-16 pl-4 cursor-pointer text-lg text-gray-500 hover:text-gray-900 dark-hover:text-gray-100`}
-        >
-            <AiOutlineLink />
-        </a>
-    );
-}
-
 export const UpdateRow = React.memo(
     function UpdateRow({ update, highlight }: UpdateRowProps) {
         const evt = update.data;
@@ -131,8 +125,6 @@ export const UpdateRow = React.memo(
                 <Score evt={evt} />
                 <Batter evt={evt} />
                 <AtBatInfo evt={evt} />
-
-                <UpdateLink hash={update.hash} />
             </div>
         );
     },
