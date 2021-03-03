@@ -79,7 +79,8 @@ export function addInningHeaderRows(
 ): Element[] {
     const elements: Element[] = [];
 
-    let lastPayload = null;
+    let lastInning = -1;
+    let lastTopOfInning = true;
     let lastHash = null;
     for (const update of updates) {
         // Basic dedupe
@@ -90,7 +91,8 @@ export function addInningHeaderRows(
 
         if (filterImportant && !isGameUpdateImportant(payload.lastUpdate, payload.scoreUpdate)) continue;
 
-        if (!lastPayload || lastPayload.inning !== payload.inning || lastPayload.topOfInning !== payload.topOfInning) {
+        const isNewHalfInning = lastInning !== payload.inning || lastTopOfInning !== payload.topOfInning;
+        if (isNewHalfInning) {
             // New inning, add header
             const header: Element = { type: "heading", inning: payload.inning, top: payload.topOfInning, update };
             elements.push(header);
@@ -116,7 +118,8 @@ export function addInningHeaderRows(
         // Add the row
         elements.push(row);
 
-        lastPayload = payload;
+        lastInning = payload.inning;
+        lastTopOfInning = payload.topOfInning;
         lastHash = update.hash;
     }
 
@@ -189,29 +192,31 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
 
     return (
         <div className="flex flex-col">
-            {grouped.map((group) => (
-                <div key={group.firstUpdate.hash + "_group"}>
-                    <InningHeader key={group.firstUpdate.hash + "_heading"} evt={group.firstUpdate.data} />
-                    <div className="flex flex-col">
-                        {group.updates.map((update) => {
-                            if (update.type === "primary") {
-                                const highlight = update.data.hash === scrollTarget;
-                                return (
-                                    <UpdateRow
-                                        key={update.data.hash + "_update"}
-                                        update={update.data}
-                                        highlight={highlight}
-                                    />
-                                );
-                            } else if (props.renderSecondary) {
-                                return props.renderSecondary(update.data);
-                            } else {
-                                return null;
-                            }
-                        })}
+            {grouped
+                .filter((g) => g.updates.length > 0)
+                .map((group) => (
+                    <div key={group.firstUpdate.hash + "_group"}>
+                        <InningHeader key={group.firstUpdate.hash + "_heading"} evt={group.firstUpdate.data} />
+                        <div className="flex flex-col">
+                            {group.updates.map((update) => {
+                                if (update.type === "primary") {
+                                    const highlight = update.data.hash === scrollTarget;
+                                    return (
+                                        <UpdateRow
+                                            key={update.data.hash + "_update"}
+                                            update={update.data}
+                                            highlight={highlight}
+                                        />
+                                    );
+                                } else if (props.renderSecondary) {
+                                    return props.renderSecondary(update.data);
+                                } else {
+                                    return null;
+                                }
+                            })}
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
         </div>
     );
 }
