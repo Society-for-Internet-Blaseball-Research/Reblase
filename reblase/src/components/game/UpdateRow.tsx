@@ -32,13 +32,20 @@ function Timestamp({ update }: WrappedUpdateProps) {
 
 function Score({ evt }: UpdateProps) {
     return (
-        <span className={`${ScoreGrid} tag font-semibold bg-gray-200 dark:bg-gray-800`}>{`${evt.awayScore} - ${evt.homeScore}`}</span>
+        <span
+            className={`${ScoreGrid} tag font-semibold bg-gray-200 dark:bg-gray-800`}
+        >{`${evt.awayScore} - ${evt.homeScore}`}</span>
     );
 }
 
 function GameLog({ evt }: UpdateProps) {
     const fontWeight = isGameUpdateImportant(evt.lastUpdate) ? "font-semibold" : "font-normal";
-    return <span className={`${GameLogGrid} ${fontWeight}`}>{evt.lastUpdate}</span>;
+    return (
+        <span className={`${GameLogGrid} ${fontWeight}`}>
+            {evt.lastUpdate}
+            {evt.scoreUpdate && <strong> {evt.scoreUpdate}</strong>}
+        </span>
+    );
 }
 
 function Batter({ evt }: UpdateProps) {
@@ -49,7 +56,9 @@ function Batter({ evt }: UpdateProps) {
         return <span className={`${BatterGrid}`} />;
 
     return (
-        <span className={`${BatterGrid} text-sm bg-gray-200 dark:bg-gray-800 rounded px-2 py-1 inline-flex items-center justify-center`}>
+        <span
+            className={`${BatterGrid} text-sm bg-gray-200 dark:bg-gray-800 rounded px-2 py-1 inline-flex items-center justify-center`}
+        >
             <Emoji emoji={team.emoji} />
             <span className="ml-1">{team.batterName}</span>
         </span>
@@ -88,7 +97,10 @@ interface UpdateRowProps extends WrappedUpdateProps {
 function UpdateLink(props: { hash: string }) {
     const href = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + props.hash;
     return (
-        <a href={href} className={`${LinkGrid} -mr-16 pl-4 cursor-pointer text-lg text-gray-500 hover:text-gray-900 dark-hover:text-gray-100`}>
+        <a
+            href={href}
+            className={`${LinkGrid} -mr-16 pl-4 cursor-pointer text-lg text-gray-500 hover:text-gray-900 dark-hover:text-gray-100`}
+        >
             <AiOutlineLink />
         </a>
     );

@@ -16,6 +16,7 @@ import {
 export interface BlaseballGame extends BlaseballEntity<GameID> {
     outcomes: string[];
     lastUpdate: string;
+    scoreUpdate: string | null;
 
     season: number;
     day: number;
