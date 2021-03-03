@@ -173,6 +173,7 @@ export function isGameUpdateImportant(update: string) {
         /Black Hole swallows/,
         /is Beaned by/,
         /is Percolated/,
+        /tastes the infinite/,
     ]) {
         if (pattern.test(update)) return true;
     }
