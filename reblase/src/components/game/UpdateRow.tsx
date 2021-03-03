@@ -6,7 +6,6 @@ import Emoji from "../elements/Emoji";
 import { BlaseballGame } from "blaseball-lib/models";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
 import BaseDisplay from "../elements/BaseDisplay";
-import { AiOutlineLink } from "react-icons/ai";
 
 interface WrappedUpdateProps {
     update: ChronGameUpdate | ChronFightUpdate;
