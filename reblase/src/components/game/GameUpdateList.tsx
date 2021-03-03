@@ -1,4 +1,4 @@
-﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
+import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
 
@@ -88,7 +88,7 @@ export function addInningHeaderRows(
         const payload = update.data;
         const row: Element = { type: "row", update };
 
-        if (filterImportant && !isGameUpdateImportant(payload.lastUpdate)) continue;
+        if (filterImportant && !isGameUpdateImportant(payload.lastUpdate, payload.scoreUpdate)) continue;
 
         if (!lastPayload || lastPayload.inning !== payload.inning || lastPayload.topOfInning !== payload.topOfInning) {
             // New inning, add header

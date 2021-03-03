@@ -39,7 +39,7 @@ function Score({ evt }: UpdateProps) {
 }
 
 function GameLog({ evt }: UpdateProps) {
-    const fontWeight = isGameUpdateImportant(evt.lastUpdate) ? "font-semibold" : "font-normal";
+    const fontWeight = isGameUpdateImportant(evt.lastUpdate, evt.scoreUpdate) ? "font-semibold" : "font-normal";
     return (
         <span className={`${GameLogGrid} ${fontWeight}`}>
             {evt.lastUpdate}
