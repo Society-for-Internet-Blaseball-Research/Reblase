@@ -1,4 +1,4 @@
-import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
+﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
 
@@ -140,7 +140,13 @@ type GroupValue<TSecondary> =
     | { type: "primary"; data: GameOrFight }
     | { type: "secondary"; data: SecondaryUpdate<TSecondary> };
 export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProps<TSecondary>) {
-    const updates = props.updateOrder === "desc" ? [...props.updates].reverse() : props.updates;
+    const updates = [...props.updates];
+
+    // Season 11+ has a "playCount" property we can use for proper ordering
+    // Otherwise, .sort is stable and it'll keep existing order
+    updates.sort((a, b) => (a.data.playCount ?? -1) - (b.data.playCount ?? -1));
+
+    if (props.updateOrder === "desc") updates.reverse();
 
     const elements = useMemo(() => addInningHeaderRows(updates, props.updateOrder, props.filterImportant), [
         updates,
