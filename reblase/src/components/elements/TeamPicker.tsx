@@ -16,6 +16,7 @@ export default function TeamPicker(props: TeamPickerProps) {
         .sort((a, b) => a.data.fullName.localeCompare(b.data.fullName))
         .map((team) => ({
             value: team.id,
+            name: team.data.fullName,
             label: (
                 <span key={team.id}>
                     <Twemoji className="mr-1" emoji={team.data.emoji} />
@@ -31,6 +32,7 @@ export default function TeamPicker(props: TeamPickerProps) {
             isMulti={true}
             placeholder={props.placeholder}
             value={items.filter((item) => (props.selectedTeams ?? []).indexOf(item.value) !== -1)}
+            getOptionValue={(team) => team.name}
             onChange={(newItems, _) => {
                 const ids = ((newItems ?? []) as any[]).map((item) => item.value as string);
                 if (props.setSelectedTeams) props.setSelectedTeams(ids);
