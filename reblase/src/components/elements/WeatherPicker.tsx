@@ -16,6 +16,7 @@ export default function WeatherPicker(props: WeatherPickerProps) {
         .map((weather) => {
             return {
                 value: weather.id,
+                name: weather.name,
                 label: (
                     <span key={weather.name}>
                         <Twemoji className="mr-1" emoji={weather.emoji ?? "?"} />
@@ -32,6 +33,7 @@ export default function WeatherPicker(props: WeatherPickerProps) {
             isMulti={true}
             placeholder={props.placeholder}
             value={items.filter((item) => (props.selectedWeather ?? []).indexOf(item.value) !== -1)}
+            getOptionValue={(weather) => weather.name}
             onChange={(newItems, _) => {
                 const ids = ((newItems ?? []) as any[]).map((item) => parseInt(item.value));
                 if (props.setSelectedWeather) props.setSelectedWeather(ids);
