@@ -16,7 +16,7 @@ export function PageLayout(props: { children: React.ReactNode }) {
                 </a>
                 .
                 <br />
-                <a href="https://twitter.com/floofstrid">Author</a> (@Ske#6201) |{" "}
+                <a href="https://twitter.com/AReblase">Author</a> (@AReblase) |{" "}
                 <a href="https://github.com/Society-for-Internet-Blaseball-Research/Reblase">GitHub</a> |{" "}
                 <a href="https://discord.gg/XKppCuj">SIBR Discord</a>
             </div>
