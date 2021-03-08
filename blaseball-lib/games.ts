@@ -174,6 +174,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /is Beaned by/,
         /is Percolated/,
         /tastes the infinite/,
+        /surge of Immateria/,
     ]) {
         if (pattern.test(update)) return true;
         if (scoreUpdate && pattern.test(scoreUpdate)) return true;
