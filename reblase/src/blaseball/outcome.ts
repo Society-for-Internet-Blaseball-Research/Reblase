@@ -31,6 +31,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Black Hole", emoji: "\u{26AB}", search: [/Black Hole/i], color: "gray" },
     { name: "Percolated", emoji: "\u{2615}", search: [/Percolated/], color: "brown" },
     { name: "Shelled", emoji: "\u{1F95C}", search: [/Shelled/], color: "orange" },
+    { name: "Flooding", emoji: "\u{1F6B0}", search: [/surge of Immateria/], color: "blue" },
 ];
 
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {
