@@ -99,6 +99,22 @@ interface UpdateRowProps extends WrappedUpdateProps {
     highlight: boolean;
 }
 
+function isMaximumBlaseball(evt: BlaseballGame): boolean {
+    const outs = evt.halfInningOuts;
+    const outsNeeded = (evt.topOfInning ? evt.awayOuts : evt.homeOuts) ?? 3;
+    const balls = evt.atBatBalls;
+    const ballsNeeded = (evt.topOfInning ? evt.awayBalls : evt.homeBalls) ?? 4;
+    const strikes = evt.atBatStrikes;
+    const strikesNeeded = (evt.topOfInning ? evt.awayStrikes : evt.homeStrikes) ?? 3;
+    const bases = (evt.topOfInning ? evt.awayBases : evt.homeBases) ?? 4;
+    const basesLoaded = Array.from({ length: bases - 1 }).every((_, i) => evt.basesOccupied.includes(i));
+
+    return basesLoaded &&
+        ballsNeeded - 1 === balls &&
+        outsNeeded - 1 === outs &&
+        strikesNeeded - 1 === strikes;
+}
+
 export const UpdateRow = React.memo(
     function UpdateRow({ update, highlight }: UpdateRowProps) {
         const evt = update.data;
@@ -114,8 +130,9 @@ export const UpdateRow = React.memo(
             <div
                 ref={highlight ? scrollRef : undefined}
                 className={
-                    "grid grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300 dark:border-gray-700" +
-                    (highlight ? " bg-yellow-200 dark:bg-gray-900" : "")
+                    "grid grid-flow-row-dense gap-2 items-center px-2 py-2 border-gray-300 dark:border-gray-700" +
+                    (highlight ? " bg-yellow-200 dark:bg-gray-900" : "") +
+                    (isMaximumBlaseball(evt) ? " maximum-blaseball" : " border-b")
                 }
                 style={{ gridTemplateColumns: "auto auto 1fr" }}
             >
