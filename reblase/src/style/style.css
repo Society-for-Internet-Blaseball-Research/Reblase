@@ -72,6 +72,11 @@
         margin: 0 .05em 0 .1em;
         vertical-align: -0.15em;
     }
+
+    .maximum-blaseball {
+        @apply rounded;
+        box-shadow: 0 0 8px 2px var(--theme-black);
+    }
 }
 
 @layer components {
