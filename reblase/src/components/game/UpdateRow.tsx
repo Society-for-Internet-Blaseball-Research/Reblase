@@ -15,11 +15,11 @@ interface UpdateProps {
     evt: BlaseballGame;
 }
 
-const TimestampGrid = "col-start-4 col-end-4 lg:col-start-1 lg:col-end-1";
-const ScoreGrid = "col-start-1 col-end-1 lg:col-start-2 lg:col-end-2";
-const GameLogGrid = "col-start-1 col-end-4 lg:col-start-3 lg:col-end-3";
-const BatterGrid = "col-start-2 col-end-2 justify-self-start lg:col-start-4 lg:col-end-4 lg:justify-self-end";
-const AtBatGrid = "col-start-3 col-end-5 justify-self-end lg:col-start-5 lg:col-end-5";
+const TimestampGrid = "col-start-4 col-span-1 lg:col-start-1 lg:col-span-1 justify-self-end self-start sm:justify-self-center sm:self-center";
+const ScoreGrid = "row-end-4 row-span-1 sm:row-auto col-start-1 col-span-1 lg:col-start-2 lg:col-span-1";
+const GameLogGrid = "col-start-1 col-span-3 lg:col-start-3 lg:col-span-1";
+const BatterGrid = "col-start-1 col-span-2 sm:col-start-2 sm:col-span-1 justify-self-start lg:col-start-4 lg:col-span-1 lg:justify-self-end";
+const AtBatGrid = "row-end-4 sm:row-auto col-start-3 col-span-2 justify-self-end lg:col-start-5 lg:col-span-1";
 
 function Timestamp({ update }: WrappedUpdateProps) {
     const updateTime = dayjs(update.timestamp);
@@ -114,7 +114,7 @@ export const UpdateRow = React.memo(
             <div
                 ref={highlight ? scrollRef : undefined}
                 className={
-                    "grid grid-flow-row-dense gap-2 items-center px-2 py-2 border-b border-gray-300 dark:border-gray-700" +
+                    "grid grid-rows-update-mobile sm:grid-rows-none md:grid-flow-row-dense gap-x-2 gap-y-1 sm:gap-2 items-center px-2 py-2 border-b border-gray-300 dark:border-gray-700" +
                     (highlight ? " bg-yellow-200 dark:bg-gray-900" : "")
                 }
                 style={{ gridTemplateColumns: "auto auto 1fr" }}

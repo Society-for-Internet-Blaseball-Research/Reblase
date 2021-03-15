@@ -7,6 +7,11 @@
             lg: "1024px",
             xl: "1200px",
         },
+        extend: {
+            gridTemplateRows: {
+                'update-mobile': '1fr minmax(0, 1fr), 1fr'
+            }
+        }
     },
     variants: {
         backgroundColor: ({ after }) => after(["odd", "dark", "dark-hover"]),
