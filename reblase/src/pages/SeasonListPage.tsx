@@ -57,9 +57,15 @@ export function SeasonListPage() {
         <Container className={"mt-4"}>
             <h2 className="text-2xl font-semibold mb-2">Seasons</h2>
 
+            <div className="flex flex-col mb-6">
+                {seasonsList.map((seasonGame, i) => (
+                    seasonGame.data.season >= 0 ? <SeasonRow key={i} game={seasonGame}/> : null
+                ))}
+            </div>
+            <h2 className="text-2xl font-semibold mb-2">Exhibitions</h2>
             <div className="flex flex-col">
                 {seasonsList.map((seasonGame, i) => (
-                    <SeasonRow key={i} game={seasonGame}></SeasonRow>
+                    seasonGame.data.season < 0 ? <SeasonRow key={i} game={seasonGame}/> : null
                 ))}
             </div>
         </Container>
