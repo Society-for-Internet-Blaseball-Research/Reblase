@@ -26,7 +26,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Unstable", emoji: "\u{1F974}", search: [/Unstable/i], color: "blue" },
     { name: "Flickering", emoji: "\u{26A1}", search: [/Flickering/i], color: "blue" },
     { name: "Birds", emoji: "\u{1F426}", search: [/The Birds pecked/i], color: "purple" },
-    { name: "Peanut", emoji: "\u{1F95C}", search: [/peanut/i], color: "orange" },
+    { name: "Peanut", emoji: "\u{1F95C}", search: [/stray peanut/i], color: "orange" },
     { name: "Sun 2", emoji: "\u{1F31E}", search: [/Sun 2/i], color: "orange" },
     { name: "Black Hole", emoji: "\u{26AB}", search: [/Black Hole/i], color: "gray" },
     { name: "Percolated", emoji: "\u{2615}", search: [/Percolated/], color: "brown" },
