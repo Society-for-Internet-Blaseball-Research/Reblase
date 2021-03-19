@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { useSWRInfinite } from "swr";
 import { useEffect, useMemo, useState } from "react";
 import {
     ChronGame,
@@ -20,6 +20,8 @@ import {
     FightsResponse,
     ChronFight,
     SimResponse,
+    TemporalResponse,
+    TemporalUpdatesQuery,
 } from "blaseball-lib/chronicler";
 import { BlaseballSimData } from "blaseball-lib/models";
 
@@ -137,10 +139,32 @@ interface TemporalHookReturn {
 }
 
 export function useTemporal(): TemporalHookReturn {
-    const { data, error } = useSWR<ChronResponse<ChronTemporalUpdate>>(chroniclerApi.temporalUpdates());
+    const { data, error } = useSWRInfinite<TemporalResponse>(
+        (_, previous) => {
+            const query: TemporalUpdatesQuery = { count: 250, order: "desc" };
+
+            // First page
+            if (!previous) return chroniclerApi.temporalUpdates(query);
+
+            // Reached end
+            if (!previous.nextPage) return null;
+
+            // Next page
+            return chroniclerApi.temporalUpdates({ ...query, page: previous.nextPage });
+        },
+        // todo: better way to do this?
+        { initialSize: 999 }
+    );
+
+    const allUpdates = [];
+    if (data) {
+        for (const page of data) {
+            allUpdates.push(...page.data);
+        }
+    }
 
     return {
-        updates: data?.data ?? [],
+        updates: allUpdates,
         error,
         isLoading: !data && !error,
     };

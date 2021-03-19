@@ -18,7 +18,7 @@ export const chroniclerApi = {
     players: () => BASE_URL + "/players",
     playerUpdates: (query: PlayerUpdatesQuery) => BASE_URL + "/players/updates?" + queryString.stringify(query),
     teams: () => BASE_URL + "/teams",
-    temporalUpdates: () => BASE_URL + "/temporal/updates",
+    temporalUpdates: (query: TemporalUpdatesQuery) => BASE_URL + "/temporal/updates?" + queryString.stringify(query),
     simUpdates: (query: SimUpdatesQuery) => BASE_URL + "/sim/updates?" + queryString.stringify(query),
 };
 
@@ -57,6 +57,12 @@ export type SimUpdatesQuery = {
     count?: number;
 };
 
+export type TemporalUpdatesQuery = {
+    order?: "asc" | "desc";
+    count?: number;
+    page?: string;
+};
+
 export interface ChronResponse<T> {
     data: T[];
 }
@@ -71,7 +77,7 @@ export interface FightUpdatesResponse extends ChronResponse<ChronFightUpdate>, P
 export interface FightsResponse extends ChronResponse<ChronFight> {}
 export interface PlayersResponse extends ChronResponse<ChronPlayer> {}
 export interface TeamsResponse extends ChronResponse<ChronTeam> {}
-export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate> {}
+export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate>, PagedResponse {}
 export interface SimResponse extends ChronResponse<ChronSimUpdate> {}
 
 export type Timestamp = string;
