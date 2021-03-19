@@ -32,6 +32,8 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Percolated", emoji: "\u{2615}", search: [/Percolated/], color: "brown" },
     { name: "Shelled", emoji: "\u{1F95C}", search: [/Shelled/], color: "orange" },
     { name: "Elsewhere", emoji: "\u{1F4A8}", search: [/Elsewhere/], color: "gray" },
+    { name: "Consumers", emoji: "\u{1F988}", search: [/CONSUMERS ATTACK/], color: "gray" },
+    { name: "Static", emoji: "\u{1F4AC}", search: [/Echoed into Static/], color: "gray" },
 ];
 
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {

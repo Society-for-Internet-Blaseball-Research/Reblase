@@ -146,9 +146,9 @@ export function getGameState(game: BlaseballGame): GameState {
     };
 }
 
-export function isGameUpdateImportant(update: string, scoreUpdate: string | null) {
+export function isGameUpdateImportant(update: string, scoreUpdate: string | null): boolean {
+    if (scoreUpdate) return true;
     for (const pattern of [
-        // TODO once 5th base lands, are these correct?
         /hits a (Single|Double|Triple|Quadruple|grand slam)/,
         /hits a (solo|2-run|3-run|4-run) home run/,
         /steals (second base|third base|fourth base|fifth base|home)/,
@@ -176,9 +176,12 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /tastes the infinite/,
         /surge of Immateria/,
         /Elsewhere/,
+        /CONSUMERS ATTACK/,
+        /ECHO/,
+        /STATIC/,
+        /Echoed/,
     ]) {
         if (pattern.test(update)) return true;
-        if (scoreUpdate && pattern.test(scoreUpdate)) return true;
     }
     return false;
 }
