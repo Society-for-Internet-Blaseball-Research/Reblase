@@ -99,7 +99,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
                 </div>
             )}
 
-            <p className="text-sm whitespace-pre-line float-left">
+            <div className="text-sm whitespace-pre-line float-left">
                 {evt.type === "game" ? (
                     evt.text.join("\n")
                 ) : (
@@ -114,7 +114,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
                         ))}
                     </ul>
                 )}
-            </p>
+            </div>
 
             {evt.type === "game" && (
                 <span className="text-sm text-gray-700 dark:text-gray-300 float-right">
