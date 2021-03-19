@@ -1,8 +1,8 @@
 import React from "react";
 import { selectTheme } from "../../blaseball/select";
-import Twemoji from "./Twemoji";
 import Select from "react-select";
-import { allWeatherTypes } from "blaseball-lib/weather";
+import { allWeatherTypes, WeatherType } from "blaseball-lib/weather";
+import Twemoji from "./Twemoji";
 
 export interface WeatherPickerProps {
     placeholder?: string;
@@ -11,20 +11,7 @@ export interface WeatherPickerProps {
 }
 
 export default function WeatherPicker(props: WeatherPickerProps) {
-    const items = allWeatherTypes
-        .filter((w) => !w.forbidden)
-        .map((weather) => {
-            return {
-                value: weather.id,
-                name: weather.name,
-                label: (
-                    <span key={weather.name}>
-                        <Twemoji className="mr-1" emoji={weather.emoji ?? "?"} />
-                        {weather.name}
-                    </span>
-                ),
-            };
-        });
+    const items = allWeatherTypes.filter((w) => !w.forbidden);
 
     return (
         <Select
@@ -32,10 +19,18 @@ export default function WeatherPicker(props: WeatherPickerProps) {
             theme={selectTheme}
             isMulti={true}
             placeholder={props.placeholder}
-            value={items.filter((item) => (props.selectedWeather ?? []).indexOf(item.value) !== -1)}
+            value={items.filter((item) => (props.selectedWeather ?? []).indexOf(item.id) !== -1)}
             getOptionValue={(weather) => weather.name}
+            formatOptionLabel={(weather) => {
+                return (
+                    <>
+                        <Twemoji className="mr-1" emoji={weather.emoji ?? "?"} />
+                        {weather.name}
+                    </>
+                );
+            }}
             onChange={(newItems, _) => {
-                const ids = ((newItems ?? []) as any[]).map((item) => parseInt(item.value));
+                const ids = ((newItems ?? []) as WeatherType[]).map((item) => item.id);
                 if (props.setSelectedWeather) props.setSelectedWeather(ids);
             }}
         />
