@@ -90,8 +90,7 @@ function PageButton({ variant, pageNumber }: { variant: PageButtonVariant, pageN
         if (Paginator.totalPages) {
             try {
                 Paginator.setCurrentPage(Paginator.currentPage + 1 < Paginator.totalPages ? Paginator.currentPage + 1 : Paginator.currentPage);
-            }
-            catch (err) {
+            } catch (err) {
                 console.error(err);
             }
         }
@@ -102,8 +101,7 @@ function PageButton({ variant, pageNumber }: { variant: PageButtonVariant, pageN
         if (Paginator.totalPages > 0) {
             try {
                 Paginator.setCurrentPage(Paginator.totalPages - 1);
-            }
-            catch (err) {
+            } catch (err) {
                 console.error(err);
             }
         }
@@ -131,7 +129,7 @@ function PageButton({ variant, pageNumber }: { variant: PageButtonVariant, pageN
         case "number":
             if (pageNumber !== undefined) {
                 return <button
-                    className={"page-btn hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black" + ` ${Paginator.currentPage === pageNumber ? "bg-gray-500 text-black" : null}`}
+                    className={`page-btn hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black ${Paginator.currentPage === pageNumber ? "bg-gray-500 text-black" : null}`}
                     onClick={goToPage}
                     value={pageNumber}>{pageNumber + 1}</button>;
             } else {
@@ -152,7 +150,7 @@ type PageNavConfig = {
  * // Creates 5 buttons, with additional first and last buttons
  * <PageNav buttonLimit=5 specialButtons={['first', 'last']}/>
  * @param {Object} props - Config options for this component
- * @param {number} [props.buttonLimit=3] The maximum amount of numbered buttons to show at any time
+ * @param {number} [props.buttonLimit=3] The maximum amount of numbered buttons to show at any time. If set to an even number, the maximum will be n+1, rather than n, when not near the edge of the list of pages.
  * @param {PageButtonVariant[]} [props.specialButtons=['first', 'prev', 'next', 'last', 'collapse', 'number']] An array of the desired special button variants to include, defaulting to include all variants
  * @param {string} [props.className] Optional styling via React's className property
  * @returns {JSX.Element} The PageNav React component, except in cases where there are no valid pages to navigate
@@ -178,7 +176,8 @@ function PageNav({
     }
     // Display up to buttonLimit or totalPages, whichever is smaller
     // Attempt to split the buttonLimit, as evenly as possible, across the current page number. If not possible, throw it to one side, biasing for the current page as an edge
-    for (let page = Math.max(0, Paginator.currentPage - Math.floor(buttonLimit / 2)); page < Math.min(Paginator.totalPages, Math.max(buttonLimit, Paginator.currentPage + 1 + Math.floor(buttonLimit / 2))); page++) {
+    // NOTE: Even numbers can't be split and also have a "center", so even buttonLimit values will actually render as buttonLimit+1 when there is no edge bias
+    for (let page = Math.max(0, Math.min(Paginator.totalPages - buttonLimit, Paginator.currentPage - Math.floor(buttonLimit / 2))); page < Math.min(Paginator.totalPages, Math.max(buttonLimit, Paginator.currentPage + 1 + Math.floor(buttonLimit / 2))); page++) {
         pageButtons.push(<PageButton variant="number" pageNumber={page} key={`page-${page}`} />);
     }
     // If there are more pages than the limit after the current page, indicate that there was a collapse
