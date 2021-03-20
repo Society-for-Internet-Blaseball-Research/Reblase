@@ -1,4 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
+import Select from "react-select";
+import { selectTheme } from "../../blaseball/select";
 
 /**
  * Create a range of numbers
@@ -198,7 +200,8 @@ function PageNav({
 
 type PageSizerConfig = {
     itemsPerPageValues: number[],
-    className?: string
+    className?: string,
+    reactSelectStyles?: object
 }
 
 /**
@@ -206,59 +209,100 @@ type PageSizerConfig = {
  * @param {Object} props - Config options for this component
  * @param {number[]} props.itemsPerPageValues - The options to be presented to the user; 'All' will be appended to the list, allowing users to decline pagination
  * @param {string} [props.className] - Optional styling via React's className property
+ * @param {Object} [props.reactSelectStyles] - Overrideable styling via {@link Select}
  * @returns {JSX.Element} - The PageSizer component
  */
-function PageSizer({ itemsPerPageValues, className }: PageSizerConfig) {
-    // Append the list of options for the selector with "All", making sure that the options are first sorted numerically
-    const [itemsPerPageChoices, setItemsPerPageChoices] = useState([...itemsPerPageValues.sort((a, b) => a - b), "All"]);
-    // If the prop fed into this changes, sort again, then append again
-    useEffect(() => {
-        setItemsPerPageChoices([...itemsPerPageValues.sort((a, b) => a - b), "All"]);
-    }, [itemsPerPageValues]);
+function PageSizer({ itemsPerPageValues, className, reactSelectStyles }: PageSizerConfig) {
+    /**
+     * Generates a prepared array of options object for {@link Select} component
+     * @private
+     * @param {number[]} valuesArray - A flat array of numerical values to use as options, which will be sorted before use
+     * @returns {Object[string, string|number]} - Returns array of objects suitable for use as in {@link Select}
+     */
+    function _generateChoiceObjects(valuesArray: number[]) {
+        const choicesAsObjects: Record<string, string | number>[] = valuesArray.sort((a, b) => a - b)
+            .map((element) => {
+                return { label: element.toString(), value: element };
+            });
+        choicesAsObjects.push({ label: "All", value: 0 });
+        return choicesAsObjects;
+    }
 
     const Paginator = useContext(PageContext);
 
+    const [itemsPerPageChoices, setItemsPerPageChoices] = useState(_generateChoiceObjects(itemsPerPageValues));
+    // If the prop fed into this component changes, sort again, then append again
+    useEffect(() => {
+        setItemsPerPageChoices(_generateChoiceObjects(itemsPerPageValues));
+    }, [itemsPerPageValues]);
+
     return (
-        <label className={`my-2 ${className}`}>Events per page: <select className="px-0.5 bg-white text-black"
-                                                                        value={Paginator.itemsPerPage}
-                                                                        onChange={(event) => {
-                                                                            Paginator.setCurrentPage(0);
-                                                                            Paginator.setItemsPerPage(parseInt(event.currentTarget.value));
-                                                                        }}>
-            {itemsPerPageChoices.map((choice) => {
-                return <option key={`perPage-${choice}`}
-                               value={choice === "All" ? 0 : choice}>{choice}</option>;
-            })}
-        </select>
+        <label className={`my-2 flex items-center ${className}`}>
+            <span className="mr-2">Events per page: </span>
+            <Select
+                    options={itemsPerPageChoices}
+                    theme={selectTheme}
+                    styles={reactSelectStyles}
+                    isClearable={false}
+                    isSearchable={false}
+                    value={{
+                        label: Paginator.itemsPerPage === 0 ? "All" : Paginator.itemsPerPage.toString(),
+                        value: Paginator.itemsPerPage,
+                    }}
+                    onChange={(newChoice, _) => {
+                        Paginator.setCurrentPage(0);
+                        Paginator.setItemsPerPage((newChoice as Record<string, string | number>).value);
+                    }}
+            />
         </label>
     );
 }
 
 type PageJumpConfig = {
-    className?: string
+    className?: string,
+    reactSelectStyles?: object
 }
 
 /**
  * Select element allowing user to jump to a specific page. The options are automatically generated using the {@link _range} function.
  * @param {Object} props - Config options for this component
  * @param {string} [props.className] - Optional styling via React's className property
+ * @param {Object} [props.reactSelectStyles] - Overrideable styling via {@link Select}
  * @returns The PageJump component
  */
-function PageJump({ className }: PageJumpConfig) {
+function PageJump({ className, reactSelectStyles }: PageJumpConfig) {
+    function _generatePageRangeObject(range: number[]) {
+        const pageRangeObject: Record<string, string | number>[] = range.map((element) => {
+            return { label: element.toString(), value: element - 1 };
+        });
+        return pageRangeObject;
+    }
+
     const Paginator = useContext(PageContext);
     const [pageRange] = useState(_range(Paginator.totalPages));
+    const [pageRangeAsObject, setPageRangeAsObject] = useState(_generatePageRangeObject(pageRange));
+    useEffect(() => {
+        setPageRangeAsObject(_generatePageRangeObject(pageRange));
+    }, [pageRange]);
 
     return (
         Paginator.totalPages !== 0 ?
-            <label className={`my-2 ${className}`}>Jump to: <select className="px-0.5 bg-white text-black"
-                                                                    value={Paginator.currentPage}
-                                                                    onChange={(event) => {
-                                                                        Paginator.setCurrentPage(parseInt(event.currentTarget.value));
-                                                                    }}>
-                {pageRange.map((choice) => {
-                    return <option key={`jump-${choice}`} value={choice - 1}>{choice}</option>;
-                })}
-            </select>
+            <label className={`my-2 flex items-center ${className}`}>
+                <span className="mr-3">Jump to:</span>
+                <Select
+                        options={pageRangeAsObject}
+                        theme={selectTheme}
+                        styles={reactSelectStyles}
+                        isClearable={false}
+                        isSearchable={true}
+                        value={{
+                            label: (Paginator.currentPage + 1).toString(),
+                            value: Paginator.currentPage,
+                        }}
+                        onChange={(newChoice, _) => {
+                            Paginator.setCurrentPage((newChoice as Record<string, string | number>).value);
+                        }}>
+                </Select>
             </label>
             : null
     );
@@ -269,6 +313,18 @@ function PageJump({ className }: PageJumpConfig) {
  * @type DisplayOption
  */
 type DisplayOption = boolean | "top" | "bottom";
+
+const defaultReactSelectStyle = {
+    option: (provided: any) => ({
+        ...provided,
+        width: '100%',
+        padding: '1em'
+    }),
+    control: (provided: any) => ({
+        ...provided,
+        width: '10ch'
+    })
+}
 
 /**
  * The main Pagination element, which creates paginated content based on its {@link React.Children}
@@ -282,6 +338,7 @@ type DisplayOption = boolean | "top" | "bottom";
  * @param {number} [props.defaultItemsPerPage=10] - The default number of items to display per page
  * @param {React.Children} [props.children] - The children of this component from the JSX hierarchy
  * @param {className} [props.className] - Optional styling via React's className property
+ * @param {reactSelectStyles} [props.reactSelectStyles] - Overrideable styling for the {@link Select} components used in {@link PageSizer} and {@link PageJump}
  * @return {JSX.Element} The Pagination React component
  */
 export function Pagination({
@@ -294,7 +351,8 @@ export function Pagination({
                                defaultItemsPerPage = 10,
                                children,
                                className,
-                           }: { pageNavDisplay?: DisplayOption, pageNavConfig?: PageNavConfig, pageSizerDisplay?: DisplayOption, pageSizerConfig?: PageSizerConfig, pageJumpDisplay?: DisplayOption, pageJumpConfig?: PageJumpConfig, defaultItemsPerPage?: number, children: ReactNode, className?: string }) {
+                               reactSelectStyles = defaultReactSelectStyle,
+                           }: { pageNavDisplay?: DisplayOption, pageNavConfig?: PageNavConfig, pageSizerDisplay?: DisplayOption, pageSizerConfig?: PageSizerConfig, pageJumpDisplay?: DisplayOption, pageJumpConfig?: PageJumpConfig, defaultItemsPerPage?: number, children: ReactNode, className?: string, reactSelectStyles?: object }) {
     const [totalItems] = useState(React.Children.count(children));
     const [itemsPerPage, setItemsPerPage] = useState(defaultItemsPerPage);
     // If defaultItemsPerPage or itemsPerPage are 0, this indicates that 'All' items are selected/user has declined pagination
@@ -325,12 +383,14 @@ export function Pagination({
      */
     function _PageUtilities({ position }: { position: "top" | "bottom" }) {
         let oppositePosition = position === "top" ? "bottom" : "top";
+        const pageSizerConfigWithStyles = {...pageSizerConfig, reactSelectStyles}
+        const pageJumpConfigWithStyles = {...pageJumpConfig, reactSelectStyles}
         return (
             <div
                 className="grid grid-flow-row-dense sm:grid-flow-row grid-cols-5 sm:grid-cols-3 grid-rows-2 sm:grid-rows-1 place-items-center">
                 {(pageSizerDisplay !== oppositePosition && pageSizerDisplay) ?
                     <PageSizer
-                        className="row-start-2 row-span-1 col-start-1 col-span-3 -ml-2 sm:ml-0 sm:row-start-1 sm:col-span-1" {...pageSizerConfig} /> : null
+                        className="row-start-2 row-span-1 col-start-1 col-span-3 -ml-2 sm:ml-0 sm:row-start-1 sm:col-span-1" {...pageSizerConfigWithStyles}/> : null
                 }
                 {(pageNavDisplay !== oppositePosition && pageNavDisplay) ?
                     <PageNav
@@ -338,7 +398,7 @@ export function Pagination({
                 }
                 {(pageJumpDisplay !== oppositePosition && pageJumpDisplay) ?
                     <PageJump
-                        className="row-start-2 row-span-1 col-start-4 col-span-2 -mr-2 sm:mr-0 sm:row-start-1 sm:col-span-1" {...pageJumpConfig} /> : null
+                        className="row-start-2 row-span-1 col-start-4 col-span-2 -mr-2 sm:mr-0 sm:row-start-1 sm:col-span-1" {...pageJumpConfigWithStyles} /> : null
                 }
             </div>
         );
