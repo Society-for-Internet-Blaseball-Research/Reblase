@@ -9,6 +9,7 @@ import { useGameList, useTemporal } from "../blaseball/hooks";
 import dayjs from "dayjs";
 import { displaySeason, GameTeam, getAwayTeam, getHomeTeam } from "blaseball-lib/games";
 import Twemoji from "components/elements/Twemoji";
+import { Pagination } from "../components/layout/Pagination";
 
 type TimedText = { text: string; timestamp: string };
 
@@ -199,12 +200,11 @@ export function EventsPage() {
     return (
         <Container className={"mt-4"}>
             <h2 className="text-2xl font-semibold mb-2">Recent game events</h2>
-
-            <div className="flex flex-col">
+            <Pagination>
                 {allEvents.map((evt, idx) => (
                     <EventRow evt={evt} key={idx} />
                 ))}
-            </div>
+            </Pagination>
         </Container>
     );
 }
