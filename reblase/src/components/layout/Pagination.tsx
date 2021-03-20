@@ -119,7 +119,7 @@ function PageButton({ variant, pageNumber }: { variant: PageButtonVariant, pageN
                 className="page-btn hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
                 aria-label="Previous page" onClick={goToPrevPage}>{PREVIOUS_PAGE}</button>;
         case "collapse":
-            return <div className="cursor-default page-btn">...</div>;
+            return <div className="cursor-default page-btn text-center">...</div>;
         case "next":
             return <button
                 className="page-btn hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
@@ -385,7 +385,7 @@ export function Pagination({
      * @param {'top'|'bottom'} position - Where this element should be placed relative to the paginated content
      * @returns {JSX.Element} - A grouping of {@link PageSizer}, {@link PageNav}, and {@link PageJump}. Each elements visibility will be affected by the related options as set in {@link Pagination}.
      */
-    function _PageUtilities({ position }: { position: "top" | "bottom" }) {
+    function PageUtilities({ position }: { position: "top" | "bottom" }) {
         let oppositePosition = position === "top" ? "bottom" : "top";
         const pageSizerConfigWithStyles = {...pageSizerConfig, reactSelectStyles}
         const pageJumpConfigWithStyles = {...pageJumpConfig, reactSelectStyles}
@@ -394,11 +394,11 @@ export function Pagination({
                 className="grid gap-x-2 grid-flow-row-dense sm:grid-flow-row grid-rows-pagination-mobile sm:grid-rows-2 md:grid-rows-1 grid-cols-5 md:grid-cols-3 place-items-center">
                 {(pageSizerDisplay !== oppositePosition && pageSizerDisplay) ?
                     <PageSizer
-                        className="row-start-2 row-span-1 col-start-1 col-span-3 -ml-2 md:justify-self-start lg:justify-self-auto sm:ml-0 md:row-start-1 md:col-span-1" {...pageSizerConfigWithStyles}/> : null
+                        className="row-start-2 row-span-1 col-start-1 col-span-2 -ml-2 md:justify-self-start lg:justify-self-auto sm:ml-0 md:row-start-1 md:col-span-1" {...pageSizerConfigWithStyles}/> : null
                 }
                 {(pageNavDisplay !== oppositePosition && pageNavDisplay) ?
                     <PageNav
-                        className="row-start-1 col-start-2 col-span-3 md:col-start-2 md:col-span-1" {...pageNavConfig} /> : null
+                        className="row-start-1 col-start-1 col-span-5 md:col-start-2 md:col-span-1" {...pageNavConfig} /> : null
                 }
                 {(pageJumpDisplay !== oppositePosition && pageJumpDisplay) ?
                     <PageJump
@@ -410,7 +410,7 @@ export function Pagination({
 
     return (
         <PageContext.Provider value={Paginator}>
-            <_PageUtilities position="top" />
+            <PageUtilities position="top" />
             <div className={`flex flex-col ${className}`}>
                 {
                     React.Children.toArray(children).map((child, index) => {
@@ -428,7 +428,7 @@ export function Pagination({
                     })
                 }
             </div>
-            <_PageUtilities position="bottom" />
+            <PageUtilities position="bottom" />
         </PageContext.Provider>
     );
 }

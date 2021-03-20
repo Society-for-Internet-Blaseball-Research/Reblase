@@ -85,6 +85,6 @@
 
     .page-btn {
         min-width: 4ch;
-        @apply px-2 border;
+        @apply text-center border;
     }
 }
