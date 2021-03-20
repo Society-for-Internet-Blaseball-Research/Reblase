@@ -238,7 +238,7 @@ function PageSizer({ itemsPerPageValues, className, reactSelectStyles }: PageSiz
 
     return (
         <label className={`my-2 flex items-center ${className}`}>
-            <span className="mr-2">Events per page: </span>
+            <span className="mr-2 text-sm sm:text-base">Events per page: </span>
             <Select
                     options={itemsPerPageChoices}
                     theme={selectTheme}
@@ -288,7 +288,7 @@ function PageJump({ className, reactSelectStyles }: PageJumpConfig) {
     return (
         Paginator.totalPages !== 0 ?
             <label className={`my-2 flex items-center ${className}`}>
-                <span className="mr-3">Jump to:</span>
+                <span className="mr-2 text-sm sm:text-base">Jump to:</span>
                 <Select
                         options={pageRangeAsObject}
                         theme={selectTheme}
@@ -322,7 +322,11 @@ const defaultReactSelectStyle = {
     }),
     control: (provided: any) => ({
         ...provided,
-        width: '10ch'
+        width: '8ch'
+    }),
+    dropdownIndicator: (provided: any) => ({
+        ...provided,
+        width: '3ch'
     })
 }
 
@@ -387,18 +391,18 @@ export function Pagination({
         const pageJumpConfigWithStyles = {...pageJumpConfig, reactSelectStyles}
         return (
             <div
-                className="grid grid-flow-row-dense sm:grid-flow-row grid-cols-5 sm:grid-cols-3 grid-rows-2 sm:grid-rows-1 place-items-center">
+                className="grid gap-x-2 grid-flow-row-dense sm:grid-flow-row grid-rows-pagination-mobile sm:grid-rows-2 md:grid-rows-1 grid-cols-5 md:grid-cols-3 place-items-center">
                 {(pageSizerDisplay !== oppositePosition && pageSizerDisplay) ?
                     <PageSizer
-                        className="row-start-2 row-span-1 col-start-1 col-span-3 -ml-2 sm:ml-0 sm:row-start-1 sm:col-span-1" {...pageSizerConfigWithStyles}/> : null
+                        className="row-start-2 row-span-1 col-start-1 col-span-3 -ml-2 md:justify-self-start lg:justify-self-auto sm:ml-0 md:row-start-1 md:col-span-1" {...pageSizerConfigWithStyles}/> : null
                 }
                 {(pageNavDisplay !== oppositePosition && pageNavDisplay) ?
                     <PageNav
-                        className="row-start-1 col-start-2 col-span-3 sm:col-start-2 sm:col-span-1" {...pageNavConfig} /> : null
+                        className="row-start-1 col-start-2 col-span-3 md:col-start-2 md:col-span-1" {...pageNavConfig} /> : null
                 }
                 {(pageJumpDisplay !== oppositePosition && pageJumpDisplay) ?
                     <PageJump
-                        className="row-start-2 row-span-1 col-start-4 col-span-2 -mr-2 sm:mr-0 sm:row-start-1 sm:col-span-1" {...pageJumpConfigWithStyles} /> : null
+                        className="row-start-2 row-span-1 col-start-4 col-span-2 -mr-2 md:justify-self-end lg:justify-self-auto sm:mr-0 md:row-start-1 md:col-span-1" {...pageJumpConfigWithStyles} /> : null
                 }
             </div>
         );

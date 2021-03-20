@@ -9,7 +9,8 @@
         },
         extend: {
             gridTemplateRows: {
-                'update-mobile': '1fr minmax(0, 1fr), 1fr'
+                'update-mobile': 'minmax(0, 1fr)',
+                'pagination-mobile': 'minmax(0, max-content) 1fr'
             }
         }
     },
