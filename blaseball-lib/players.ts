@@ -60,13 +60,16 @@ export function generateSoulScream(stats: SoulscreamStats): string {
     ];
 
     let scream = "";
-    for (let digitPosition = 0; digitPosition < stats.soul; digitPosition++) {
+    for (let digitPosition = 0; digitPosition < Math.min(stats.soul, 300); digitPosition++) {
         for (let statIndex = 0; statIndex < 11; statIndex++) {
             const digitMask = 1 / Math.pow(10, digitPosition);
             const statDigit = soulStats[statIndex % soulStats.length] % digitMask;
             const digitValue = Math.floor((statDigit / digitMask) * 10);
             scream += chars[digitValue];
         }
+    }
+    if (stats.soul > 300) {
+        scream += `... (CONT. FOR ${stats.soul - 300} SOUL)`;
     }
     return scream;
 }
