@@ -180,6 +180,8 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /ECHO/,
         /STATIC/,
         /Echoed/,
+        /The Salmon swim upstream!/,
+        /is now being Observed/,
     ]) {
         if (pattern.test(update)) return true;
     }
