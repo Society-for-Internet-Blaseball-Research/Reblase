@@ -85,7 +85,7 @@ export const allWeatherTypes = [
         // icon: WiStars,
         background: "#ff94ff",
         color: "#fff98a",
-        forbidden: false,
+        forbidden: true,
     },
     {
         id: 9,
