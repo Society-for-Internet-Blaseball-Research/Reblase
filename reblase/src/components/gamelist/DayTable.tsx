@@ -12,6 +12,7 @@ interface DayTableProps {
     games: ChronGame[];
     season: number;
     day: number;
+    currentDay: number;
     showFutureWeather: boolean;
     teams: Record<string, BlaseballTeam>;
     players: Record<string, BlaseballPlayer>;
@@ -20,10 +21,11 @@ interface DayTableProps {
 function predictPitchersForGame(
     teams: Record<string, BlaseballTeam>,
     players: Record<string, BlaseballPlayer>,
-    game: BlaseballGame
+    game: BlaseballGame,
+    currentDay: number
 ) {
-    const home = predictGamePitcher(teams[game.homeTeam], game.day, (id) => players[id]);
-    const away = predictGamePitcher(teams[game.awayTeam], game.day, (id) => players[id]);
+    const home = predictGamePitcher(teams[game.homeTeam], game.day, currentDay, (id) => players[id]);
+    const away = predictGamePitcher(teams[game.awayTeam], game.day, currentDay, (id) => players[id]);
 
     return {
         home: players[home].name,
@@ -47,7 +49,7 @@ export const DayTable = function DayTable(props: DayTableProps) {
             </div>
 
             {props.games.map((game) => {
-                const predictedPitchers = predictPitchersForGame(props.teams, props.players, game.data);
+                const predictedPitchers = predictPitchersForGame(props.teams, props.players, game.data, props.currentDay);
                 return (
                     <GameRow
                         key={game.gameId}
