@@ -23,7 +23,10 @@ import {
     TemporalResponse,
     TemporalUpdatesQuery,
 } from "blaseball-lib/chronicler";
-import { BlaseballSimData } from "blaseball-lib/models";
+
+import { cauldronApi, CauldronEventsResponse, CauldronEventsQuery } from "blaseball-lib/cauldron"
+import { blaseballApi } from "blaseball-lib/api";
+import { BlaseballSimData, CauldronGameEvent } from "blaseball-lib/models";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -209,5 +212,23 @@ export function useFights(): FightsHookReturn {
         fights: data?.data ?? [],
         isLoading: !data,
         error,
+    };
+}
+
+// Cauldron Game Events
+interface CauldronEventsHookReturn {
+    events: CauldronGameEvent[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useCauldronGameEvents(query: CauldronEventsQuery): CauldronEventsHookReturn {
+    
+    const { data: gameEventList, error } = useSWR<CauldronEventsResponse>(cauldronApi.gameEvents(query));
+
+    return {
+        events: gameEventList?.results ?? [],
+        error,
+        isLoading: !gameEventList,
     };
 }

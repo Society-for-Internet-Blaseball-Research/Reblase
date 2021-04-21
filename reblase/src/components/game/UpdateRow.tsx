@@ -21,7 +21,7 @@ const GameLogGrid = "col-start-1 col-span-3 lg:col-start-3 lg:col-span-1";
 const BatterGrid = "col-start-1 col-span-2 sm:col-start-2 sm:col-span-1 justify-self-start lg:col-start-4 lg:col-span-1 lg:justify-self-end";
 const AtBatGrid = "row-end-4 sm:row-auto col-start-3 col-span-2 justify-self-end lg:col-start-5 lg:col-span-1";
 
-function Timestamp({ update }: WrappedUpdateProps) {
+ function Timestamp({ update }:WrappedUpdateProps ) {
     const updateTime = dayjs(update.timestamp);
     const time = updateTime.format("mm:ss");
 
@@ -131,3 +131,4 @@ export const UpdateRow = React.memo(
         return oldProps.update.hash === newProps.update.hash && oldProps.highlight === newProps.highlight;
     }
 );
+

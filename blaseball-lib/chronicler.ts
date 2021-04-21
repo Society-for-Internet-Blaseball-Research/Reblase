@@ -1,4 +1,5 @@
 import queryString from "query-string";
+
 import {
     BlaseballFight,
     BlaseballGame,
@@ -6,6 +7,7 @@ import {
     BlaseballSimData,
     BlaseballTeam,
     BlaseballTemporal,
+    CauldronGameEvent,
 } from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
