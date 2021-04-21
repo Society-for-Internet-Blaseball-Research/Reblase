@@ -6,7 +6,7 @@ import { Loading } from "../components/elements/Loading";
 import { Container } from "../components/layout/Container";
 import Error from "../components/elements/Error";
 import { cache } from "swr";
-import { useFights, useGameList, usePlayerTeamsList } from "../blaseball/hooks";
+import { useFights, useGameList, usePlayerTeamsList, useSimulation } from "../blaseball/hooks";
 import { ChronGame } from "blaseball-lib/chronicler";
 import TeamPicker from "../components/elements/TeamPicker";
 import OutcomePicker from "../components/elements/OutcomePicker";
@@ -41,15 +41,17 @@ function groupByDay(games: ChronGame[]): GameDay[] {
 }
 
 const GamesList = React.memo(
-    (props: { days: GameDay[]; players: BlaseballPlayer[]; teams: BlaseballTeam[]; showFutureWeather: boolean }) => {
+    (props: {
+        days: GameDay[];
+        players: BlaseballPlayer[];
+        teams: BlaseballTeam[];
+        showFutureWeather: boolean;
+        currentDay: number;
+    }) => {
         const teamsMap: Record<PlayerID, BlaseballTeam> = {};
         for (const team of props.teams) teamsMap[team.id!] = team;
         const playersMap: Record<PlayerID, BlaseballPlayer> = {};
         for (const player of props.players) playersMap[player.id!] = player;
-
-        const currentDay = Math.max(...props.days
-            .filter(({ games }) => games.every((game) => game.data.gameStart))
-            .map(({ day }) => day));
 
         return (
             <div>
@@ -59,7 +61,7 @@ const GamesList = React.memo(
                             key={day}
                             season={season}
                             day={day}
-                            currentDay={currentDay}
+                            currentDay={props.currentDay}
                             games={games}
                             teams={teamsMap}
                             players={playersMap}
@@ -91,6 +93,8 @@ function GamesListFetching(props: {
         outcomes: props.outcomes ? true : undefined,
     });
 
+    let { data: simData, error: simError, isLoading: simIsLoading } = useSimulation();
+
     const days = useMemo(() => {
         let gamesFiltered = games;
         if (props.outcomes) {
@@ -105,8 +109,10 @@ function GamesListFetching(props: {
         return groupByDay(gamesFiltered).reverse();
     }, [games, props.outcomes]);
 
-    if (error) return <Error>{error}</Error>;
-    if (isLoading) return <Loading />;
+    if (error || simError) return <Error>{error}</Error>;
+    if (isLoading || simIsLoading) return <Loading />;
+
+    const currentDay = simData?.day ?? 0;
 
     return (
         <GamesList
@@ -114,6 +120,7 @@ function GamesListFetching(props: {
             players={props.allPlayers}
             teams={props.allTeams}
             showFutureWeather={props.showFutureWeather}
+            currentDay={currentDay}
         />
     );
 }

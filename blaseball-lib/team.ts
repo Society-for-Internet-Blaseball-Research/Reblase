@@ -1,19 +1,29 @@
 import { hasAttribute } from "./attributes";
-import { PlayerID, TeamRoster } from "./common";
-import { BlaseballPlayer } from "./models";
+import { PlayerID } from "./common";
+import { BlaseballPlayer, BlaseballTeam } from "./models";
 
 export function predictGamePitcher(
-    team: TeamRoster,
+    team: BlaseballTeam,
     day: number,
     currentDay: number,
     getPlayer: (id: PlayerID) => BlaseballPlayer
 ): PlayerID {
-    if (team.rotationSlot !== undefined) {
-        day += team.rotationSlot - currentDay - 1;
+    const slotOffset = team.rotationSlot ? team.rotationSlot - currentDay - 1 : 0;
+    const slot = day + slotOffset;
+    return skipPlayers(slot, team, getPlayer);
+}
+
+function skipPlayers(slot: number, team: BlaseballTeam, getPlayer: (id: PlayerID) => BlaseballPlayer): PlayerID {
+    for (let i = 0; i < team.rotation.length; i++) {
+        const pitcher = team.rotation[slot++ % team.rotation.length];
+        if (!isPlayerSkippedInRotation(getPlayer(pitcher))) return pitcher;
     }
-    let pitcher = null;
-    do {
-        pitcher = team.rotation[day++ % team.rotation.length];
-    } while (["SHELLED", "ELSEWHERE"].some((a) => hasAttribute(getPlayer(pitcher), a)));
-    return pitcher;
+
+    // fallback for the inevitable Snackrifice 2 or w/e so we don't infinitely spin
+    // (whatever team actually yeets their entire rotation completely will still break this. godspeed.)
+    return team.rotation[0];
+}
+
+function isPlayerSkippedInRotation(player: BlaseballPlayer) {
+    return hasAttribute(player, "SHELLED") || hasAttribute(player, "ELSEWHERE");
 }
