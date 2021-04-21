@@ -10,6 +10,6 @@ export function predictGamePitcher(
     let pitcher = null;
     do {
         pitcher = team.rotation[day++ % team.rotation.length];
-    } while (hasAttribute(getPlayer(pitcher), "SHELLED"));
+    } while (["SHELLED", "ELSEWHERE"].some((a) => hasAttribute(getPlayer(pitcher), a)));
     return pitcher;
 }

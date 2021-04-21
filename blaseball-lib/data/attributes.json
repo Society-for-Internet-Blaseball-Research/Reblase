@@ -128,12 +128,12 @@
         "description": "This player has Returned from the void. At the end of each season, this player has a chance of being called back to the Void."
     },
     {
-        "id": "INWARD",
+        "id": "INVERTED",
         "color": "#d3d8de",
         "textColor": "#d3d8de",
         "background": "#38080d",
-        "title": "Inward",
-        "description": "This player has turned Inward."
+        "title": "Inverted",
+        "description": "This player has Inverted."
     },
     {
         "id": "MARKED",
@@ -285,7 +285,7 @@
         "textColor": "#fffaba",
         "background": "#786600",
         "title": "Super Idol",
-        "description": "This player will earn Fans double the rewards from all Idol Pendants."
+        "description": "This player will earn Fans double the rewards from all Idol Snacks."
     },
     {
         "id": "FIRE_PROTECTOR",
@@ -445,7 +445,7 @@
         "textColor": "#fffaba",
         "background": "#786600",
         "title": "Credit to the Team",
-        "description": "This player will earn Fans 5x the rewards from all Idol Pendants."
+        "description": "This player will earn Fans 5x the rewards from all Idol Snacks."
     },
     {
         "id": "LOVE",
@@ -638,5 +638,989 @@
         "background": "#1c1c1c",
         "title": "Inhabiting",
         "description": "This player is temporarily Inhabiting a Haunted player."
+    },
+    {
+        "id": "WIRED",
+        "color": "#511c00",
+        "textColor": "#511c00",
+        "background": "#ffffff",
+        "title": "Wired",
+        "description": "When a Run scores, each Wired player involved in the play (the Scoring Baserunner, Current Batter, or Current Pitcher) will make the Run worth 0.5 more."
+    },
+    {
+        "id": "TIRED",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#511c00",
+        "title": "Tired",
+        "description": "When a Run scores, each Tired player involved in the play (the Scoring Baserunner, Current Batter, or Current Pitcher) with make the Run worth 0.5 less."
+    },
+    {
+        "id": "COFFEE_EXIT",
+        "color": "#e9c4ff",
+        "textColor": "#e9c4ff",
+        "background": "#96afd4",
+        "title": "Percolated",
+        "description": "This player has been fully and completely Percolated."
+    },
+    {
+        "id": "COFFEE_SHADOWS",
+        "color": "#f0efaa",
+        "textColor": "#f0efaa",
+        "background": "#031736",
+        "title": "Well Rested",
+        "description": "Whenever a player on this team loses the Tired modification, they'll swap with a player in the Shadows."
+    },
+    {
+        "id": "HARD_BOILED",
+        "color": "#9a7b4f",
+        "textColor": "#9a7b4f",
+        "background": "#511c00",
+        "title": "Hard Boiled",
+        "description": "This player was boiled a little bit before hatching."
+    },
+    {
+        "id": "COFFEE_PERIL",
+        "color": "#9a7b4f",
+        "textColor": "#9a7b4f",
+        "background": "#000000",
+        "title": "Observed",
+        "description": "This player is being Observed carefully..."
+    },
+    {
+        "id": "COFFEE_RALLY",
+        "color": "#2e1406",
+        "textColor": "#fffcd9",
+        "background": "#44c97c",
+        "title": "Free Refill",
+        "description": "Good for one Free Refill."
+    },
+    {
+        "id": "TRIPLE_THREAT",
+        "color": "#cc527a",
+        "textColor": "#cc527a",
+        "background": "#5dbcd2",
+        "title": "Triple Threat",
+        "description": "This pitcher's strikeouts score Unruns when there are 3 runners on base, a runner on 3rd, or 3 Balls in the count. Each condition met is worth .3 Unruns. At the end of the 3rd Inning, there's a 33.33% chance that this mod will disappear."
+    },
+    {
+        "id": "PERK",
+        "color": "#be4fff",
+        "textColor": "#be4fff",
+        "background": "#96afd4",
+        "title": "Perk",
+        "description": "This player has been rewarded Percolated energy. They will Overperform in all Coffee weathers."
+    },
+    {
+        "id": "OVERPERFORMING",
+        "color": "#32b528",
+        "textColor": "#32b528",
+        "background": "#000000",
+        "title": "Overperforming",
+        "description": "This player will play 20% better than usual."
+    },
+    {
+        "id": "SHAME_GIVER",
+        "color": "#ff005d",
+        "textColor": "#ff005d",
+        "background": "#3d1539",
+        "title": "Shame Donor",
+        "description": "When this team shames their opponent, that opponent will begin their next game with Unruns."
+    },
+    {
+        "id": "UNDERPERFORMING",
+        "color": "#db3616",
+        "textColor": "#db3616",
+        "background": "#000000",
+        "title": "Underperforming",
+        "description": "This player will play 20% worse than usual."
+    },
+    {
+        "id": "EGO1",
+        "color": "#d1c252",
+        "textColor": "#d1c252",
+        "background": "#383000",
+        "title": "Ego+",
+        "description": "This player has a boosted Ego."
+    },
+    {
+        "id": "EGO2",
+        "color": "#d6c965",
+        "textColor": "#d6c965",
+        "background": "#5e5100",
+        "title": "Ego++",
+        "description": "This player has a boosted boosted Ego."
+    },
+    {
+        "id": "EGO3",
+        "color": "#e3d77f",
+        "textColor": "#e3d77f",
+        "background": "#857300",
+        "title": "Ego+++",
+        "description": "This player has a boosted boosted boosted Ego."
+    },
+    {
+        "id": "EGO4",
+        "color": "#f5eba2",
+        "textColor": "#f5eba2",
+        "background": "#a89200",
+        "title": "Ego++++",
+        "description": "This player has a boosted boosted boosted boosted Ego."
+    },
+    {
+        "id": "LEGENDARY",
+        "color": "#fff8c7",
+        "textColor": "#fff8c7",
+        "background": "#bfa600",
+        "title": "Legendary",
+        "description": "This player is Legendary."
+    },
+    {
+        "id": "ELSEWHERE",
+        "color": "#bdb3c3",
+        "textColor": "#bdb3c3",
+        "background": "#ffffff",
+        "title": "Elsewhere",
+        "description": "This player is Elsewhere. They'll find their own way back."
+    },
+    {
+        "id": "BOTTOM_DWELLER",
+        "color": "#ffd7b0",
+        "textColor": "#ffd7b0",
+        "background": "#705336",
+        "title": "Bottom Dweller",
+        "description": "If this team finishes last in their division, they'll be boosted up to 5%."
+    },
+    {
+        "id": "CARCINIZATION",
+        "color": "#ff4258",
+        "textColor": "#ff4258",
+        "background": "#38040a",
+        "title": "Carcinization",
+        "description": "When the Crabs activate the Black Hole, they will steal the other team's best hitter for the remainder of the game."
+    },
+    {
+        "id": "MAINTENANCE_MODE",
+        "color": "#ffed63",
+        "textColor": "#ffed63",
+        "background": "#c25429",
+        "title": "Maintenance Mode",
+        "description": "Whenever a player on this team is Impaired, they'll receive the Fourth Out for the remainder of the game."
+    },
+    {
+        "id": "AMBUSH",
+        "color": "#ff2160",
+        "textColor": "#ff2160",
+        "background": "#0c000f",
+        "title": "Ambush",
+        "description": "When a player is incinerated in a game this team is playing, a Hall of Flame player will join their Shadows."
+    },
+    {
+        "id": "UNDERSEA",
+        "color": "#c2e1ff",
+        "textColor": "#c2e1ff",
+        "background": "#34516e",
+        "title": "Undersea",
+        "description": "If this team ever has negative Runs, they'll Overperform for the rest of the game."
+    },
+    {
+        "id": "PENANCE",
+        "color": "#ca0000",
+        "textColor": "#ca0000",
+        "background": "#4a0000",
+        "title": "Penance",
+        "description": "This team will start each game by accepting 3 Unruns of penance."
+    },
+    {
+        "id": "EXTRA_OUT",
+        "color": "#5ba3eb",
+        "textColor": "#5ba3eb",
+        "background": "#00254a",
+        "title": "Fourth Out",
+        "description": "This team plays with a Fourth Out."
+    },
+    {
+        "id": "STUCK",
+        "color": "#b5bceb",
+        "textColor": "#b5bceb",
+        "background": "#5f1e61",
+        "title": "Stuck",
+        "description": "This player cannot swing."
+    },
+    {
+        "id": "SWIM_BLADDER",
+        "color": "#fffd6e",
+        "textColor": "#fffd6e",
+        "background": "#0a6154",
+        "title": "Flippers",
+        "description": "When immateria floods, this Runner will score instead of being cleared from the Bases."
+    },
+    {
+        "id": "DEBT_THREE",
+        "color": "#ff1f3c",
+        "textColor": "#ff1f3c",
+        "background": "#3b3217",
+        "title": "Debt",
+        "description": "This player must fulfill a Debt."
+    },
+    {
+        "id": "ECHO",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#9c2c46",
+        "title": "Echo",
+        "description": "Echo Echo Echo Echo Echo Echo Echo Echo Echo Echo Echo Echo"
+    },
+    {
+        "id": "STATIC",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#302a2f",
+        "title": "Static",
+        "description": "....."
+    },
+    {
+        "id": "EARLBIRDS",
+        "color": "#ffc2f9",
+        "textColor": "#ffc2f9",
+        "background": "#0a8ef5",
+        "title": "Earlbirds",
+        "description": "This Team or Player will Overperform in the Earlseason."
+    },
+    {
+        "id": "LATE_TO_PARTY",
+        "color": "#addbff",
+        "textColor": "#addbff",
+        "background": "#700065",
+        "title": "Late to the Party",
+        "description": "This Team or Player will Overperform in the Lateseason."
+    },
+    {
+        "id": "OVERUNDER",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Over Under",
+        "description": "Whenever this pitcher's team has Over 5 Runs, they'll Underperform."
+    },
+    {
+        "id": "UNDEROVER",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Under Over",
+        "description": "Whenever this player's team has Under 5 Runs, they'll Overperform."
+    },
+    {
+        "id": "WANDERER",
+        "color": "#fffeeb",
+        "textColor": "#fffeeb",
+        "background": "#3f1e57",
+        "title": "Roamin'",
+        "description": "This player has a chance of Roamin' to a new team at the end of each season."
+    },
+    {
+        "id": "SUPERWANDERER",
+        "color": "#fcff54",
+        "textColor": "#fcff54",
+        "background": "#6b3c8c",
+        "title": "Super Roamin'",
+        "description": "This player has a high chance of Roamin' to a new team at the end of each season."
+    },
+    {
+        "id": "NEWADVENTURE",
+        "color": "#caffc7",
+        "textColor": "#caffc7",
+        "background": "#007da3",
+        "title": "On an Odyssey",
+        "description": "This player is boosted 5% every team they join a team."
+    },
+    {
+        "id": "SINKING_SHIP",
+        "color": "#78befb",
+        "textColor": "#78befb",
+        "background": "#00250d",
+        "title": "Sinking Ship",
+        "description": "This team plays 1% worse for every player above 14 players on their roster, and 1% better for every player below 14 on their roster."
+    },
+    {
+        "id": "PARASITE",
+        "color": "#e30000",
+        "textColor": "#e30000",
+        "background": "#2b0000",
+        "title": "Parasite",
+        "description": "When this pitcher strikes out a batter in Blooddrain, they'll drain some blood from them."
+    },
+    {
+        "id": "DEFECTOR",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Defector",
+        "description": ""
+    },
+    {
+        "id": "HOMEBODY",
+        "color": "#8dadb5",
+        "textColor": "#8dadb5",
+        "background": "#032b12",
+        "title": "Homebody",
+        "description": "This player will Overperform when playing in their home Ballpark and Underperform otherwise."
+    },
+    {
+        "id": "KILLER_PIES",
+        "color": "#ace8de",
+        "textColor": "#ace8de",
+        "background": "#3b524e",
+        "title": "Flying Pie",
+        "description": "Whenever this team has lost 3 games in a Row, their pitchers will start throwing Pies."
+    },
+    {
+        "id": "FRESH",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Fresh",
+        "description": "When a player joins this Team, they'll be boosted by 2%."
+    },
+    {
+        "id": "PARTING_GIFT",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Parting Gift",
+        "description": "When a player leaves this Team, they'll be boosted by 2%"
+    },
+    {
+        "id": "BLOCKED_BOOST",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Blocked Boost",
+        "description": "If this player is protected from a Steal or Swap Will, they'll be boosted by 2%."
+    },
+    {
+        "id": "HALL_EXIT_BOOST",
+        "color": "#ff943d",
+        "textColor": "#ff943d",
+        "background": "#163073",
+        "title": "Phoenix",
+        "description": "When this player exits the Hall of Flame, they'll be boosted 10% to 20%."
+    },
+    {
+        "id": "FLOOD_PUMPS",
+        "color": "#41feff",
+        "textColor": "#41feff",
+        "background": "#465f63",
+        "title": "Flood Pumps",
+        "description": "Flood Pumps will prevent Flooding weather from making your Ballpark filthier."
+    },
+    {
+        "id": "POLAR_VORTEX",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Polar Vortex",
+        "description": ""
+    },
+    {
+        "id": "SALMON_CANNONS",
+        "color": "#ffb0c6",
+        "textColor": "#ffb0c6",
+        "background": "#2a292e",
+        "title": "Salmon Cannons",
+        "description": "Salmon Cannons have a chance of expelling pests from your Ballpark."
+    },
+    {
+        "id": "EVENT_HORIZON",
+        "color": "#ec49ff",
+        "textColor": "#ec49ff",
+        "background": "#160626",
+        "title": "Event Horizon",
+        "description": "The Event Horizon will prevent the first Black Hole activation in each game, converting the Overflow to Unruns for your opponent's next game."
+    },
+    {
+        "id": "SOUNDSYSTEM",
+        "color": "#4be397",
+        "textColor": "#4be397",
+        "background": "#330a2a",
+        "title": "LCD Soundsystem",
+        "description": "The LCD Soundsystem will boost both players involved in a Feedback swap by 5%."
+    },
+    {
+        "id": "ECHO_CHAMBER",
+        "color": "#61b3ff",
+        "textColor": "#61b3ff",
+        "background": "#1f061b",
+        "title": "Echo Chamber",
+        "description": "In Reverb, Echo Chambers will occasionally provide Reverberating and Repeating modifications to players for game-long use."
+    },
+    {
+        "id": "FIRE_INSURANCE",
+        "color": "#ff2e2e",
+        "textColor": "#ff2e2e",
+        "background": "#020324",
+        "title": "Heat Magnet",
+        "description": "The Heat Magnet will absorb heat from an incineration and pass it on to the Thermal Converter."
+    },
+    {
+        "id": "PEANUT_MISTER",
+        "color": "#f3ff54",
+        "textColor": "#f3ff54",
+        "background": "#423519",
+        "title": "Peanut Mister",
+        "description": "A Peanut Mister will occasionally cure a player of their peanut allergy."
+    },
+    {
+        "id": "BLOOD_LUSTER",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Blood Luster",
+        "description": ""
+    },
+    {
+        "id": "BIRDHOUSES",
+        "color": "#d4ecff",
+        "textColor": "#d4ecff",
+        "background": "#0a8ef5",
+        "title": "Birdhouses",
+        "description": "Birdhouses invite Birds to come live in your Ballpark."
+    },
+    {
+        "id": "SWEETENER",
+        "color": "#fffcad",
+        "textColor": "#fffcad",
+        "background": "#4a2f40",
+        "title": "Sweetener",
+        "description": "Sweetener makes Beanings & Free Refills more likely in Coffee & Coffee Two weathers, and lowers the chance of losing Triple Threat."
+    },
+    {
+        "id": "SECRET_BASE",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#363335",
+        "title": "Secret Base",
+        "description": "The Secret Base is a hidden base beyond 2nd that allows a baserunner to hide between innings."
+    },
+    {
+        "id": "HOOPS",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Hoops",
+        "description": ""
+    },
+    {
+        "id": "GRIND_RAIL",
+        "color": "#a8a8a5",
+        "textColor": "#a8a8a5",
+        "background": "#43474a",
+        "title": "Grind Rail",
+        "description": "The Grind Rail allows a chance to steal directly from first base to third base, as long as they have the skills."
+    },
+    {
+        "id": "CASINO_ZONE",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Casino Zone",
+        "description": "777"
+    },
+    {
+        "id": "CATAPULTS",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Catapults",
+        "description": ""
+    },
+    {
+        "id": "BIG_BUCKET",
+        "color": "#fffb82",
+        "textColor": "#fffb82",
+        "background": "#083a3b",
+        "title": "Big Buckets",
+        "description": "If a home run lands in a Big Bucket, it scores an extra Run."
+    },
+    {
+        "id": "SMALL_BUCKET",
+        "color": "#ffe76b",
+        "textColor": "#ffe76b",
+        "background": "#673e00",
+        "title": "Small Bucket",
+        "description": "If a home run lands in a Small Bucket, it score 5 extra Runs."
+    },
+    {
+        "id": "BUMPERS",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Bumpers",
+        "description": ""
+    },
+    {
+        "id": "BULLPEN",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Bull Pen",
+        "description": ""
+    },
+    {
+        "id": "SEARCHLIGHTS",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Searchlights",
+        "description": ""
+    },
+    {
+        "id": "SECRET_TUNNELS",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Secret Tunnels",
+        "description": ""
+    },
+    {
+        "id": "SOLAR_PANELS",
+        "color": "#fff896",
+        "textColor": "#fff896",
+        "background": "#b58004",
+        "title": "Solar Panels",
+        "description": "Solar Panels will prevent the first Sun 2 activation in each game, converting the Overflow to Runs for your Team's next game."
+    },
+    {
+        "id": "TEMP_STOLEN",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Temp Stolen",
+        "description": "This player has been temporarily stolen."
+    },
+    {
+        "id": "REDACTED",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Redacted",
+        "description": "This player is Redacted."
+    },
+    {
+        "id": "FUGITIVE",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Fugitive",
+        "description": ""
+    },
+    {
+        "id": "BIG_RED_BUTTON",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Supercharged",
+        "description": "When this Team hits a Grand Slam, reset the number of Outs to zero."
+    },
+    {
+        "id": "BASE_DEALING",
+        "color": "#d297f9",
+        "textColor": "#a16dc3",
+        "background": "#180027",
+        "title": "Base Dealing",
+        "description": "This Team's lineup will advance in reverse order."
+    },
+    {
+        "id": "SMOOTH",
+        "color": "#8ae9ff",
+        "textColor": "#8ae9ff",
+        "background": "#423519",
+        "title": "Smooth",
+        "description": "This player will have 100% more Speed in Peanut weather."
+    },
+    {
+        "id": "CHUNKY",
+        "color": "#ff9e08",
+        "textColor": "#ff9e08",
+        "background": "#423519",
+        "title": "Chunky",
+        "description": "This player will have 100% more Power in Peanut weather."
+    },
+    {
+        "id": "SUN_KISSED",
+        "color": "#ffe100",
+        "textColor": "#ffe100",
+        "background": "#5c5d45",
+        "title": "Sun Dialed",
+        "description": "When this Team activates Sun 2, a random player on their Team will be boosted by 1%."
+    },
+    {
+        "id": "UNHOLEY",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#863490",
+        "title": "Unholey",
+        "description": "When this Team activates the Black Hole, a random player on their opponent's Team will be impaired by 1%."
+    },
+    {
+        "id": "SUPERCHARGED",
+        "color": "#e6ff21",
+        "textColor": "#e6ff21",
+        "background": "#84072a",
+        "title": "Supercharged",
+        "description": "This Team will play 10% better after scoring 10+ Runs the Day before."
+    },
+    {
+        "id": "HIGH_PRESSURE",
+        "color": "#fff912",
+        "textColor": "#fff912",
+        "background": "#465f63",
+        "title": "High Pressure",
+        "description": "This Team or Player will play 25% better in Flooding weather when runners are on base."
+    },
+    {
+        "id": "SCATTERED",
+        "color": "#bdb3c3",
+        "textColor": "#bdb3c3",
+        "background": "#ffffff",
+        "title": "Scattered",
+        "description": "This Player returned from Elsewhere a bit Scattered."
+    },
+    {
+        "id": "PATIENT",
+        "color": "#f06cff",
+        "textColor": "#f06cff",
+        "background": "#1b2950",
+        "title": "Patient",
+        "description": "This batter will never swing when there are 0 Strikes and are 1 Ball away from a Walk."
+    },
+    {
+        "id": "HUNCH",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#453e30",
+        "title": "Hunch",
+        "description": "This player has a Hunch."
+    },
+    {
+        "id": "UNCERTAIN",
+        "color": "#d285ff",
+        "textColor": "#d285ff",
+        "background": "#ffffff",
+        "title": "Uncertain",
+        "description": "When this Player returns from Elsewhere, they'll be adjusted by -15% to +20%."
+    },
+    {
+        "id": "MUNCHIES",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Munchies",
+        "description": ""
+    },
+    {
+        "id": "DOUBLE_DOG",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Double-Dog",
+        "description": ""
+    },
+    {
+        "id": "BLACKHOLE_PAYOUTS",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#863490",
+        "title": "Jam-Packed",
+        "description": "When this Team triggers the Black Hole, they'll earn double payouts for all Wet Pretzel holders."
+    },
+    {
+        "id": "SUN2_PAYOUTS",
+        "color": "#ffe100",
+        "textColor": "#ffe100",
+        "background": "#5c5d45",
+        "title": "Glazed",
+        "description": "When this Team activates Sun 2, they'll earn double payouts for all Doughnut holders."
+    },
+    {
+        "id": "POPCORN_PAYOUTS",
+        "color": "#fff8bd",
+        "textColor": "#fff8bd",
+        "background": "#d4223a",
+        "title": "Buttered Up",
+        "description": "This Team earns double payouts on Popcorn."
+    },
+    {
+        "id": "STALEPOPCORN_PAYOUTS",
+        "color": "#bababa",
+        "textColor": "#bababa",
+        "background": "#7a0000",
+        "title": "Over Salted",
+        "description": "This Team earns double payouts on Stale Popcorn."
+    },
+    {
+        "id": "MAXIMALIST",
+        "color": "#29ffd1",
+        "textColor": "#29ffd1",
+        "background": "#007a87",
+        "title": "Maximalist",
+        "description": "This Player plays 250% better at Maximum Blaseball."
+    },
+    {
+        "id": "MINIMALIST",
+        "color": "#80bfb2",
+        "textColor": "#80bfb2",
+        "background": "#2f4e52",
+        "title": "Minimalist",
+        "description": "This Player plays 75% worse at Maximum Blaseball."
+    },
+    {
+        "id": "FREE_WILL",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#9e0000",
+        "title": "Free Will",
+        "description": "This Team will receive an Extra Will in the upcoming Election."
+    },
+    {
+        "id": "CUSTOM_HATCHED",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Custom Hatched",
+        "description": "This Player was hatched via Bird Rights."
+    },
+    {
+        "id": "FORCE",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#000000",
+        "title": "Force",
+        "description": "This Player is Forced into position. They cannot leave or move within this Team's roster."
+    },
+    {
+        "id": "PSYCHOACOUSTICS",
+        "color": "#ff007b",
+        "textColor": "#ff007b",
+        "background": "#ffd1f1",
+        "title": "PsychoAcoustics",
+        "description": "In Feedback or Reverb, PsychoAcoustics will occasionally Echo one of the Away Team's mods to the Home Team, for game-long use."
+    },
+    {
+        "id": "CRIME_SCENE",
+        "color": "#8a8099",
+        "textColor": "#8a8099",
+        "background": "#2a0b40",
+        "title": "Crime Scene",
+        "description": "When a Hard-Boiled Player plays at a Crime Scene, they'll Investigate."
+    },
+    {
+        "id": "AFTER_PARTY",
+        "color": "#aba9a4",
+        "textColor": "#aba9a4",
+        "background": "#450043",
+        "title": "Afterparty",
+        "description": "This Team will occasionally receive permanent stats boost in their games (outside of Party Time), but only while they're losing."
+    },
+    {
+        "id": "MIDDLING",
+        "color": "#809fff",
+        "textColor": "#809fff",
+        "background": "#002b0f",
+        "title": "Middling",
+        "description": "This Team or Player will Overperform in the Midseason."
+    },
+    {
+        "id": "0",
+        "color": "#cffff0",
+        "textColor": "#cffff0",
+        "background": "#904899",
+        "title": "0",
+        "description": "Players with 0 will always swing at strikes while there are 0 Balls and 0 Strikes in the At Bat."
+    },
+    {
+        "id": "H20",
+        "color": "#cffff0",
+        "textColor": "#cffff0",
+        "background": "#489699",
+        "title": "H20",
+        "description": "Players with H20 will always swing at strikes while there are 2 Outs."
+    },
+    {
+        "id": "ATTRACTOR",
+        "color": "#96fdff",
+        "textColor": "#96fdff",
+        "background": "#2e0330",
+        "title": "Attractor",
+        "description": "When this player scores a Run, they'll join the Shadows of the Team that scored them, if they're not already on their roster."
+    },
+    {
+        "id": "SCRAMBLED",
+        "color": "#9a7b4f",
+        "textColor": "#9a7b4f",
+        "background": "#511c00",
+        "title": "Scrambled",
+        "description": "This player is Scrambled."
+    },
+    {
+        "id": "CAREFUL",
+        "color": "#fff39c",
+        "textColor": "#fff39c",
+        "background": "#ad4b00",
+        "title": "Careful",
+        "description": "This player's Items will not be damaged by standard game actions."
+    },
+    {
+        "id": "AMBITIOUS",
+        "color": "#ffcf0f",
+        "textColor": "#ffcf0f",
+        "background": "#247d7a",
+        "title": "Ambitious",
+        "description": "This Team or Player will Overperform in the Postseason."
+    },
+    {
+        "id": "PRO_SKATER",
+        "color": "#4dbd8b",
+        "textColor": "#4dbd8b",
+        "background": "#1a385c",
+        "title": "Pro Skater",
+        "description": "This player cannot bail when using the Grind Rail."
+    },
+    {
+        "id": "PSYCHIC",
+        "color": "#ff87ff",
+        "textColor": "#ff87ff",
+        "background": "#230747",
+        "title": "Psychic",
+        "description": "Psychic players have a chance of reversing a bad outcome with a Mind Trick."
+    },
+    {
+        "id": "FIERY",
+        "color": "#ff995e",
+        "textColor": "#ff995e",
+        "background": "#940101",
+        "title": "Fiery",
+        "description": "Players with Fiery have a small chance of throwing Double Strikes."
+    },
+    {
+        "id": "AAA",
+        "color": "#f1ffa3",
+        "textColor": "#f1ffa3",
+        "background": "#192400",
+        "title": "Power Chaaarge",
+        "description": "When this Player hits a Triple, they'll have a chance of Overperforming for the rest of the game."
+    },
+    {
+        "id": "UNAMBITIOUS",
+        "color": "#ada26d",
+        "textColor": "#ada26d",
+        "background": "#062e2d",
+        "title": "Unambitious",
+        "description": "This Team or player will Underperform in the Postseason."
+    },
+    {
+        "id": "COASTING",
+        "color": "#809fff",
+        "textColor": "#809fff",
+        "background": "#4a152c",
+        "title": "Coasting",
+        "description": "This Team or player will Underperform in the Midseason."
+    },
+    {
+        "id": "EAT_THE_RICH",
+        "color": "#f5d64e",
+        "textColor": "#f5d64e",
+        "background": "#911d00",
+        "title": "Eat The Rich",
+        "description": "At the end of each season, the Fans with the top 1% of Coins will have their funds redistributed throughout the 99%."
+    },
+    {
+        "id": "WILD_CARDS",
+        "color": "#dda6ed",
+        "textColor": "#dda6ed",
+        "background": "#291633",
+        "title": "Wild Cards",
+        "description": "At the end of the regular season, 1 Wild Card will be drawn at random from the remaining teams in each Sub-League to receive a Postseason Birth."
+    },
+    {
+        "id": "SIM_FREE_WILL",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#9e0000",
+        "title": "Free Wills",
+        "description": "The bottom four finishing Teams in the League will receive an extra Will in that season's election."
+    },
+    {
+        "id": "SIM_ALL_YOU_CAN_EAT",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#06293d",
+        "title": "All You Can Eat",
+        "description": "Fans are free to buy and discard Snack Slots in their Snack Pack. The number of Slots they have will determine their Payout Modifier for all Snacks. The less slots, the higher the Payout Modifier."
+    },
+    {
+        "id": "SIM_BASED_EVOLUTION",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#254027",
+        "title": "Based Evolution",
+        "description": "Every Third Championship a Team wins will cause the Team and its Players to Evolve. Players that round the phylogenic Bases will get to go Home."
+    },
+    {
+        "id": "SIM_PARTY_TIME",
+        "color": "#ff66f9",
+        "textColor": "#ff66f9",
+        "background": "#fff947",
+        "title": "Party Time",
+        "description": "A Team will enter Party Time if receiving 1 Win per remaining game would not land them in the Postseason. In Party Time, they'll receive random Stat Boosts from Partying."
+    },
+    {
+        "id": "FLOOD_BATH",
+        "color": "#5988ff",
+        "textColor": "#5988ff",
+        "background": "#163073",
+        "title": "Flood Bath",
+        "description": "When Runners on this Team are cleared via Flooding, they'll become Slippery for the remainder of the game."
+    },
+    {
+        "id": "SLIPPERY",
+        "color": "#5988ff",
+        "textColor": "#5988ff",
+        "background": "#163073",
+        "title": "Slippery",
+        "description": "When a Slippery baserunner scores, and first base is available, they'll slide to first after scoring."
+    },
+    {
+        "id": "HOTEL_MOTEL",
+        "color": "#5988ff",
+        "textColor": "#5988ff",
+        "background": "#163073",
+        "title": "Hotel Motel",
+        "description": ""
+    },
+    {
+        "id": "FAX_MACHINE",
+        "color": "#5988ff",
+        "textColor": "#5988ff",
+        "background": "#163073",
+        "title": "Fax Machine",
+        "description": ""
+    },
+    {
+        "id": "SIM_COMMUNITY_CHEST",
+        "color": "#ffffff",
+        "textColor": "#ffffff",
+        "background": "#40223e",
+        "title": "Community Chest",
+        "description": "Anytime 3000 Runs are accumulated league-wide, every Team will receive an Item Crate for a random active Player on their Team."
+    },
+    {
+        "id": "ENTANGLED",
+        "color": "#4b0f69",
+        "textColor": "#d285ff",
+        "background": "#ffffff",
+        "title": "Entangled",
+        "description": "Whenever this Player would return from Elsewhere, their Alternate will return instead."
     }
 ]
