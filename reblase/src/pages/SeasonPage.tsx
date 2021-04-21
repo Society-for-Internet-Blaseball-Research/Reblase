@@ -47,6 +47,10 @@ const GamesList = React.memo(
         const playersMap: Record<PlayerID, BlaseballPlayer> = {};
         for (const player of props.players) playersMap[player.id!] = player;
 
+        const currentDay = Math.max(...props.days
+            .filter(({ games }) => games.every((game) => game.data.gameStart))
+            .map(({ day }) => day));
+
         return (
             <div>
                 {props.days.map(({ games, season, day }) => {
@@ -55,6 +59,7 @@ const GamesList = React.memo(
                             key={day}
                             season={season}
                             day={day}
+                            currentDay={currentDay}
                             games={games}
                             teams={teamsMap}
                             players={playersMap}
