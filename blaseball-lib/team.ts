@@ -9,14 +9,18 @@ export function predictGamePitcher(
     getPlayer: (id: PlayerID) => BlaseballPlayer
 ): PlayerID {
     const slotOffset = team.rotationSlot ? team.rotationSlot - currentDay - 1 : 0;
-    const slot = day + slotOffset;
+
+    // making the assumption here that the offset is never negative to handle cases where the slot is bumped early
+    const slot = day + Math.max(slotOffset, 0);
+
     return skipPlayers(slot, team, getPlayer);
 }
 
 function skipPlayers(slot: number, team: BlaseballTeam, getPlayer: (id: PlayerID) => BlaseballPlayer): PlayerID {
     for (let i = 0; i < team.rotation.length; i++) {
-        const pitcher = team.rotation[slot++ % team.rotation.length];
-        if (!isPlayerSkippedInRotation(getPlayer(pitcher))) return pitcher;
+        const pitcherId = team.rotation[slot++ % team.rotation.length];
+        const pitcher = getPlayer(pitcherId);
+        if (!isPlayerSkippedInRotation(pitcher)) return pitcherId;
     }
 
     // fallback for the inevitable Snackrifice 2 or w/e so we don't infinitely spin
