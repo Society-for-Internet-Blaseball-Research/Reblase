@@ -82,4 +82,9 @@
     .tag-sm {
         @apply text-sm rounded px-2 inline-flex items-center justify-center;
     }
+
+    .page-btn {
+        min-width: 4ch;
+        @apply text-center border;
+    }
 }
