@@ -1,0 +1,55 @@
+.UpdateRow {
+    display: grid;
+
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+        "gamelog gamelog gamelog gamelog timestamp"
+        "batter batter . . ."
+        "score . . atbat atbat";
+
+    @apply gap-x-2 gap-y-1 sm:gap-2 p-2 items-center border-b border-gray-300 dark:border-gray-700;
+}
+
+@screen sm {
+    .UpdateRow {
+        grid-template-areas:
+            "gamelog gamelog gamelog gamelog timestamp"
+            "score batter . atbat atbat";
+    }
+}
+
+@screen lg {
+    .UpdateRow {
+        grid-template-columns: auto auto 1fr auto auto;
+        grid-template-areas: "timestamp score gamelog batter atbat";
+    }
+}
+
+.UpdateRow-Highlight {
+    @apply bg-yellow-200 dark:bg-gray-900;
+}
+
+
+.UpdateRow-Timestamp {
+    grid-area: timestamp;
+    @apply text-gray-700 dark:text-gray-300;
+}
+
+.UpdateRow-Score {
+    grid-area: score;
+    @apply font-semibold bg-gray-200 dark:bg-gray-800;
+}
+
+.UpdateRow-GameLog {
+    grid-area: gamelog;
+}
+
+.UpdateRow-Batter {
+    grid-area: batter;
+    @apply text-sm bg-gray-200 dark:bg-gray-800 rounded px-2 py-1 inline-flex items-center justify-center;
+}
+
+.UpdateRow-AtBat {
+    grid-area: atbat;
+    @apply space-x-2 flex flex-row items-center;
+}
