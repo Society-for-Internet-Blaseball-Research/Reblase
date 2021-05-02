@@ -92,25 +92,34 @@ export function addInningHeaderRows(
         if (filterImportant && !isGameUpdateImportant(payload.lastUpdate, payload.scoreUpdate)) continue;
 
         const isNewHalfInning = lastInning !== payload.inning || lastTopOfInning !== payload.topOfInning;
-        if (isNewHalfInning) {
+        if (isNewHalfInning && payload.inning > -1) {
             // New inning, add header
             const header: Element = { type: "heading", inning: payload.inning, top: payload.topOfInning, update };
-            elements.push(header);
+
+            // We're skipping "inning 0" so if this is the inning 1 header, "push" it before the first events
+            if (payload.inning === 0 && payload.topOfInning) {
+                elements.unshift(header);
+            } else {
+                elements.push(header);
+            }
         }
 
         // Reorder accounting for the early pitching updates we get
-        if (direction === "asc") {
-            if (payload.lastUpdate.endsWith("batting.") && elements.length > 2) {
-                const [heading, prevUpdate] = elements.splice(-2);
-                elements.push(prevUpdate, heading);
-            }
-        } else {
-            if (elements.length > 3) {
-                const [prevPrevUpdate, prevUpdate, heading] = elements.splice(-3);
-                if (heading.type === "heading" && prevPrevUpdate.update.data.lastUpdate.endsWith("batting.")) {
-                    elements.push(prevPrevUpdate, heading, prevUpdate);
-                } else {
-                    elements.push(prevPrevUpdate, prevUpdate, heading);
+        // This was fixed in Season 12 (iirc??)
+        if (update.data.season < 11) {
+            if (direction === "asc") {
+                if (payload.lastUpdate.endsWith("batting.") && elements.length > 2) {
+                    const [heading, prevUpdate] = elements.splice(-2);
+                    elements.push(prevUpdate, heading);
+                }
+            } else {
+                if (elements.length > 3) {
+                    const [prevPrevUpdate, prevUpdate, heading] = elements.splice(-3);
+                    if (heading.type === "heading" && prevPrevUpdate.update.data.lastUpdate.endsWith("batting.")) {
+                        elements.push(prevPrevUpdate, heading, prevUpdate);
+                    } else {
+                        elements.push(prevPrevUpdate, prevUpdate, heading);
+                    }
                 }
             }
         }
