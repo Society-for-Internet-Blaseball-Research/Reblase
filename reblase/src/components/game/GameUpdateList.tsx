@@ -166,7 +166,7 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
         props.filterImportant,
     ]);
 
-    var grouped = [];
+    const grouped = [];
     for (const elem of elements) {
         if (elem.type === "heading") {
             grouped.push({
@@ -192,9 +192,7 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
             }
         }
 
-        grouped[grouped.length - 1].updates.push(
-            ...remaining.map((d) => ({ type: "secondary" as "secondary", data: d }))
-        );
+        grouped[grouped.length - 1].updates.push(...remaining.map((d) => ({ type: "secondary" as const, data: d })));
     }
 
     const scrollTarget = window.location.hash.replace("#", "");

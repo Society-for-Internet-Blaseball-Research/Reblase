@@ -1,7 +1,7 @@
 import React from "react";
 import { TiStar, TiStarHalf } from "react-icons/ti";
 import { GoArrowBoth, GoArrowDown, GoArrowUp } from "react-icons/go";
-import { getVibeCategory } from "../../../../blaseball-lib/players";
+import { getVibeCategory } from "blaseball-lib/players";
 import "./PlayerCard.css";
 
 interface PlayerInfoProps {

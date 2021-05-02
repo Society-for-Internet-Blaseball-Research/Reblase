@@ -87,7 +87,7 @@ function GamesListFetching(props: {
     allPlayers: BlaseballPlayer[];
     allTeams: BlaseballTeam[];
 }) {
-    let { games, error, isLoading } = useGameList({
+    const { games, error, isLoading } = useGameList({
         season: props.season,
         started: !props.showFutureGames ? true : undefined,
         team: props.teams ? props.teams.join(",") : undefined,
@@ -95,7 +95,7 @@ function GamesListFetching(props: {
         outcomes: props.outcomes ? true : undefined,
     });
 
-    let { data: simData, error: simError, isLoading: simIsLoading } = useSimulation();
+    const { data: simData, error: simError, isLoading: simIsLoading } = useSimulation();
 
     const days = useMemo(() => {
         let gamesFiltered = games;
@@ -152,15 +152,15 @@ interface SeasonPageParams {
 export function SeasonPage() {
     const location = useLocation();
 
-    let { season: seasonStr } = useParams<SeasonPageParams>();
+    const { season: seasonStr } = useParams<SeasonPageParams>();
     const season = parseInt(seasonStr) - 1;
 
-    let [selectedTeams, setSelectedTeams] = useState<string[]>([]);
-    let [selectedStadiums, setSelectedStadiums] = useState<string[]>([]);
-    let [selectedOutcomes, setSelectedOutcomes] = useState<string[]>([]);
-    let [selectedWeather, setSelectedWeather] = useState<number[]>([]);
-    let [showFutureGames, setShowFutureGames] = useState<boolean>(false);
-    let [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
+    const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+    const [selectedStadiums, setSelectedStadiums] = useState<string[]>([]);
+    const [selectedOutcomes, setSelectedOutcomes] = useState<string[]>([]);
+    const [selectedWeather, setSelectedWeather] = useState<number[]>([]);
+    const [showFutureGames, setShowFutureGames] = useState<boolean>(false);
+    const [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
 
     const { players, teams, error, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
     let { fights } = useFights();

@@ -3,15 +3,14 @@
 module.exports = {
     style: {
         postcss: {
-            plugins: [require("postcss-nested"), require("tailwindcss")("./tailwind.config.js")],
+            plugins: [require("tailwindcss")],
         },
     },
     webpack: {
         configure: (webpackConfig) => {
-            webpackConfig.resolve.plugins.pop();
             webpackConfig.resolve.plugins.push(new TsconfigPathsPlugin());
 
-            const tsRule = webpackConfig.module.rules[2].oneOf[1];
+            const tsRule = webpackConfig.module.rules[1].oneOf[2];
             tsRule.include = undefined;
             tsRule.exclude = /node_modules/;
 

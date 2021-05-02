@@ -133,9 +133,9 @@ export function EventsPage() {
     if (isLoading || temporalIsLoading) return <Loading />;
 
     const gameEvents: BlaseEvent[] = [];
-    for (let game of games) {
+    for (const game of games) {
         const outcomes = getOutcomes(game.data.outcomes);
-        for (let outcome of outcomes) {
+        for (const outcome of outcomes) {
             const lastEvent = gameEvents[gameEvents.length - 1];
             if (
                 lastEvent &&
