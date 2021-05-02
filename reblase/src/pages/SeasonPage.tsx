@@ -186,6 +186,7 @@ export function SeasonPage() {
                     <div className="font-semibold mb-1">Filter by team</div>
                     <TeamPicker
                         placeholder="Select team(s)..."
+                        type={season >= 0 ? "league" : "coffee"}
                         teams={teams}
                         selectedTeams={selectedTeams}
                         setSelectedTeams={setSelectedTeams}
