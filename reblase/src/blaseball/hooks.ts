@@ -22,8 +22,9 @@ import {
     SimResponse,
     TemporalResponse,
     TemporalUpdatesQuery,
+    ChronStadium,
 } from "blaseball-lib/chronicler";
-import { BlaseballSimData } from "blaseball-lib/models";
+import { BlaseballSimData, BlaseballStadium } from "blaseball-lib/models";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -209,5 +210,21 @@ export function useFights(): FightsHookReturn {
         fights: data?.data ?? [],
         isLoading: !data,
         error,
+    };
+}
+
+interface StadiumHookReturn {
+    stadiums: BlaseballStadium[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useStadiums(): StadiumHookReturn {
+    const { data, error } = useSWR<ChronResponse<ChronStadium>>(chroniclerApi.stadiums());
+
+    return {
+        stadiums: (data?.data ?? []).map((s) => s.data),
+        error,
+        isLoading: !data,
     };
 }

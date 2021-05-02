@@ -7,6 +7,7 @@ export type SubleagueID = string;
 export type DivisionID = string;
 export type SeasonID = string;
 export type PlayoffsID = string;
+export type StadiumID = string;
 
 export interface BlaseballEntity<T> {
     id?: T;

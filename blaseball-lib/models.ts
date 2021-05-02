@@ -9,6 +9,7 @@ import {
     PlayerStats,
     PlayoffsID,
     SeasonID,
+    StadiumID,
     TeamID,
     TeamRoster,
 } from "./common";
@@ -84,6 +85,8 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     seriesIndex: number;
     seriesLength: number;
     repeatCount?: number;
+
+    stadiumId?: string | null;
 }
 
 export interface DamageResult {
@@ -191,4 +194,12 @@ export interface BlaseballSimData extends BlaseballEntity<"thisidisstaticyo"> {
     doTheThing?: boolean;
     eatTheRich?: boolean;
     unlockedInterviews?: boolean;
+}
+
+export interface BlaseballStadium extends BlaseballEntity<StadiumID> {
+    name: string;
+    nickname: string;
+    teamId: string;
+    model: number;
+    mods: AttributeID[];
 }

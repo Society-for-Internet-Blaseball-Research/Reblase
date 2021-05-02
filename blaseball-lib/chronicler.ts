@@ -4,6 +4,7 @@ import {
     BlaseballGame,
     BlaseballPlayer,
     BlaseballSimData,
+    BlaseballStadium,
     BlaseballTeam,
     BlaseballTemporal,
 } from "./models";
@@ -20,6 +21,7 @@ export const chroniclerApi = {
     teams: () => BASE_URL + "/teams",
     temporalUpdates: (query: TemporalUpdatesQuery) => BASE_URL + "/temporal/updates?" + queryString.stringify(query),
     simUpdates: (query: SimUpdatesQuery) => BASE_URL + "/sim/updates?" + queryString.stringify(query),
+    stadiums: () => BASE_URL + "/stadiums",
 };
 
 export type PlayerUpdatesQuery = {
@@ -158,4 +160,9 @@ export interface ChronPlayerUpdate extends ChronEntityVersion<BlaseballPlayer> {
 
 export interface ChronTeamUpdate extends ChronEntityVersion<BlaseballTeam> {
     teamId: string;
+}
+
+export interface ChronStadium {
+    id: string;
+    data: BlaseballStadium;
 }

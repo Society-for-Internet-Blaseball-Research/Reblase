@@ -19,6 +19,7 @@ import { PlayerID } from "blaseball-lib/common";
 import { FightRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
 import { displaySeason } from "blaseball-lib/games";
+import StadiumPicker from "components/elements/StadiumPicker";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
 function groupByDay(games: ChronGame[]): GameDay[] {
@@ -77,6 +78,7 @@ const GamesList = React.memo(
 function GamesListFetching(props: {
     season: number;
     teams: string[] | null;
+    stadiums: string[] | null;
     outcomes: string[] | null;
     weather: number[] | null;
     showFutureGames: boolean;
@@ -106,8 +108,16 @@ function GamesListFetching(props: {
             });
         }
 
+        if (props.stadiums) {
+            gamesFiltered = gamesFiltered.filter((game) => {
+                if (!game.data.stadiumId) return false;
+                return props.stadiums?.indexOf(game.data.stadiumId) !== -1 ?? false;
+            });
+        }
+
+        console.log(gamesFiltered.length);
         return groupByDay(gamesFiltered).reverse();
-    }, [games, props.outcomes]);
+    }, [games, props.outcomes, props.stadiums]);
 
     if (error || simError) return <Error>{error}</Error>;
     if (isLoading || simIsLoading) return <Loading />;
@@ -146,6 +156,7 @@ export function SeasonPage() {
     const season = parseInt(seasonStr) - 1;
 
     let [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+    let [selectedStadiums, setSelectedStadiums] = useState<string[]>([]);
     let [selectedOutcomes, setSelectedOutcomes] = useState<string[]>([]);
     let [selectedWeather, setSelectedWeather] = useState<number[]>([]);
     let [showFutureGames, setShowFutureGames] = useState<boolean>(false);
@@ -200,6 +211,16 @@ export function SeasonPage() {
                 </div>
 
                 <div>
+                    <div className="font-semibold mb-1">Filter by stadium</div>
+                    <StadiumPicker
+                        placeholder="Select stadium(s)..."
+                        teams={teams}
+                        selectedStadiums={selectedStadiums}
+                        setSelectedStadiums={setSelectedStadiums}
+                    />
+                </div>
+
+                <div>
                     <div className="font-semibold mb-1">Options</div>
                     <Checkbox value={showFutureGames} setValue={setShowFutureGames}>
                         Show future games
@@ -231,6 +252,7 @@ export function SeasonPage() {
                 teams={selectedTeams.length ? selectedTeams : null}
                 outcomes={selectedOutcomes.length ? selectedOutcomes : null}
                 weather={selectedWeather.length ? selectedWeather : null}
+                stadiums={selectedStadiums.length ? selectedStadiums : null}
                 showFutureGames={showFutureGames}
                 showFutureWeather={showFutureWeather}
                 allPlayers={players.map((p) => p.data)}
