@@ -60,10 +60,20 @@ const temporalTypes = {
         color: "blue",
         emoji: "\u{1F991}",
     },
+    reader: {
+        name: "The Reader",
+        color: "purple",
+        emoji: "\u{1F0CF}",
+    },
     coin: {
         name: "Boss",
         color: "yellow",
         emoji: "\u{1FA99}",
+    },
+    lootcrates: {
+        name: "Lōotcrates",
+        color: "black",
+        emoji: "\u{1F4DC}",
     },
     unknown: {
         name: "???",
@@ -76,6 +86,8 @@ const temporalTypeByGamma: Partial<Record<number, TemporalType>> = {
     0: temporalTypes.peanut,
     1: temporalTypes.squid,
     2: temporalTypes.coin,
+    3: temporalTypes.reader,
+    5: temporalTypes.lootcrates,
 };
 
 const EventRow = ({ evt }: { evt: BlaseEvent }) => {
