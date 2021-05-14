@@ -46,10 +46,10 @@
         --theme-blue-100: theme("colors.blue.900");
         --theme-red-600: theme("colors.red.200");
         --theme-red-300: theme("colors.red.700");
+    }
 
-        body {
-            @apply bg-black text-gray-100;
-        }
+    :root.mode-dark body {
+        @apply bg-black text-gray-100;
     }
 
     strong {
