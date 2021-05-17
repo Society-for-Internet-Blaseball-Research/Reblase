@@ -74,7 +74,10 @@ const Duration = React.memo(
         const arrow = props.topOfInning ? "\u25B2" : "\u25BC";
 
         return (
-            <Link className="text-center text-sm tabular-nums text-gray-700 dark:text-gray-300" to={`/game/${props.gameId}`}>
+            <Link
+                className="text-center text-sm tabular-nums text-gray-700 dark:text-gray-300"
+                to={`/game/${props.gameId}`}
+            >
                 <span className="w-4 inline-block text-right mr-1">{props.inning + 1}</span>
                 <span className="text-xs pr-2 border-r border-gray-500 mr-2">{arrow}</span>
                 {duration}
@@ -84,8 +87,7 @@ const Duration = React.memo(
 );
 
 export const Weather = React.memo((props: { weather: number | null; className?: string }) => {
-    const weather = getWeather(props.weather ?? -1);
-    if (!weather) return <Twemoji emoji={"\u{2753}"} className={props.className} />;
+    const weather = getWeather(props.weather ?? -1) ?? { name: "???", emoji: "\u{2753}" };
 
     return (
         <Tooltip placement="top" overlay={<span>{weather.name}</span>}>
