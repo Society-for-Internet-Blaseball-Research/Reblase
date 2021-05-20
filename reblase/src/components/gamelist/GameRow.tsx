@@ -20,38 +20,47 @@ const outcomeStyle: Record<OutcomeColor, string> = {
     green: "bg-green-200 dark:bg-green-900 text-green-800 dark:text-green-200",
 };
 
-const Events = React.memo((props: { outcomes: string[]; shame: boolean; awayTeam: string }) => {
-    const outcomes = getOutcomes(props.outcomes, props.shame, props.awayTeam);
-    if (!outcomes) return <></>;
+const Events = React.memo(
+    (props: {
+        outcomes: string[];
+        shame: boolean;
+        awayTeam: string;
+        startTime: string | null;
+        endTime: string | null;
+    }) => {
+        const outcomes = getOutcomes(props.outcomes, props.shame, props.awayTeam, props.startTime, props.endTime);
 
-    const outcomesByType: Record<string, Outcome[]> = {};
-    for (const outcome of outcomes) {
-        if (!outcomesByType[outcome.name]) outcomesByType[outcome.name] = [];
-        outcomesByType[outcome.name].push(outcome);
+        if (!outcomes) return <></>;
+
+        const outcomesByType: Record<string, Outcome[]> = {};
+        for (const outcome of outcomes) {
+            if (!outcomesByType[outcome.name]) outcomesByType[outcome.name] = [];
+            outcomesByType[outcome.name].push(outcome);
+        }
+
+        return (
+            <span>
+                {Object.keys(outcomesByType).map((outcomeType, idx) => {
+                    const outcomes = outcomesByType[outcomeType];
+                    const combined = outcomes.map((o) => o.text).join("\n");
+
+                    return (
+                        <Tooltip
+                            key={idx}
+                            placement="top"
+                            overlay={<div className="whitespace-pre-line text-center">{combined}</div>}
+                        >
+                            <span className={`ml-1 tag-sm ${outcomeStyle[outcomes[0].color]}`}>
+                                {outcomeType}
+                                {outcomes.length > 1 ? <span className="ml-1"> x{outcomes.length}</span> : ""}
+                            </span>
+                        </Tooltip>
+                    );
+                })}
+            </span>
+        );
     }
-
-    return (
-        <span>
-            {Object.keys(outcomesByType).map((outcomeType, idx) => {
-                const outcomes = outcomesByType[outcomeType];
-                const combined = outcomes.map((o) => o.text).join("\n");
-
-                return (
-                    <Tooltip
-                        key={idx}
-                        placement="top"
-                        overlay={<div className="whitespace-pre-line text-center">{combined}</div>}
-                    >
-                        <span className={`ml-1 tag-sm ${outcomeStyle[outcomes[0].color]}`}>
-                            {outcomeType}
-                            {outcomes.length > 1 ? <span className="ml-1"> x{outcomes.length}</span> : ""}
-                        </span>
-                    </Tooltip>
-                );
-            })}
-        </span>
-    );
-});
+);
 
 const EventsExperimental = React.memo((props: { outcomes: BlaseballDisplayExperimental[]; shame: boolean; awayTeam: string }) => {
     const outcomes = getOutcomesExperimental(props.outcomes, props.shame, props.awayTeam);
@@ -75,15 +84,16 @@ const EventsExperimental = React.memo((props: { outcomes: BlaseballDisplayExperi
                         overlay={<div className="whitespace-pre-line text-center">{combined}</div>}
                     >
                         <span className={`ml-1 tag-sm ${outcomeStyle[outcomes[0].color]}`}>
-                            {outcomeType}
-                            {outcomes.length > 1 ? <span className="ml-1"> x{outcomes.length}</span> : ""}
-                        </span>
-                    </Tooltip>
-                );
-            })}
-        </span>
-    );
-});
+                                {outcomeType}
+                                {outcomes.length > 1 ? <span className="ml-1"> x{outcomes.length}</span> : ""}
+                            </span>
+                        </Tooltip>
+                    );
+                })}
+            </span>
+        );
+    }
+);
 
 const Duration = React.memo(
     (props: {
@@ -309,6 +319,8 @@ export const GameRow = React.memo(
                                 outcomes={data.outcomes ?? []}
                                 shame={data.shame}
                                 awayTeam={data.awayTeamNickname}
+                                startTime={props.game.startTime}
+                                endTime={props.game.endTime}
                             />
                             <Duration
                                 gameId={props.game.gameId}
@@ -340,7 +352,13 @@ export const GameRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events
+                            outcomes={data.outcomes ?? []}
+                            shame={data.shame}
+                            awayTeam={data.awayTeamNickname}
+                            startTime={props.game.startTime}
+                            endTime={props.game.endTime}
+                        />
                         <Duration
                             gameId={props.game.gameId}
                             startTime={props.game.startTime}
@@ -503,6 +521,8 @@ export const FightRow = React.memo(
                                 outcomes={data.outcomes ?? []}
                                 shame={data.shame}
                                 awayTeam={data.awayTeamNickname}
+                                startTime={null}
+                                endTime={null}
                             />
                         </div>
                     </div>
@@ -521,7 +541,13 @@ export const FightRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events
+                            outcomes={data.outcomes ?? []}
+                            shame={data.shame}
+                            awayTeam={data.awayTeamNickname}
+                            startTime={null}
+                            endTime={null}
+                        />
                     </div>
                 </div>
             </Link>
@@ -570,6 +596,8 @@ export const SemiCentennialRow = React.memo(
                                 outcomes={data.outcomes ?? []}
                                 shame={data.shame}
                                 awayTeam={data.awayTeamNickname}
+                                startTime={null}
+                                endTime={null}
                             />
                         </div>
                     </div>
@@ -588,7 +616,13 @@ export const SemiCentennialRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events
+                            outcomes={data.outcomes ?? []}
+                            shame={data.shame}
+                            awayTeam={data.awayTeamNickname}
+                            startTime={null}
+                            endTime={null}
+                        />
                     </div>
                 </div>
             </Link>
