@@ -183,6 +183,13 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /The Salmon swim upstream!/,
         /is now being Observed/,
         /The Polarity shifted!/,
+        /hops on the Grind Rail/,
+        /The Community Chest Opens!/,
+        /A shimmering Crate descends/,
+        /(were|was) repaired by Smithy/,
+        /broke!/,
+        /(were|was) damaged./,
+        /Prize Match!/,
     ]) {
         if (pattern.test(update)) return true;
     }
