@@ -175,7 +175,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /is Percolated/,
         /tastes the infinite/,
         /surge of Immateria/,
-        /Elsewhere/,
+        /(swept|returned from) Elsewhere/,
         /CONSUMERS ATTACK/,
         /ECHO/,
         /STATIC/,
