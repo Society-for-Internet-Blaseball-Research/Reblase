@@ -182,6 +182,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /Echoed/,
         /The Salmon swim upstream!/,
         /is now being Observed/,
+        /The Polarity shifted!/,
     ]) {
         if (pattern.test(update)) return true;
     }
