@@ -7,7 +7,7 @@ export interface WeatherType {
     forbidden: boolean;
 }
 
-export const allWeatherTypes = [
+export const allWeatherTypes: WeatherType[] = [
     {
         id: 0,
         name: "Void",
@@ -198,6 +198,54 @@ export const allWeatherTypes = [
         background: "#3b0422",
         color: "#ff6be6",
         forbidden: false,
+    },
+    {
+        id: 22,
+        name: "???",
+        emoji: "\u{2753}", // ? emoji
+        background: "#0e4e8a",
+        color: "#ffc400",
+        forbidden: true,
+    },
+    {
+        id: 23,
+        name: "Sun 90",
+        emoji: "\u{2753}", // ? emoji
+        background: "#0e4e8a",
+        color: "#ffc400",
+        forbidden: true,
+    },
+    {
+        id: 24,
+        name: "Sun .1",
+        emoji: "\u{1F90F}",
+        background: "#0e4e8a",
+        color: "#ffc400",
+        forbidden: false,
+    },
+    {
+        id: 25,
+        name: "Sum Sun",
+        emoji: "\u{2753}", // ? emoji
+        background: "#0e4e8a",
+        color: "#ffc400",
+        forbidden: true,
+    },
+    {
+        id: 26,
+        name: "Jazz",
+        emoji: "\u{1F3B7}", // ? emoji
+        background: "#570b0b",
+        color: "#000",
+        forbidden: true,
+    },
+    {
+        id: 27,
+        name: "Night",
+        emoji: "\u{1F319}", // ? emoji
+        background: "#000",
+        color: "#ff8d13",
+        forbidden: true,
     },
 ];
 
