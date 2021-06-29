@@ -170,7 +170,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /murder of Crows/,
         /charms/,
         /Sun 2 smiles/,
-        /Black Hole swallows/,
+        /Black Hole swallow/,
         /is Beaned by/,
         /is Percolated/,
         /tastes the infinite/,
