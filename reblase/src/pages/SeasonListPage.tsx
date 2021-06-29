@@ -8,11 +8,39 @@ import { useGameList } from "../blaseball/hooks";
 import { ChronGame } from "blaseball-lib/chronicler";
 import { displaySeason } from "blaseball-lib/games";
 
-function SeasonRow(props: { game: ChronGame }) {
-    const { startTime, data } = props.game;
+interface SeasonData {
+    name: string;
+    start: string;
+    end: string;
+}
 
-    const startDate = startTime ? dayjs(startTime) : null;
-    const endDate = startTime ? dayjs(startTime).add(6, "day") : null;
+const seasonOverrides: Record<number, SeasonData> = {
+    [-1]: {
+        name: "The Coffee Cup \u{2615}",
+        start: "2020-11-17T22:00:00Z",
+        end: "2020-12-09T01:00:00Z",
+    },
+};
+
+function getSeasonData(game: ChronGame) {
+    const override = seasonOverrides[game.data.season];
+    if (override) return override;
+
+    const start = game.startTime ?? null;
+    const end = start ? dayjs(start).add(6, "day").toISOString() : null;
+    const name = `Season ${displaySeason(game.data.season)}`;
+
+    return { name, start, end };
+}
+
+function SeasonRow(props: { game: ChronGame }) {
+    const { data } = props.game;
+
+    const seasonData = getSeasonData(props.game);
+
+    const startDate = seasonData.start ? dayjs(seasonData.start) : null;
+    const endDate = seasonData.end ? dayjs(seasonData.end) : null;
+
     const dateFormat = "MMM D, YYYY";
 
     const target = `/season/${data.season + 1}`;
@@ -21,12 +49,22 @@ function SeasonRow(props: { game: ChronGame }) {
             className="flex px-4 py-2 border-b border-solid border-gray-300 dark:border-gray-700 items-center hover:bg-gray-200 dark-hover:bg-gray-800"
             to={target}
         >
-            <span className="text-lg font-semibold">Season {displaySeason(data.season)}</span>
+            <span className="text-lg font-semibold">{seasonData.name}</span>
             <span className="text-gray-700 dark:text-gray-300 ml-4 mr-auto">
                 {startDate?.format(dateFormat) ?? "TBD"} - {endDate?.format(dateFormat) ?? "TBD"}
             </span>
             <span className="text-semibold">View games</span>
         </Link>
+    );
+}
+
+function SeasonGroup(props: { games: ChronGame[] }) {
+    return (
+        <div className="flex flex-col mb-6">
+            {props.games.map((seasonGame) => (
+                <SeasonRow key={seasonGame.gameId} game={seasonGame} />
+            ))}
+        </div>
     );
 }
 
@@ -53,21 +91,20 @@ export function SeasonListPage() {
         })
         .map((s) => seasons[s]!);
 
+    const expansionEra = seasonsList.filter((x) => x.data.season >= 11);
+    const disciplineEra = seasonsList.filter((x) => x.data.season >= 0 && x.data.season < 11);
+    const exhibitions = seasonsList.filter((x) => x.data.season < 0);
+
     return (
         <Container className={"mt-4"}>
-            <h2 className="text-2xl font-semibold mb-2">Seasons</h2>
+            <h2 className="text-2xl font-semibold mb-2">Expansion Era</h2>
+            <SeasonGroup games={expansionEra} />
 
-            <div className="flex flex-col mb-6">
-                {seasonsList.map((seasonGame, i) => (
-                    seasonGame.data.season >= 0 ? <SeasonRow key={i} game={seasonGame}/> : null
-                ))}
-            </div>
+            <h2 className="text-2xl font-semibold mb-2">Discipline Era</h2>
+            <SeasonGroup games={disciplineEra} />
+
             <h2 className="text-2xl font-semibold mb-2">Exhibitions</h2>
-            <div className="flex flex-col">
-                {seasonsList.map((seasonGame, i) => (
-                    seasonGame.data.season < 0 ? <SeasonRow key={i} game={seasonGame}/> : null
-                ))}
-            </div>
+            <SeasonGroup games={exhibitions} />
         </Container>
     );
 }
