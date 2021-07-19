@@ -247,22 +247,13 @@ export const allWeatherTypes: WeatherType[] = [
         color: "#ffc400",
         forbidden: true
     },
-    // todo: unredact after S23 D1
-    // {
-    //     id: 28,
-    //     name: "Jazz",
-    //     emoji: "\u{1F3B7}",
-    //     background: "#0f592f",
-    //     color: "#000",
-    //     forbidden: true,
-    // },
     {
         id: 28,
-        name: "????",
-        emoji: "\u{2753}", // ? emoji
-        background: "#570b0b",
+        name: "Jazz",
+        emoji: "\u{1F3B7}",
+        background: "#0f592f",
         color: "#000",
-        forbidden: true,
+        forbidden: false,
     },
     {
         id: 29,
