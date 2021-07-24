@@ -226,21 +226,37 @@ export const allWeatherTypes: WeatherType[] = [
     {
         id: 25,
         name: "Sum Sun",
-        emoji: "\u{2753}", // ? emoji
+        emoji: "\u{2795}", // ? emoji
         background: "#0e4e8a",
         color: "#ffc400",
-        forbidden: true,
+        forbidden: false,
     },
     {
         id: 26,
-        name: "Jazz",
-        emoji: "\u{1F3B7}", // ? emoji
-        background: "#570b0b",
-        color: "#000",
-        forbidden: true,
+        name: "????",
+        emoji: "\u{2753}", // ? emoji
+        background: "#36001b",
+        color: "#ffc400",
+        forbidden: true
     },
     {
         id: 27,
+        name: "????",
+        emoji: "\u{2753}", // ? emoji
+        background: "#36001b",
+        color: "#ffc400",
+        forbidden: true
+    },
+    {
+        id: 28,
+        name: "Jazz",
+        emoji: "\u{1F3B7}",
+        background: "#0f592f",
+        color: "#000",
+        forbidden: false,
+    },
+    {
+        id: 29,
         name: "Night",
         emoji: "\u{1F319}", // ? emoji
         background: "#000",
