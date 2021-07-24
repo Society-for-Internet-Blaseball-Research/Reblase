@@ -191,6 +191,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /(were|was) damaged./,
         /Prize Match!/,
         /entered the Tunnels/,
+        /Night Shift/,
     ]) {
         if (pattern.test(update)) return true;
     }
