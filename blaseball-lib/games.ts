@@ -171,7 +171,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /charms/,
         /Sun 2 smiles/,
         /Sun 30 smiled/,
-        /Black Hole swallows/,
+        /Black Hole swallow/,
         /is Beaned by/,
         /is Percolated/,
         /tastes the infinite/,
@@ -191,6 +191,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /broke!/,
         /(were|was) damaged./,
         /Prize Match!/,
+        /entered the Tunnels/,
     ]) {
         if (pattern.test(update)) return true;
     }

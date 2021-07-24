@@ -29,7 +29,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Peanut", emoji: "\u{1F95C}", search: [/stray peanut/i], color: "orange" },
     { name: "Sun 2", emoji: "\u{1F31E}", search: [/Sun 2/i], color: "orange" },
     { name: "Sun 30", emoji: "\u{1F31E}", search: [/Sun 30/i], color: "orange" },
-    { name: "Black Hole", emoji: "\u{26AB}", search: [/Black Hole/i], color: "gray" },
+    { name: "Black Hole", emoji: "\u{26AB}", search: [/Black Hole (swallowed|burped)/i], color: "gray" },
     { name: "Percolated", emoji: "\u{2615}", search: [/Percolated/], color: "brown" },
     { name: "Shelled", emoji: "\u{1F95C}", search: [/Shelled/], color: "orange" },
     { name: "Elsewhere", emoji: "\u{1F4A8}", search: [/Elsewhere/], color: "gray" },
@@ -37,6 +37,8 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Static", emoji: "\u{1F4AC}", search: [/Echoed into Static/], color: "gray" },
     { name: "Observed", emoji: "\u{1F441}", search: [/is now being Observed/], color: "orange" },
     { name: "Fax Machine", emoji: "\u{1F4E0}", search: [/was replaced by incoming Fax/], color: "gray" },
+    { name: "Voicemail", emoji: "\u{260E}", search: [/was replaced by incoming Voicemail/], color: "gray" },
+    { name: "Fifth Base", emoji: "\u{1F37D}", search: [/(took|placed) The Fifth Base/i], color: "gray" },    
 ];
 
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {
