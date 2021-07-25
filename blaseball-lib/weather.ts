@@ -233,11 +233,11 @@ export const allWeatherTypes: WeatherType[] = [
     },
     {
         id: 26,
-        name: "????",
-        emoji: "\u{2753}", // ? emoji
+        name: "Supernova",
+        emoji: "\u{1F386}",
         background: "#36001b",
         color: "#ffc400",
-        forbidden: true
+        forbidden: false,
     },
     {
         id: 27,
@@ -245,7 +245,7 @@ export const allWeatherTypes: WeatherType[] = [
         emoji: "\u{2753}", // ? emoji
         background: "#36001b",
         color: "#ffc400",
-        forbidden: true
+        forbidden: true,
     },
     {
         id: 28,
