@@ -233,7 +233,7 @@ export const allWeatherTypes: WeatherType[] = [
     },
     {
         id: 26,
-        name: "Supernova",
+        name: "Supernova Eclipse",
         emoji: "\u{1F386}",
         background: "#36001b",
         color: "#ffc400",
