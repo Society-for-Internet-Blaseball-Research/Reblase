@@ -50,7 +50,7 @@ interface GameUpdatesHookReturn {
 
 export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): GameUpdatesHookReturn {
     // First load of original data
-    query.count = 1000; // should be enough, right? :)
+    query.count = 2000; // should be enough, right? (future message from season 23: [narrator voice] it wasn't.)
     const { data: initialData, error } = useSWR<GameUpdatesResponse>(chroniclerApi.gameUpdates(query));
 
     // Updates added via autoupdating
