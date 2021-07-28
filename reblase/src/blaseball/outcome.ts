@@ -44,6 +44,7 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Voicemail", emoji: "\u{260E}", search: [/was replaced by incoming Voicemail/], color: "gray" },
     { name: "Fifth Base", emoji: "\u{1F37D}", search: [/(took|placed) The Fifth Base/i], color: "gray" },
     { name: "Night Shift", emoji: "\u{1F4C7}", search: [/Night Shift/], color: "gray" },
+    { name: "Nullified", emoji: "\u{2B1B}", search: [/nullified/], color: "red" },
 ];
 
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {
