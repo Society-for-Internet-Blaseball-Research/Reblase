@@ -8,7 +8,15 @@ import { Link } from "react-router-dom";
 import { useGameList, useAllTemporal, useFeedSeasonList } from "../blaseball/hooks";
 import dayjs from "dayjs";
 import OutcomePicker from "../components/elements/OutcomePicker";
-import { displaySeason, displaySim, didSimHaveMultipleSeasons, GameTeam, getAwayTeam, getHomeTeam, STATIC_ID } from "blaseball-lib/games";
+import {
+    displaySeason,
+    displaySim,
+    didSimHaveMultipleSeasons,
+    GameTeam,
+    getAwayTeam,
+    getHomeTeam,
+    STATIC_ID,
+} from "blaseball-lib/games";
 import Twemoji from "components/elements/Twemoji";
 import { BlaseballFeedSeasonList } from "blaseball-lib/models";
 
@@ -52,16 +60,19 @@ const temporalTypes = {
         name: "Alert",
         color: "red",
         emoji: "\u{1F6A8}",
+        aliases: ["announcer"],
     },
     peanut: {
         name: "The Peanut",
         color: "brown",
         emoji: "\u{1F95C}",
+        aliases: ["the shelled one"],
     },
     squid: {
         name: "The Hall Monitor",
         color: "blue",
         emoji: "\u{1F991}",
+        aliases: ["squid", "binky"],
     },
     reader: {
         name: "The Reader",
@@ -72,11 +83,13 @@ const temporalTypes = {
         name: "Boss",
         color: "yellow",
         emoji: "\u{1FA99}",
+        aliases: ["the coin"],
     },
     lootcrates: {
         name: "Lōotcrates",
         color: "black",
         emoji: "\u{1F4DC}",
+        aliases: ["lootcrates"],
     },
     microphone: {
         name: "Microphone",
@@ -116,7 +129,10 @@ const temporalTypeList: TemporalType[] = [
     temporalTypes.squid,
     temporalTypes.coin,
     temporalTypes.reader,
+    temporalTypes.microphone,
+    temporalTypes.macrophone,
     temporalTypes.lootcrates,
+    temporalTypes.namerifeht,
 ];
 
 const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent; feedSeasons: BlaseballFeedSeasonList | null }) => {
@@ -128,8 +144,16 @@ const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent; feedSeasons: Blasebal
                         {evt.emoji} {evt.name}
                     </Link>
                     <Link to={`/game/${evt.game}`} className="text-sm">
-                        {evt.sim != STATIC_ID && <><strong>{displaySim(evt.sim, feedSeasons)}</strong>, </>}
-                        {didSimHaveMultipleSeasons(evt.sim) && <>Season <strong>{displaySeason(evt.season)}</strong>, </>}
+                        {evt.sim != STATIC_ID && (
+                            <>
+                                <strong>{displaySim(evt.sim, feedSeasons)}</strong>,{" "}
+                            </>
+                        )}
+                        {didSimHaveMultipleSeasons(evt.sim) && (
+                            <>
+                                Season <strong>{displaySeason(evt.season)}</strong>,{" "}
+                            </>
+                        )}
                         Day <strong>{evt.day + 1}</strong>
                     </Link>
                 </div>
