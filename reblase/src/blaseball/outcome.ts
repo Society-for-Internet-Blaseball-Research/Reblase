@@ -38,7 +38,8 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Observed", emoji: "\u{1F441}", search: [/is now being Observed/], color: "orange" },
     { name: "Fax Machine", emoji: "\u{1F4E0}", search: [/was replaced by incoming Fax/], color: "gray" },
     { name: "Voicemail", emoji: "\u{260E}", search: [/was replaced by incoming Voicemail/], color: "gray" },
-    { name: "Fifth Base", emoji: "\u{1F37D}", search: [/(took|placed) The Fifth Base/i], color: "gray" },    
+    { name: "Fifth Base", emoji: "\u{1F37D}", search: [/(took|placed) The Fifth Base/i], color: "gray" },
+    { name: "Night Shift", emoji: "\u{1F4C7}", search: [/Night Shift/], color: "gray" },
 ];
 
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {

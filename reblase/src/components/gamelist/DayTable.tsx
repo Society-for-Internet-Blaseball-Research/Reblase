@@ -28,8 +28,8 @@ function predictPitchersForGame(
     const away = predictGamePitcher(teams[game.awayTeam], game.day, currentDay, (id) => players[id]);
 
     return {
-        home: players[home].name,
-        away: players[away].name,
+        home: home ? players[home].name : null,
+        away: away ? players[away].name : null,
     };
 }
 
@@ -49,7 +49,12 @@ export const DayTable = function DayTable(props: DayTableProps) {
             </div>
 
             {props.games.map((game) => {
-                const predictedPitchers = predictPitchersForGame(props.teams, props.players, game.data, props.currentDay);
+                const predictedPitchers = predictPitchersForGame(
+                    props.teams,
+                    props.players,
+                    game.data,
+                    props.currentDay
+                );
                 return (
                     <GameRow
                         key={game.gameId}

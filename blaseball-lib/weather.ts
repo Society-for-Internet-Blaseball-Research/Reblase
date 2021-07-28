@@ -233,19 +233,19 @@ export const allWeatherTypes: WeatherType[] = [
     },
     {
         id: 26,
-        name: "????",
-        emoji: "\u{2753}", // ? emoji
+        name: "Supernova Eclipse",
+        emoji: "\u{1F386}",
         background: "#36001b",
         color: "#ffc400",
-        forbidden: true
+        forbidden: false,
     },
     {
         id: 27,
-        name: "????",
-        emoji: "\u{2753}", // ? emoji
+        name: "Black Hole (Black Hole)",
+        emoji: "\u{23F9}", // send help. we're running out of emojis.
         background: "#36001b",
         color: "#ffc400",
-        forbidden: true
+        forbidden: false,
     },
     {
         id: 28,
@@ -261,7 +261,7 @@ export const allWeatherTypes: WeatherType[] = [
         emoji: "\u{1F319}", // ? emoji
         background: "#000",
         color: "#ff8d13",
-        forbidden: true,
+        forbidden: false,
     },
 ];
 
