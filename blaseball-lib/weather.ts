@@ -241,11 +241,11 @@ export const allWeatherTypes: WeatherType[] = [
     },
     {
         id: 27,
-        name: "????",
-        emoji: "\u{2753}", // ? emoji
+        name: "Black Hole (Black Hole)",
+        emoji: "\u{23F9}", // send help. we're running out of emojis.
         background: "#36001b",
         color: "#ffc400",
-        forbidden: true,
+        forbidden: false,
     },
     {
         id: 28,
