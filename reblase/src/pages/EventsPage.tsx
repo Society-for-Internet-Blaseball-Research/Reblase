@@ -2,7 +2,7 @@
 
 import { Loading } from "../components/elements/Loading";
 import { Container } from "../components/layout/Container";
-import { getOutcomes } from "../blaseball/outcome";
+import { getOutcomes, BaseOutcome } from "../blaseball/outcome";
 import Error from "../components/elements/Error";
 import { Link } from "react-router-dom";
 import { useGameList, useAllTemporal, useFeedSeasonList } from "../blaseball/hooks";
@@ -49,7 +49,7 @@ interface TemporalEvent extends BaseEvent {
 
 type BlaseEvent = GameEvent | TemporalEvent;
 
-interface TemporalType {
+interface TemporalType extends BaseOutcome {
     name: string;
     color: string;
     emoji: string;

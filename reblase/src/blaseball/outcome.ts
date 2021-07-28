@@ -5,7 +5,13 @@ export interface Outcome {
     color: string;
 }
 
-interface OutcomeType {
+export interface BaseOutcome {
+    name: string;
+    emoji: string;
+    color: string;
+}
+
+interface OutcomeType extends BaseOutcome {
     name: string;
     emoji: string;
     search: RegExp[];
@@ -14,9 +20,7 @@ interface OutcomeType {
 
 const shameOutcome: OutcomeType = { name: "Shame", emoji: "\u{1F7E3}", search: [], color: "purple" };
 
-export const calculatedOutcomeTypes: OutcomeType[] = [
-    shameOutcome,
-];
+export const calculatedOutcomeTypes: OutcomeType[] = [shameOutcome];
 
 export const outcomeTypes: OutcomeType[] = [
     shameOutcome,
