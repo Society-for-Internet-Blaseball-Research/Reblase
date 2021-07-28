@@ -7,7 +7,13 @@ export interface Outcome {
     color: string;
 }
 
-interface OutcomeType {
+export interface BaseOutcome {
+    name: string;
+    emoji: string;
+    color: string;
+}    
+
+interface OutcomeType extends BaseOutcome {
     name: string;
     emoji: string;
     search: RegExp[];

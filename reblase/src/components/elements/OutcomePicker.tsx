@@ -1,5 +1,5 @@
 import React from "react";
-import { outcomeTypes } from "../../blaseball/outcome";
+import { outcomeTypes, BaseOutcome } from "../../blaseball/outcome";
 import { selectTheme } from "../../blaseball/select";
 import Twemoji from "./Twemoji";
 import Select from "react-select";
@@ -17,19 +17,18 @@ export interface OutcomePickerProps {
     setSelectedOutcomes?: (outcomes: string[]) => void;
 }
 
+interface DisplayableOutcome {
+    value: string;
+    label: JSX.Element;
+}
+
+interface Group {
+    label: string;
+    options: DisplayableOutcome[];
+}
+
 export default function OutcomePicker(props: OutcomePickerProps) {
-    const eventOptions = outcomeTypes.sort((a, b) => a.name.localeCompare(b.name))
-        .map((eventOutcome) => ({
-            value: eventOutcome.name,
-            label: (
-                <span key={eventOutcome.name}>
-                    <Twemoji className="mr-1" emoji={eventOutcome.emoji} />
-                    {eventOutcome.name}
-                </span>
-            ),
-        }));
-    
-    const temporalOptions = (props.temporalTypes ?? [])
+    const createSelectable = (outcomes: BaseOutcome[]) => outcomes
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((eventOutcome) => ({
             value: eventOutcome.name,
@@ -39,10 +38,12 @@ export default function OutcomePicker(props: OutcomePickerProps) {
                     {eventOutcome.name}
                 </span>
             ),
-        }));
+        }))
     
-    const groups = 
-    [
+    const eventOptions: DisplayableOutcome[] = createSelectable(outcomeTypes);
+    const temporalOptions: DisplayableOutcome[] = createSelectable(props.temporalTypes ?? []);
+    
+    const groups: Group[] = [
         {
             label: 'Events', 
             options: eventOptions,
@@ -53,7 +54,7 @@ export default function OutcomePicker(props: OutcomePickerProps) {
         },
     ];
 
-    const items = [...eventOptions, ...temporalOptions];
+    const items: DisplayableOutcome[] = [...eventOptions, ...temporalOptions];
     
     return (
         <Select
