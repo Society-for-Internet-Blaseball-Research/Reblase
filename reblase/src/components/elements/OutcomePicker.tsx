@@ -18,25 +18,46 @@ export interface OutcomePickerProps {
 }
 
 export default function OutcomePicker(props: OutcomePickerProps) {
-    let events = [];
-    events.push(...outcomeTypes);
-    events.push(...(props.temporalTypes ?? []));
+    const eventOptions = outcomeTypes.sort((a, b) => a.name.localeCompare(b.name))
+        .map((eventOutcome) => ({
+            value: eventOutcome.name,
+            label: (
+                <span key={eventOutcome.name}>
+                    <Twemoji className="mr-1" emoji={eventOutcome.emoji} />
+                    {eventOutcome.name}
+                </span>
+            ),
+        }));
+    
+    const temporalOptions = (props.temporalTypes ?? [])
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((eventOutcome) => ({
+            value: eventOutcome.name,
+            label: (
+                <span key={eventOutcome.name}>
+                    <Twemoji className="mr-1" emoji={eventOutcome.emoji} />
+                    {eventOutcome.name}
+                </span>
+            ),
+        }));
+    
+    const groups = 
+    [
+        {
+            label: 'Events', 
+            options: eventOptions,
+        },
+        {
+            label: 'Entities',
+            options: temporalOptions,
+        },
+    ];
 
-    let items = events
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((outcome) => ({
-                value: outcome.name,
-                label: (
-                    <span key={outcome.name}>
-                        <Twemoji className="mr-1" emoji={outcome.emoji} />
-                        {outcome.name}
-                    </span>
-                ),
-            }));
+    const items = [...eventOptions, ...temporalOptions];
     
     return (
         <Select
-            options={items}
+            options={props.temporalTypes ? groups : eventOptions}
             theme={selectTheme}
             isMulti={true}
             placeholder={props.placeholder}
