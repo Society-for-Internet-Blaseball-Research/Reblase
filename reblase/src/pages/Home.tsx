@@ -1,4 +1,4 @@
-﻿import { useGameList, useSimulation } from "../blaseball/hooks";
+﻿import { useGameList, usePlayerTeamsList, useSimulation } from "../blaseball/hooks";
 import React from "react";
 import Error from "../components/elements/Error";
 
@@ -10,9 +10,14 @@ import { displaySeason } from "blaseball-lib/games";
 
 function SingleDayGamesList(props: { season: number; day: number }) {
     const { games, error, isLoading } = useGameList({ season: props.season, day: props.day });
+    const { players, teams, error: teamError, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
 
     if (error) return <Error>{error.toString()}</Error>;
-    if (isLoading) return <Loading />;
+    if (teamError) return <Error>{teamError.toString()}</Error>;
+    if (isLoading || isLoadingPlayerTeams) return <Loading />;
+    const teamsMap: Record<PlayerID, BlaseballTeam> = {};
+    for (const team of teams) teamsMap[team.id!] = team.data;
+
     return (
         <div className="flex flex-col">
             {games.map((game) => {
@@ -20,6 +25,7 @@ function SingleDayGamesList(props: { season: number; day: number }) {
                     <GameRow
                         key={game.gameId}
                         game={game}
+                        teams={teamsMap}
                         showWeather={true}
                         predictedAwayPitcher={null}
                         predictedHomePitcher={null}

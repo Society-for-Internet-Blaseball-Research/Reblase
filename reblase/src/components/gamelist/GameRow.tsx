@@ -188,8 +188,8 @@ export const GameRow = React.memo(
     }) => {
         const { data } = props.game;
 
-		const homeTeam: BlaseballTeam = props.teams[data.homeTeam];
-		const awayTeam: BlaseballTeam = props.teams[data.awayTeam];
+	    const homeTeam: BlaseballTeam = props.teams[data.homeTeam];
+	    const awayTeam: BlaseballTeam = props.teams[data.awayTeam];
 
         const home = {
             name: homeTeam?.state?.scattered ? homeTeam.state.scattered.nickname : data.homeTeamNickname,
