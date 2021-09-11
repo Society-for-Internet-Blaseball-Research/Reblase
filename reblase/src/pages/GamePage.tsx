@@ -137,7 +137,11 @@ export function GamePage() {
         <div className="container mx-auto px-4">
             {last && <GameHeading evt={last} />}
 
-            <GamePageOptions options={options} setOptions={setOptions} gameComplete={last?.gameComplete ?? true} />
+            <GamePageOptions 
+                options={options}
+                setOptions={setOptions} gameComplete={last?.gameComplete ?? true}
+                season={first?.data?.season}
+                timestamp={first?.timestamp}/>
 
             <UpdatesListFetching
                 updates={updates}
