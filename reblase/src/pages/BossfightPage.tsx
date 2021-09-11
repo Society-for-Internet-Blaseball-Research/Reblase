@@ -1,4 +1,4 @@
-import { ChronFight, ChronFightUpdate, ChronTemporalUpdate } from "blaseball-lib/chronicler";
+import { ChronFightUpdate, ChronTemporalUpdate } from "blaseball-lib/chronicler";
 import { BlaseballFight, BlaseballTemporal, DamageResult } from "blaseball-lib/models";
 import { useFightUpdates, useTemporal } from "blaseball/hooks";
 import { Loading } from "components/elements/Loading";
