@@ -59,6 +59,7 @@ export const DayTable = function DayTable(props: DayTableProps) {
                     <GameRow
                         key={game.gameId}
                         game={game}
+                        teams={props.teams}
                         showWeather={props.showFutureWeather || game.startTime !== null}
                         predictedAwayPitcher={predictedPitchers.away}
                         predictedHomePitcher={predictedPitchers.home}
