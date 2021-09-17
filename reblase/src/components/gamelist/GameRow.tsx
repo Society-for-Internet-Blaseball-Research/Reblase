@@ -328,3 +328,65 @@ export const FightRow = React.memo(
     },
     (prev, next) => prev.fight.id === next.fight.id
 );
+
+export const SemiCentennialRow = React.memo(
+    (props: { game: ChronGame }) => {
+        const { data } = props.game;
+
+        const home = {
+            name: data.homeTeamNickname,
+            emoji: data.homeTeamEmoji,
+            score: data.homeScore,
+            pitcher: data.homePitcherName,
+            predictedPitcher: null,
+            win: data.homeScore >= data.awayScore,
+        };
+
+        const away = {
+            name: data.awayTeamNickname,
+            emoji: data.awayTeamEmoji,
+            score: data.awayScore,
+            pitcher: data.awayPitcherName,
+            predictedPitcher: null,
+            win: data.awayScore >= data.homeScore,
+        };
+
+        return (
+            <Link
+                to={`/game/${props.game.gameId}`}
+                className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 dark-hover:bg-gray-800"
+            >
+                <div className="contents md:hidden">
+                    <TwoLineTeamScore home={home} away={away} />
+
+                    <div className="flex flex-col justify-center items-end">
+                        <div className="flex flex-row space-x-2">
+                            <SeasonDay season={data.season} day={"X"} className="text-right" />
+                        </div>
+
+                        <div className="flex flex-row justify-end items-baseline space-x-2">
+                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="hidden md:contents">
+                    <SeasonDay season={data.season} day={"X"} className="text-center w-8" />
+                    <OneLineTeamScore home={home} away={away} />
+                    <StandalonePitchers
+                        awayPitcher={data.awayPitcherName}
+                        homePitcher={data.homePitcherName}
+                        predictedAwayPitcher={null}
+                        predictedHomePitcher={null}
+                        className="flex flex-1"
+                    />
+
+                    <div className="flex flex-row justify-end items-baseline space-x-2">
+                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                    </div>
+                </div>
+            </Link>
+        );
+    },
+    (prev, next) => prev.game.gameId === next.game.gameId
+);

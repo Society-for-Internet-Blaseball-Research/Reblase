@@ -79,6 +79,7 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     baseRunnerNames?: string[];
 
     phase: number;
+    rules: string;
     gameStart: boolean;
     gameComplete: boolean;
     finalized: boolean;
