@@ -18,7 +18,7 @@ interface UpdateProps {
 }
 
 function Timestamp({ update }: WrappedUpdateProps) {
-    const updateTime = dayjs(update.timestamp);
+    const updateTime = dayjs((update as ChronGameUpdate)?.timestamp ?? (update as ChronFightUpdate).validFrom);
     const time = updateTime.format("mm:ss");
 
     const linkHref =

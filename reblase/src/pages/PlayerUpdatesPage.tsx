@@ -63,13 +63,13 @@ function consolidateStates(updates: ChronPlayerUpdate[]): StateUpdate[] {
         const lastUpdate = states[states.length - 1];
         if (!lastUpdate || !deepEqual(thisState, lastUpdate.state)) {
             states.push({
-                id: update.updateId,
-                firstSeen: update.firstSeen,
-                lastSeen: update.lastSeen,
+                id: update.entityId,
+                firstSeen: update.validFrom,
+                lastSeen: update.validTo,
                 state: thisState,
             });
         } else {
-            lastUpdate.lastSeen = update.lastSeen;
+            lastUpdate.lastSeen = update.validTo;
         }
     }
 

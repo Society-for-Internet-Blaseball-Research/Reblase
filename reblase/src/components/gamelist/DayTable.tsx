@@ -24,6 +24,14 @@ function predictPitchersForGame(
     game: BlaseballGame,
     currentDay: number
 ) {
+    if (game.gameComplete)
+    {
+        return {
+            home: game.homePitcherName,
+            away: game.awayPitcherName,
+        };
+    }
+
     const home = predictGamePitcher(teams[game.homeTeam], game.day, currentDay, (id) => players[id]);
     const away = predictGamePitcher(teams[game.awayTeam], game.day, currentDay, (id) => players[id]);
 
@@ -59,6 +67,7 @@ export const DayTable = function DayTable(props: DayTableProps) {
                     <GameRow
                         key={game.gameId}
                         game={game}
+                        teams={props.teams}
                         showWeather={props.showFutureWeather || game.startTime !== null}
                         predictedAwayPitcher={predictedPitchers.away}
                         predictedHomePitcher={predictedPitchers.home}

@@ -14,18 +14,24 @@ export interface TeamPickerProps {
 
 export default function TeamPicker(props: TeamPickerProps) {
     const formatOptionLabel = (option: ChronTeam, meta: { context: string }) => {
-        return (
+       const fullName = option.data?.state?.scattered ? option.data.state.scattered.fullName : option.data.fullName;
+       const nickname = option.data?.state?.scattered ? option.data.state.scattered.nickname : option.data.nickname;
+       return (
             <span>
                 <Twemoji className="mr-1" emoji={option.data.emoji} />
-                {meta.context === "menu" ? option.data.fullName : option.data.nickname}
+                {meta.context === "menu" ? fullName : nickname}
             </span>
         );
     };
 
     const teamIds = props.type === "league" ? leagueTeams : coffeeTeams;
     const options = props.teams
-        .filter((team) => teamIds.includes(team.id))
-        .sort((a, b) => a.data.fullName.localeCompare(b.data.fullName));
+        .filter((team) => teamIds.includes(team.entityId))
+        .sort((a, b) => {
+            const aName = a.data?.state?.scattered ? a.data.state.scattered.fullName : a.data.fullName;
+            const bName = b.data?.state?.scattered ? b.data.state.scattered.fullName : b.data.fullName;
+            return aName.localeCompare(bName);
+        });
 
     return (
         <Select
@@ -33,12 +39,12 @@ export default function TeamPicker(props: TeamPickerProps) {
             isMulti={true}
             placeholder={props.placeholder}
             options={options}
-            value={options.filter((team) => props.selectedTeams?.includes(team.id) ?? [])}
+            value={options.filter((team) => props.selectedTeams?.includes(team.entityId) ?? [])}
             getOptionValue={(team) => team.data.fullName}
             formatOptionLabel={formatOptionLabel}
             onChange={(value) => {
                 if (props.setSelectedTeams) {
-                    props.setSelectedTeams((value as ChronTeam[])?.map((team) => team.id) ?? []);
+                    props.setSelectedTeams((value as ChronTeam[])?.map((team) => team.entityId) ?? []);
                 }
             }}
         />

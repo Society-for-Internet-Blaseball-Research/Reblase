@@ -191,17 +191,17 @@ export function EventsPage() {
         const type = temporalTypeByGamma[doc.gamma] ?? temporalTypes.unknown;
 
         if (lastEvent && lastEvent.name === type.name) {
-            lastEvent.text.push({ text: doc.zeta, timestamp: update.firstSeen });
+            lastEvent.text.push({ text: doc.zeta, timestamp: update.validFrom });
             continue;
         }
 
         lastEvent = {
             type: "temporal",
-            timestamp: update.firstSeen,
+            timestamp: update.validFrom,
             name: type.name,
             emoji: type.emoji,
             color: type.color,
-            text: [{ text: doc.zeta, timestamp: update.firstSeen }],
+            text: [{ text: doc.zeta, timestamp: update.validFrom }],
         };
         temporalEvents.push(lastEvent);
     }

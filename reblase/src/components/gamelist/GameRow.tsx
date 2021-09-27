@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
 import { getOutcomes, Outcome } from "../../blaseball/outcome";
 import { getWeather } from "blaseball-lib/weather";
+import { BlaseballTeam } from "blaseball-lib/models";
 import Twemoji from "../elements/Twemoji";
 import { displaySeason } from "blaseball-lib/games";
 
@@ -180,14 +181,18 @@ const SeasonDay = React.memo((props: { season: number; day: number | string; cla
 export const GameRow = React.memo(
     (props: {
         game: ChronGame;
+        teams: Record<string, BlaseballTeam>;
         showWeather: boolean;
         predictedHomePitcher: string | null;
         predictedAwayPitcher: string | null;
     }) => {
         const { data } = props.game;
 
+	    const homeTeam: BlaseballTeam = props.teams[data.homeTeam];
+	    const awayTeam: BlaseballTeam = props.teams[data.awayTeam];
+
         const home = {
-            name: data.homeTeamNickname,
+            name: homeTeam?.state?.scattered ? homeTeam.state.scattered.nickname : data.homeTeamNickname,
             emoji: data.homeTeamEmoji,
             score: data.homeScore,
             pitcher: data.homePitcherName,
@@ -196,7 +201,7 @@ export const GameRow = React.memo(
         };
 
         const away = {
-            name: data.awayTeamNickname,
+            name: awayTeam?.state?.scattered ? awayTeam.state.scattered.nickname : data.awayTeamNickname,
             emoji: data.awayTeamEmoji,
             score: data.awayScore,
             pitcher: data.awayPitcherName,
@@ -286,7 +291,7 @@ export const FightRow = React.memo(
 
         return (
             <Link
-                to={`/bossfight/${props.fight.id}`}
+                to={`/bossfight/${props.fight.entityId}`}
                 className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 dark-hover:bg-gray-800"
             >
                 <div className="contents md:hidden">
@@ -321,5 +326,5 @@ export const FightRow = React.memo(
             </Link>
         );
     },
-    (prev, next) => prev.fight.id === next.fight.id
+    (prev, next) => prev.fight.entityId === next.fight.entityId
 );
