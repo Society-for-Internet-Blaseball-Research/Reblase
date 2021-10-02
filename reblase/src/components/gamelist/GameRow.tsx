@@ -149,20 +149,31 @@ const OneLineTeamScore = React.memo((props: { away: TeamData; home: TeamData; cl
 
 const StandalonePitchers = React.memo(
     (props: {
+        gameComplete: boolean,
         homePitcher: string | null;
         awayPitcher: string | null;
         predictedHomePitcher: string | null;
         predictedAwayPitcher: string | null;
         className?: string;
     }) => {
-        return (
-            <div className={`text-sm text-gray-700 dark:text-gray-300 italic ${props.className}`}>
-                {props.awayPitcher ? props.awayPitcher : props.predictedAwayPitcher}
-                {" / "}
-                {props.homePitcher ? props.homePitcher : props.predictedHomePitcher}
-                {(!props.awayPitcher || !props.homePitcher) && " (est.)"}
-            </div>
-        );
+        const usePredictedPitchers = (!props.awayPitcher || !props.homePitcher);
+        if (props.gameComplete && usePredictedPitchers) {
+            return (
+                <div className={`text-sm text-gray-700 dark:text-gray-300 italic ${props.className}`}>
+                    {"Game Cancelled"}
+                </div>
+            );
+        }
+        else {
+            return (
+                <div className={`text-sm text-gray-700 dark:text-gray-300 italic ${props.className}`}>
+                    {props.awayPitcher ? props.awayPitcher : props.predictedAwayPitcher}
+                    {" / "}
+                    {props.homePitcher ? props.homePitcher : props.predictedHomePitcher}
+                    {usePredictedPitchers && " (est.)"}
+                </div>
+            );
+        }
     }
 );
 
@@ -242,6 +253,7 @@ export const GameRow = React.memo(
                     <SeasonDay season={data.season} day={data.day} className="text-center w-10" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
+                        gameComplete={data.gameComplete}
                         awayPitcher={data.awayPitcherName}
                         homePitcher={data.homePitcherName}
                         predictedAwayPitcher={props.predictedAwayPitcher}
@@ -312,6 +324,7 @@ export const FightRow = React.memo(
                     <SeasonDay season={data.season} day={"X"} className="text-center w-8" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
+                        gameComplete={data.gameComplete}
                         awayPitcher={data.awayPitcherName}
                         homePitcher={data.homePitcherName}
                         predictedAwayPitcher={null}
