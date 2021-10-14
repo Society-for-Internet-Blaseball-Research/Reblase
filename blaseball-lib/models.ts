@@ -216,3 +216,9 @@ export interface BlaseballStadium extends BlaseballEntity<StadiumID> {
     model: number;
     mods: AttributeID[];
 }
+
+export interface BlaseballSunSunPressure {
+    current: number;
+    maximum: number;
+    recharge: number;
+}

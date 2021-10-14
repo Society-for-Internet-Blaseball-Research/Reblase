@@ -10,6 +10,33 @@
     @apply gap-x-2 gap-y-1 sm:gap-2 p-2 items-center border-b border-gray-300 dark:border-gray-700;
 }
 
+.TemporalRow {
+    display: grid;
+    
+    grid-template-columns: auto auto 1fr;
+    grid-template-areas: "icon delta";
+}
+
+.progress-bar {
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #007bff;
+    transition: width 0.6s ease;
+    height: 100%;
+  }
+
+.TemporalRow-Icon {
+    grid-area: icon;
+}
+
+.TemporalRow-Delta {
+    grid-area: delta;
+    white-space: pre-line;
+}
+
 @screen sm {
     .UpdateRow {
         grid-template-areas:
