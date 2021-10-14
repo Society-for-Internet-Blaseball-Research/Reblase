@@ -291,7 +291,7 @@ export const FightRow = React.memo(
 
         return (
             <Link
-                to={`/bossfight/${props.fight.id}`}
+                to={`/bossfight/${props.fight.entityId}`}
                 className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 dark-hover:bg-gray-800"
             >
                 <div className="contents md:hidden">
@@ -326,7 +326,7 @@ export const FightRow = React.memo(
             </Link>
         );
     },
-    (prev, next) => prev.fight.id === next.fight.id
+    (prev, next) => prev.fight.entityId === next.fight.entityId
 );
 
 export const SemiCentennialRow = React.memo(
@@ -353,7 +353,7 @@ export const SemiCentennialRow = React.memo(
 
         return (
             <Link
-                to={`/game/${props.game.gameId}`}
+                to={`/semicentennial/${props.game.gameId}`}
                 className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 dark-hover:bg-gray-800"
             >
                 <div className="contents md:hidden">

@@ -140,7 +140,7 @@ export interface BlaseballTeamState {
 
 export interface BlaseballTeam
     extends BlaseballEntity<TeamID>,
-    	BlaseballTeamDescriptor
+    	BlaseballTeamDescriptor,
         BlaseballAttributes,
         BlaseballAttributesDeprecated,
         TeamRoster {
