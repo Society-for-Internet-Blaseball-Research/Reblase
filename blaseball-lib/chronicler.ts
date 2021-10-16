@@ -134,4 +134,4 @@ export interface ChronTeamUpdate extends ChronEntityVersion<BlaseballTeam> {}
 export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseballTemporal>, HashedUpdate {}
 export interface ChronSimUpdate extends ChronEntityVersion<BlaseballSimData> {}
 export interface ChronStadium extends ChronEntityVersion<BlaseballStadium> {}
-export interface ChronSunSunPressure extends ChronEntityVersion<BlaseballSunSunPressure> {}
+export interface ChronSunSunPressure extends ChronEntityVersion<BlaseballSunSunPressure>, HashedUpdate {}

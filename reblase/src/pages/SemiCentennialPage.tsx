@@ -53,6 +53,8 @@ function SemiCentennialUpdateList(
 
     const pressureSecondary = props.sunSunPressureUpdates
         .filter((upd) => upd.validFrom >= start && upd.validFrom < end)
+        .sort((a, b) => a.validFrom.localeCompare(b.validTo))
+        .filter((upd, i) => upd.hash !== props.sunSunPressureUpdates[i - 1]?.hash)
         .map((upd) => ({
             timestamp: upd.validFrom,
             data: {
