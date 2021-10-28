@@ -378,7 +378,7 @@ export const SemiCentennialRow = React.memo(
                         </div>
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
-                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                            <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                         </div>
                     </div>
                 </div>
@@ -396,7 +396,7 @@ export const SemiCentennialRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                     </div>
                 </div>
             </Link>
