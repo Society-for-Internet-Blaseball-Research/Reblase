@@ -4,16 +4,17 @@ import { useFightUpdates, useTemporal } from "blaseball/hooks";
 import { Loading } from "components/elements/Loading";
 import Twemoji from "components/elements/Twemoji";
 import { Container } from "components/layout/Container";
+import Tooltip from "rc-tooltip";
 import React from "react";
 import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Error from "../components/elements/Error";
 import { GameUpdateList, SecondaryUpdate } from "../components/game/GameUpdateList";
 
-const FightHeading = (props: { evt: BlaseballFight }) => {
+const FightHeading = (props: { firstEvt: ChronFightUpdate; lastEvtData: BlaseballFight }) => {
     const location = useLocation();
 
-    const displaySeasonNumber = props.evt.season + 1;
+    const displaySeasonNumber = props.lastEvtData.season + 1;
 
     return (
         <>
@@ -25,11 +26,17 @@ const FightHeading = (props: { evt: BlaseballFight }) => {
                     Season {displaySeasonNumber}, Day <span className="bg-red-700 text-white px-2">X</span>
                 </h2>
                 <h3>
-                    <strong>{props.evt.awayTeamName}</strong>
+                    <strong>{props.lastEvtData.awayTeamName}</strong>
                     <small> vs. </small>
-                    <strong>{props.evt.homeTeamName}</strong>
+                    <strong>{props.lastEvtData.homeTeamName}</strong>
                 </h3>
             </Link>
+                
+            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.lastEvtData.season}&time=${props.firstEvt.timestamp}`}>
+                <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
+                    <Twemoji emoji={"\u{1FA78}"} />
+                </Tooltip>
+            </a>
         </>
     );
 };
@@ -135,11 +142,12 @@ export default function BossfightPage() {
     if (updatesError || temporalError) return <Error>{(updatesError || temporalError).toString()}</Error>;
     if (isLoading) return <Loading />;
 
+    const first = fightUpdates[0]
     const last = fightUpdates[fightUpdates.length - 1]?.data;
 
     return (
         <Container>
-            {last && <FightHeading evt={last} />}
+            {last && <FightHeading firstEvt={first} lastEvtData={last} />}
 
             <BossfightUpdateList fightUpdates={fightUpdates} temporalUpdates={temporalUpdates} />
         </Container>

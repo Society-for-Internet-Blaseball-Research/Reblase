@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router";
+import Tooltip from "rc-tooltip";
 
 import { UpdatesListFetching } from "../components/game/GameUpdateList";
 import { cache } from "swr";
@@ -53,6 +54,8 @@ interface GamePageOptionsProps {
     options: GamePageOptions;
     setOptions: (opts: GamePageOptions) => void;
     gameComplete: boolean;
+    season: number;
+    timestamp: string;
 }
 
 const CheckBox = (props: { value: boolean; onChange: (newValue: boolean) => void; children?: ReactNode }) => (
@@ -92,6 +95,12 @@ const GamePageOptions = (props: GamePageOptionsProps) => {
                     Live refresh
                 </CheckBox>
             )}
+
+            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.season}&time=${props.timestamp}`}>
+                <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
+                    <Twemoji emoji={"\u{1FA78}"} />
+                </Tooltip>
+            </a>
         </div>
     );
 };
@@ -118,6 +127,7 @@ export function GamePage() {
     const { updates, error, isLoading } = useGameUpdates(query, options.autoUpdate);
     if (error) return <Error>{error.toString()}</Error>;
 
+    const first = updates[0];
     const last = updates[updates.length - 1]?.data;
 
     // Stop autoupdating once the game is over
@@ -127,7 +137,11 @@ export function GamePage() {
         <div className="container mx-auto px-4">
             {last && <GameHeading evt={last} />}
 
-            <GamePageOptions options={options} setOptions={setOptions} gameComplete={last?.gameComplete ?? true} />
+            <GamePageOptions 
+                options={options}
+                setOptions={setOptions} gameComplete={last?.gameComplete ?? true}
+                season={first?.data?.season}
+                timestamp={first?.timestamp}/>
 
             <UpdatesListFetching
                 updates={updates}
