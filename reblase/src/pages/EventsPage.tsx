@@ -146,7 +146,7 @@ export function EventsPage() {
 
     const gameEvents: BlaseEvent[] = [];
     for (const game of games) {
-        const outcomes = getOutcomes(game.data.outcomes);
+        const outcomes = getOutcomes(game.data.outcomes ?? []);
         for (const outcome of outcomes) {
             const lastEvent = gameEvents[gameEvents.length - 1];
             if (

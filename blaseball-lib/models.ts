@@ -15,7 +15,7 @@ import {
 } from "./common";
 
 export interface BlaseballGame extends BlaseballEntity<GameID> {
-    outcomes: string[];
+    outcomes?: string[];
     lastUpdate: string;
     scoreLedger: string | null;
     scoreUpdate: string | null;
@@ -139,7 +139,7 @@ export interface BlaseballTeamState {
 
 export interface BlaseballTeam
     extends BlaseballEntity<TeamID>,
-    	BlaseballTeamDescriptor
+    	BlaseballTeamDescriptor,
         BlaseballAttributes,
         BlaseballAttributesDeprecated,
         TeamRoster {

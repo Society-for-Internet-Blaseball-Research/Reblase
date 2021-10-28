@@ -7,6 +7,8 @@ import { Loading } from "../components/elements/Loading";
 import { Link } from "react-router-dom";
 import { GameRow } from "../components/gamelist/GameRow";
 import { displaySeason } from "blaseball-lib/games";
+import { PlayerID } from "blaseball-lib/common";
+import { BlaseballTeam } from "blaseball-lib/models";
 
 function SingleDayGamesList(props: { season: number; day: number }) {
     const { games, error, isLoading } = useGameList({ season: props.season, day: props.day });
