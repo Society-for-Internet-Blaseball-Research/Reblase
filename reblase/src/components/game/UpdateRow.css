@@ -14,17 +14,11 @@
     display: grid;
     
     grid-template-columns: auto auto 1fr;
-    grid-template-areas: "icon delta";
+    grid-template-areas: "icon delta .";
 }
 
 .progress-bar {
-    flex-direction: column;
-    justify-content: center;
-    color: #fff;
-    text-align: center;
-    white-space: nowrap;
     background-color: #007bff;
-    transition: width 0.6s ease;
     height: 100%;
   }
 
