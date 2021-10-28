@@ -4,16 +4,17 @@ import { useGameUpdates, useTemporal, useSunSunPressure } from "blaseball/hooks"
 import { Loading } from "components/elements/Loading";
 import Twemoji from "components/elements/Twemoji";
 import { Container } from "components/layout/Container";
+import Tooltip from "rc-tooltip";
 import React from "react";
 import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import Error from "../components/elements/Error";
 import { GameUpdateList, SecondaryUpdate } from "../components/game/GameUpdateList";
 
-const SemiCentennialHeading = (props: { evt: BlaseballGame }) => {
+const SemiCentennialHeading = (props: { firstEvt: ChronGameUpdate; lastEvtData: BlaseballGame }) => {
     const location = useLocation();
 
-    const displaySeasonNumber = props.evt.season + 1;
+    const displaySeasonNumber = props.lastEvtData.season + 1;
 
     return (
         <>
@@ -25,11 +26,17 @@ const SemiCentennialHeading = (props: { evt: BlaseballGame }) => {
                     Season {displaySeasonNumber}, <span className="bg-blue-700 text-white px-2">Semi-Centennial</span>
                 </h2>
                 <h3>
-                    <strong>{props.evt.awayTeamName}</strong>
+                    <strong>{props.lastEvtData.awayTeamName}</strong>
                     <small> vs. </small>
-                    <strong>{props.evt.homeTeamName}</strong>
+                    <strong>{props.lastEvtData.homeTeamName}</strong>
                 </h3>
             </Link>
+
+            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.lastEvtData.season}&time=${props.firstEvt.timestamp}`}>
+                <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
+                    <Twemoji emoji={"\u{1FA78}"} />
+                </Tooltip>
+            </a>
         </>
     );
 };
@@ -138,11 +145,12 @@ export default function SemiCentennialPage() {
     if (updatesError || temporalError || sunSunPressureError) return <Error>{(updatesError || temporalError || sunSunPressureError).toString()}</Error>;
     if (isLoading) return <Loading />;
 
+    const first = gameUpdates[0];
     const last = gameUpdates[gameUpdates.length - 1]?.data;
 
     return (
         <Container>
-             {last && <SemiCentennialHeading evt={last} />}
+             {last && <SemiCentennialHeading firstEvt={first} lastEvtData={last} />}
 
              <SemiCentennialUpdateList gameUpdates={gameUpdates} temporalUpdates={temporalUpdates} sunSunPressureUpdates={sunSunPressureUpdates}/>
          </Container>
