@@ -15,7 +15,7 @@ import {
 } from "./common";
 
 export interface BlaseballGame extends BlaseballEntity<GameID> {
-    outcomes: string[];
+    outcomes?: string[];
     lastUpdate: string;
     scoreLedger: string | null;
     scoreUpdate: string | null;

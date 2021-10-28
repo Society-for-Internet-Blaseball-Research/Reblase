@@ -237,7 +237,7 @@ export const GameRow = React.memo(
                         </div>
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
-                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                            <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                             <Duration
                                 gameId={props.game.gameId}
                                 startTime={props.game.startTime}
@@ -262,7 +262,7 @@ export const GameRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                         <Duration
                             gameId={props.game.gameId}
                             startTime={props.game.startTime}
@@ -315,7 +315,7 @@ export const FightRow = React.memo(
                         </div>
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
-                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                            <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                         </div>
                     </div>
                 </div>
@@ -333,7 +333,7 @@ export const FightRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                     </div>
                 </div>
             </Link>
