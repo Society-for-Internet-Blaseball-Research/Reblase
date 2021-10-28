@@ -15,7 +15,7 @@ import {
 } from "./common";
 
 export interface BlaseballGame extends BlaseballEntity<GameID> {
-    outcomes: string[];
+    outcomes?: string[];
     lastUpdate: string;
     scoreLedger: string | null;
     scoreUpdate: string | null;
@@ -126,14 +126,23 @@ export interface BlaseballPlayer extends BlaseballEntity<PlayerID>, BlaseballAtt
     consecutiveHits?: number;
 }
 
+export interface BlaseballTeamDescriptor {
+	fullName: string;
+	nickname: string;
+	location: string;
+}
+
+export interface BlaseballTeamState {
+	nullified?: boolean;
+	scattered?: BlaseballTeamDescriptor;
+}
+
 export interface BlaseballTeam
     extends BlaseballEntity<TeamID>,
+    	BlaseballTeamDescriptor,
         BlaseballAttributes,
         BlaseballAttributesDeprecated,
         TeamRoster {
-    fullName: string;
-    nickname: string;
-    location: string;
     shorthand: string;
     slogan: string;
     emoji: string;
@@ -149,6 +158,8 @@ export interface BlaseballTeam
 
     championships: number;
     rotationSlot?: number;
+
+    state?: BlaseballTeamState;
 }
 
 export interface BlaseballTemporal {

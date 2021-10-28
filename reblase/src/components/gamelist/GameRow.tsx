@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
 import { getOutcomes, Outcome } from "../../blaseball/outcome";
 import { getWeather } from "blaseball-lib/weather";
+import { BlaseballTeam } from "blaseball-lib/models";
 import Twemoji from "../elements/Twemoji";
 import { displaySeason } from "blaseball-lib/games";
 
@@ -148,20 +149,31 @@ const OneLineTeamScore = React.memo((props: { away: TeamData; home: TeamData; cl
 
 const StandalonePitchers = React.memo(
     (props: {
+        gameComplete: boolean,
         homePitcher: string | null;
         awayPitcher: string | null;
         predictedHomePitcher: string | null;
         predictedAwayPitcher: string | null;
         className?: string;
     }) => {
-        return (
-            <div className={`text-sm text-gray-700 dark:text-gray-300 italic ${props.className}`}>
-                {props.awayPitcher ? props.awayPitcher : props.predictedAwayPitcher}
-                {" / "}
-                {props.homePitcher ? props.homePitcher : props.predictedHomePitcher}
-                {(!props.awayPitcher || !props.homePitcher) && " (est.)"}
-            </div>
-        );
+        const usePredictedPitchers = (!props.awayPitcher || !props.homePitcher);
+        if (props.gameComplete && usePredictedPitchers) {
+            return (
+                <div className={`text-sm text-gray-700 dark:text-gray-300 italic ${props.className}`}>
+                    {"Game Cancelled"}
+                </div>
+            );
+        }
+        else {
+            return (
+                <div className={`text-sm text-gray-700 dark:text-gray-300 italic ${props.className}`}>
+                    {props.awayPitcher ? props.awayPitcher : props.predictedAwayPitcher}
+                    {" / "}
+                    {props.homePitcher ? props.homePitcher : props.predictedHomePitcher}
+                    {usePredictedPitchers && " (est.)"}
+                </div>
+            );
+        }
     }
 );
 
@@ -180,14 +192,18 @@ const SeasonDay = React.memo((props: { season: number; day: number | string; cla
 export const GameRow = React.memo(
     (props: {
         game: ChronGame;
+        teams: Record<string, BlaseballTeam>;
         showWeather: boolean;
         predictedHomePitcher: string | null;
         predictedAwayPitcher: string | null;
     }) => {
         const { data } = props.game;
 
+	    const homeTeam: BlaseballTeam = props.teams[data.homeTeam];
+	    const awayTeam: BlaseballTeam = props.teams[data.awayTeam];
+
         const home = {
-            name: data.homeTeamNickname,
+            name: homeTeam?.state?.scattered ? homeTeam.state.scattered.nickname : data.homeTeamNickname,
             emoji: data.homeTeamEmoji,
             score: data.homeScore,
             pitcher: data.homePitcherName,
@@ -196,7 +212,7 @@ export const GameRow = React.memo(
         };
 
         const away = {
-            name: data.awayTeamNickname,
+            name: awayTeam?.state?.scattered ? awayTeam.state.scattered.nickname : data.awayTeamNickname,
             emoji: data.awayTeamEmoji,
             score: data.awayScore,
             pitcher: data.awayPitcherName,
@@ -221,7 +237,7 @@ export const GameRow = React.memo(
                         </div>
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
-                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                            <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                             <Duration
                                 gameId={props.game.gameId}
                                 startTime={props.game.startTime}
@@ -237,6 +253,7 @@ export const GameRow = React.memo(
                     <SeasonDay season={data.season} day={data.day} className="text-center w-10" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
+                        gameComplete={data.gameComplete}
                         awayPitcher={data.awayPitcherName}
                         homePitcher={data.homePitcherName}
                         predictedAwayPitcher={props.predictedAwayPitcher}
@@ -245,7 +262,7 @@ export const GameRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                         <Duration
                             gameId={props.game.gameId}
                             startTime={props.game.startTime}
@@ -298,7 +315,7 @@ export const FightRow = React.memo(
                         </div>
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
-                            <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                            <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                         </div>
                     </div>
                 </div>
@@ -307,6 +324,7 @@ export const FightRow = React.memo(
                     <SeasonDay season={data.season} day={"X"} className="text-center w-8" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
+                        gameComplete={data.gameComplete}
                         awayPitcher={data.awayPitcherName}
                         homePitcher={data.homePitcherName}
                         predictedAwayPitcher={null}
@@ -315,7 +333,7 @@ export const FightRow = React.memo(
                     />
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
-                        <Events outcomes={data.outcomes} shame={data.shame} awayTeam={data.awayTeamNickname} />
+                        <Events outcomes={data.outcomes ?? []} shame={data.shame} awayTeam={data.awayTeamNickname} />
                     </div>
                 </div>
             </Link>
