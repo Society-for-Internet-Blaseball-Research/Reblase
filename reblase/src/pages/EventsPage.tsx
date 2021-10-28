@@ -80,6 +80,11 @@ const temporalTypes = {
         color: "pink",
         emoji: "\u{1F3A4}",
     },
+    namerifeht: {
+        name: "Namerifeht",
+        color: "red",
+        emoji: "\u{1F525}",
+    },
     unknown: {
         name: "???",
         color: "black",
@@ -94,6 +99,7 @@ const temporalTypeByGamma: Partial<Record<number, TemporalType>> = {
     3: temporalTypes.reader,
     4: temporalTypes.microphone,
     5: temporalTypes.lootcrates,
+    6: temporalTypes.namerifeht,
 };
 
 const EventRow = ({ evt }: { evt: BlaseEvent }) => {
