@@ -387,6 +387,7 @@ export const SemiCentennialRow = React.memo(
                     <SeasonDay season={data.season} day={"X"} className="text-center w-8" />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
+                        gameComplete={data.gameComplete}
                         awayPitcher={data.awayPitcherName}
                         homePitcher={data.homePitcherName}
                         predictedAwayPitcher={null}

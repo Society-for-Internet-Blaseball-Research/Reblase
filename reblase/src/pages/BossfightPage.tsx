@@ -32,7 +32,7 @@ const FightHeading = (props: { firstEvt: ChronFightUpdate; lastEvtData: Blasebal
                 </h3>
             </Link>
                 
-            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.lastEvtData.season}&time=${props.firstEvt.timestamp}`}>
+            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.lastEvtData.season}&time=${props.firstEvt.validFrom}`}>
                 <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
                     <Twemoji emoji={"\u{1FA78}"} />
                 </Tooltip>
