@@ -39,6 +39,7 @@ export type GameListQuery = {
     order?: "asc" | "desc";
     team?: string;
     weather?: string;
+    sim?: string;
 };
 
 export type GameUpdatesQuery = {

@@ -10,8 +10,8 @@ import { displaySeason } from "blaseball-lib/games";
 import { PlayerID } from "blaseball-lib/common";
 import { BlaseballTeam } from "blaseball-lib/models";
 
-function SingleDayGamesList(props: { season: number; day: number }) {
-    const { games, error, isLoading } = useGameList({ season: props.season, day: props.day });
+function SingleDayGamesList(props: { sim: string; season: number; day: number }) {
+    const { games, error, isLoading } = useGameList({ sim: props.sim, season: props.season, day: props.day });
     const { players, teams, error: teamError, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
 
     if (error) return <Error>{error.toString()}</Error>;
@@ -58,7 +58,7 @@ export function Home() {
                     Season {displaySeason(season)}, Day {sim.day + 1}
                 </h4>
 
-                {sim && <SingleDayGamesList season={season} day={sim.day} />}
+                {sim && <SingleDayGamesList sim={sim.id!} season={season} day={sim.day} />}
                 <Link className="block mt-2" to={`/season/${sim.season + 1}`}>
                     View all Season {displaySeason(season)} games &rarr;
                 </Link>
