@@ -175,7 +175,7 @@ export interface BlaseballTemporalDoc extends BlaseballEntity<"whatistime"> {
     epsilon: boolean;
 }
 
-export interface BlaseballSimData extends BlaseballEntity<"thisidisstaticyo"> {
+export interface BlaseballSimData extends BlaseballEntity<string> {
     season: number;
     day: number;
 
