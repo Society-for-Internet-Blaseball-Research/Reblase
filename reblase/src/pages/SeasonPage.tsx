@@ -18,7 +18,7 @@ import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
 import { FightRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
-import { displaySeason } from "blaseball-lib/games";
+import { displaySeason, displaySim } from "blaseball-lib/games";
 import StadiumPicker from "components/elements/StadiumPicker";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
@@ -77,6 +77,7 @@ const GamesList = React.memo(
 
 function GamesListFetching(props: {
     season: number;
+    sim: string;
     teams: string[] | null;
     stadiums: string[] | null;
     outcomes: string[] | null;
@@ -89,6 +90,7 @@ function GamesListFetching(props: {
 }) {
     const { games, error, isLoading } = useGameList({
         season: props.season,
+        sim: props.sim,
         started: !props.showFutureGames ? true : undefined,
         team: props.teams ? props.teams.join(",") : undefined,
         weather: props.weather ? props.weather.join(",") : undefined,
@@ -137,6 +139,7 @@ function GamesListFetching(props: {
 
 interface SeasonPageParams {
     season: string;
+    sim: string;
 }
 
 // const { data: teams, error: teamsError } = useSWR<BlaseballTeam[]>(blaseballApi.allTeams());
@@ -152,7 +155,7 @@ interface SeasonPageParams {
 export function SeasonPage() {
     const location = useLocation();
 
-    const { season: seasonStr } = useParams<SeasonPageParams>();
+    const { season: seasonStr, sim = "thisidisstaticyo" } = useParams<SeasonPageParams>();
     const season = parseInt(seasonStr) - 1;
 
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
@@ -178,7 +181,7 @@ export function SeasonPage() {
                 <Link to="/seasons">&larr; Back to Seasons</Link>
             </p>
             <h2 className="text-2xl font-semibold mb-4">
-                <Link to={location.pathname}>Games in Season {displaySeason(season)}</Link>
+                <Link to={location.pathname}>Games in {sim != "thisidisstaticyo" ? displaySim(sim) + ", " : ""}Season {displaySeason(season)}</Link>
             </h2>
 
             <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -250,6 +253,7 @@ export function SeasonPage() {
 
             <GamesListFetching
                 season={season}
+                sim={sim}
                 teams={selectedTeams.length ? selectedTeams : null}
                 outcomes={selectedOutcomes.length ? selectedOutcomes : null}
                 weather={selectedWeather.length ? selectedWeather : null}
