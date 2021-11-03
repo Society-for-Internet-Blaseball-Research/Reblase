@@ -18,7 +18,7 @@ import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
 import { FightRow, SemiCentennialRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
-import { displaySeason, displaySim } from "blaseball-lib/games";
+import { displaySeason, displaySim, STATIC_ID } from "blaseball-lib/games";
 import StadiumPicker from "components/elements/StadiumPicker";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
@@ -183,7 +183,7 @@ interface SeasonPageParams {
 export function SeasonPage() {
     const location = useLocation();
 
-    const { season: seasonStr, sim = "thisidisstaticyo" } = useParams<SeasonPageParams>();
+    const { season: seasonStr, sim = STATIC_ID } = useParams<SeasonPageParams>();
     const season = parseInt(seasonStr) - 1;
 
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);

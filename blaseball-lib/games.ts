@@ -1,6 +1,8 @@
 import { PlayerID, TeamID } from "./common";
 import { BlaseballGame } from "./models";
 
+export const STATIC_ID = "thisidisstaticyo";
+
 export interface GameTeam {
     id: TeamID;
     name: string;
