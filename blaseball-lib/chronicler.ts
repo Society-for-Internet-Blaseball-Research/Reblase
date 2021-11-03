@@ -8,6 +8,7 @@ import {
     BlaseballSunSunPressure,
     BlaseballTeam,
     BlaseballTemporal,
+    BlaseballFeedSeasonList,
 } from "./models";
 
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
@@ -24,6 +25,7 @@ export const chroniclerApi = {
     simUpdates: () => BASE_URL + "v2/entities?type=Sim",
     stadiums: () => BASE_URL + "v2/entities?type=Stadium",
     sunSunPressure: (query: SunSunPressureQuery) => BASE_URL + "v2/versions?type=SunSun&" + queryString.stringify(query),
+    feedSeasonList: () => BASE_URL + "v2/entities?type=FeedSeasonList",
 };
 
 export type PlayerUpdatesQuery = {
@@ -93,6 +95,7 @@ export interface TeamsResponse extends ChronV2Response<ChronTeam> {}
 export interface TemporalResponse extends ChronV2Response<ChronTemporalUpdate>, PagedResponse {}
 export interface SimResponse extends ChronV2Response<ChronSimUpdate> {}
 export interface SunSunPressureResponse extends ChronV2Response<ChronSunSunPressure>, PagedResponse {}
+export interface FeedSeasonListResponse extends ChronV2Response<ChronFeedSeasonList> {}
 
 export type Timestamp = string;
 
@@ -131,3 +134,4 @@ export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseballTempora
 export interface ChronSimUpdate extends ChronEntityVersion<BlaseballSimData> {}
 export interface ChronStadium extends ChronEntityVersion<BlaseballStadium> {}
 export interface ChronSunSunPressure extends ChronEntityVersion<BlaseballSunSunPressure>, HashedUpdate {}
+export interface ChronFeedSeasonList extends ChronEntityVersion<BlaseballFeedSeasonList> {}

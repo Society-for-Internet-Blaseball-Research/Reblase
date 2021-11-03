@@ -223,3 +223,13 @@ export interface BlaseballSunSunPressure {
     maximum: number;
     recharge: number;
 }
+
+export interface BlaseballFeedSeasonEntry {
+    sim: string;
+    name: string;
+    seasons: number[];
+}
+
+export interface BlaseballFeedSeasonList {
+    collection: BlaseballFeedSeasonEntry[];
+}
