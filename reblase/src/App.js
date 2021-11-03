@@ -24,6 +24,7 @@ export default function App() {
                     <Route path="/game/:gameId" component={GamePage} />
                     <Route path="/bossfight/:fightId" component={BossfightPage} />
                     <Route path="/seasons" component={SeasonListPage} />
+                    <Route path="/season/:season/:sim" exact component={SeasonPage} />
                     <Route path="/season/:season" component={SeasonPage} />
                     <Route path="/events" component={EventsPage} />
                     {/* <Route path="/players" component={PlayersPage} /> */}

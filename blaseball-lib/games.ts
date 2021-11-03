@@ -203,3 +203,9 @@ export function displaySeason(seasonNumber: number) {
     if (seasonNumber === -1) return "\u2615";
     return (seasonNumber + 1).toString();
 }
+
+export function displaySim(sim: string) {
+    if (sim == "gamma4") return "Gamma 1"
+    if (sim == "gamma8") return "Gamma 2"
+    return "";
+}

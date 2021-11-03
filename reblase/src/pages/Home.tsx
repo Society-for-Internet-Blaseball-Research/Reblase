@@ -55,12 +55,12 @@ export function Home() {
                 <h3 className="text-2xl font-semibold">Current games</h3>
 
                 <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
-                    Season {displaySeason(season)}, Day {sim.day + 1}
+                    Gamma 2, Season {displaySeason(season)}, Day {sim.day + 1}
                 </h4>
 
                 {sim && <SingleDayGamesList sim={sim.id!} season={season} day={sim.day} />}
-                <Link className="block mt-2" to={`/season/${sim.season + 1}`}>
-                    View all Season {displaySeason(season)} games &rarr;
+                <Link className="block mt-2" to={`/season/${sim.season + 1}/${sim.id}`}>
+                    View all Gamma 2, Season {displaySeason(season)} games &rarr;
                 </Link>
             </div>
         </Container>
