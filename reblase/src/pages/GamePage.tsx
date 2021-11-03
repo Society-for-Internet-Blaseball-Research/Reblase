@@ -139,7 +139,8 @@ export function GamePage() {
 
             <GamePageOptions 
                 options={options}
-                setOptions={setOptions} gameComplete={last?.gameComplete ?? true}
+                setOptions={setOptions}
+                gameComplete={last?.gameComplete ?? true}
                 season={first?.data?.season}
                 timestamp={first?.timestamp}/>
 

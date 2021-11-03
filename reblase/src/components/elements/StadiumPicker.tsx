@@ -13,21 +13,21 @@ export interface StadiumPickerProps {
 }
 
 export default function StadiumPicker(props: StadiumPickerProps) {
-    const teamsById = Object.fromEntries(props.teams.map((t) => [t.id, t.data]));
+    const teamsById = Object.fromEntries(props.teams.map((t) => [t.entityId, t.data]));
 
     const { stadiums } = useStadiums();
 
     const items = [...stadiums]
-        .sort((a, b) => a.nickname.localeCompare(b.nickname))
+        .sort((a, b) => a.data.nickname.localeCompare(b.data.nickname))
         .map((stadium) => {
-            const team = teamsById[stadium.teamId];
+            const team = teamsById[stadium.data.teamId];
             return {
-                value: stadium.id!,
-                name: stadium.nickname,
+                value: stadium.entityId!,
+                name: stadium.data.nickname,
                 label: (
-                    <span key={stadium.id}>
+                    <span key={stadium.entityId}>
                         <Twemoji className="mr-1" emoji={team.emoji} />
-                        {stadium.nickname}
+                        {stadium.data.nickname}
                     </span>
                 ),
             };
@@ -39,11 +39,13 @@ export default function StadiumPicker(props: StadiumPickerProps) {
             theme={selectTheme}
             isMulti={true}
             placeholder={props.placeholder}
-            value={items.filter((item) => (props.selectedStadiums ?? []).indexOf(item.value) !== -1)}
+            values={items.filter((item) => (props.selectedStadiums?.includes(item.value) ?? []))}
             getOptionValue={(stadium) => stadium.name}
-            onChange={(newItems, _) => {
+            onChange={(newItems) => {
                 const ids = ((newItems ?? []) as any[]).map((item) => item.value as string);
-                if (props.setSelectedStadiums) props.setSelectedStadiums(ids);
+                if (props.setSelectedStadiums) {
+                    props.setSelectedStadiums(ids);
+                };
             }}
         />
     );
