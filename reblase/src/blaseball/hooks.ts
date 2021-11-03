@@ -28,7 +28,7 @@ import {
     SunSunPressureResponse,
     ChronSunSunPressure,
 } from "blaseball-lib/chronicler";
-import { BlaseballSimData, BlaseballStadium } from "blaseball-lib/models";
+import { BlaseballSimData } from "blaseball-lib/models";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -204,7 +204,7 @@ interface SimDataHookReturn {
 }
 
 export function useSimulation(): SimDataHookReturn {
-    const { data, error } = useSWR<SimResponse>(chroniclerApi.simUpdates({ order: "desc", count: 1 }));
+    const { data, error } = useSWR<SimResponse>(chroniclerApi.simUpdates());
 
     return {
         data: data?.items[0]?.data ?? null,

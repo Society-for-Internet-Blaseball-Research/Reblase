@@ -21,7 +21,7 @@ export const chroniclerApi = {
     playerUpdates: (query: PlayerUpdatesQuery) => BASE_URL + "v2/versions?type=Player&" + queryString.stringify(query),
     teams: () => BASE_URL + "v2/entities?type=Team",
     temporalUpdates: (query: TemporalUpdatesQuery) => BASE_URL + "v2/versions?type=Temporal&" + queryString.stringify(query),
-    simUpdates: (query: SimUpdatesQuery) => BASE_URL + "v2/entities?type=Sim&" + queryString.stringify(query),
+    simUpdates: () => BASE_URL + "v2/entities?type=Sim",
     stadiums: () => BASE_URL + "v2/entities?type=Stadium",
     sunSunPressure: (query: SunSunPressureQuery) => BASE_URL + "v2/versions?type=SunSun&" + queryString.stringify(query),
 };
@@ -56,11 +56,6 @@ export type FightUpdatesQuery = {
     after?: string;
     count?: number;
     page?: string;
-};
-
-export type SimUpdatesQuery = {
-    order?: "asc" | "desc";
-    count?: number;
 };
 
 export type SunSunPressureQuery = {

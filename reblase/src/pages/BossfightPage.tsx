@@ -142,10 +142,10 @@ export default function BossfightPage() {
     };
 
     const { updates: fightUpdates, error: updatesError, isLoading } = useFightUpdates(query);
-    const { updates: temporalUpdates, error: temporalError } = useTemporal();
+    const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useTemporal();
 
     if (updatesError || temporalError) return <Error>{(updatesError || temporalError).toString()}</Error>;
-    if (isLoading) return <Loading />;
+    if (isLoading || temporalIsLoading) return <Loading />;
 
     const first = fightUpdates[0]
     const last = fightUpdates[fightUpdates.length - 1]?.data;

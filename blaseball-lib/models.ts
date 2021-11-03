@@ -129,19 +129,19 @@ export interface BlaseballPlayer extends BlaseballEntity<PlayerID>, BlaseballAtt
 }
 
 export interface BlaseballTeamDescriptor {
-	fullName: string;
-	nickname: string;
-	location: string;
+    fullName: string;
+    nickname: string;
+    location: string;
 }
 
 export interface BlaseballTeamState {
-	nullified?: boolean;
-	scattered?: BlaseballTeamDescriptor;
+    nullified?: boolean;
+    scattered?: BlaseballTeamDescriptor;
 }
 
 export interface BlaseballTeam
     extends BlaseballEntity<TeamID>,
-    	BlaseballTeamDescriptor,
+        BlaseballTeamDescriptor,
         BlaseballAttributes,
         BlaseballAttributesDeprecated,
         TeamRoster {
