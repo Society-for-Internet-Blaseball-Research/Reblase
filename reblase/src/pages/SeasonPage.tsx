@@ -16,7 +16,7 @@ import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
 import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
-import { FightRow } from "components/gamelist/GameRow";
+import { FightRow, SemiCentennialRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
 import { displaySeason, displaySim } from "blaseball-lib/games";
 import StadiumPicker from "components/elements/StadiumPicker";
@@ -26,6 +26,8 @@ function groupByDay(games: ChronGame[]): GameDay[] {
     const days: Record<string, GameDay> = {};
     for (const game of games) {
         const day = game.data.day;
+        const gameHasDefaultRules = game.data.rules == "4ae9d46a-5408-460a-84fb-cbd8d03fff6c";
+        if (!gameHasDefaultRules) continue;
         if (!days[day]) days[day] = { games: [], season: game.data.season, day: game.data.day };
         days[day].games.push(game);
     }
@@ -117,9 +119,17 @@ function GamesListFetching(props: {
             });
         }
 
-        console.log(gamesFiltered.length);
         return groupByDay(gamesFiltered).reverse();
     }, [games, props.outcomes, props.stadiums]);
+
+    const semiCentennialGames = useMemo(() => {
+        let gamesFiltered = games;
+        gamesFiltered = gamesFiltered.filter((game) =>{
+            return game.data.rules != "4ae9d46a-5408-460a-84fb-cbd8d03fff6c";
+        })
+
+        return gamesFiltered;
+    }, [games]);
 
     if (error || simError) return <Error>{error}</Error>;
     if (isLoading || simIsLoading) return <Loading />;
@@ -127,13 +137,31 @@ function GamesListFetching(props: {
     const currentDay = simData?.day ?? 0;
 
     return (
-        <GamesList
-            days={days}
-            players={props.allPlayers}
-            teams={props.allTeams}
-            showFutureWeather={props.showFutureWeather}
-            currentDay={currentDay}
-        />
+        <>
+            {semiCentennialGames.length > 0 ? (
+                <div className="border-4 border-yellow-700 -mx-6 my-2 px-5 py-4">
+                    <div className="font-semibold">
+                        <Twemoji emoji={"\u{1F3C6}"} className="mr-1" />
+                        Semi-Centennial
+                        <Twemoji emoji={"\u{1F3C6}"} className="ml-1" />
+                    </div>
+
+                    <div className="flex flex-col">
+                        {semiCentennialGames.map((game) => {
+                            return <SemiCentennialRow game={game} />;
+                        })}
+                    </div>
+                </div>
+            ) : null}
+
+            <GamesList
+                days={days}
+                players={props.allPlayers}
+                teams={props.allTeams}
+                showFutureWeather={props.showFutureWeather}
+                currentDay={currentDay}
+            />
+        </>
     );
 }
 

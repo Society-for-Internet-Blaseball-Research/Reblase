@@ -32,7 +32,7 @@ const FightHeading = (props: { firstEvt: ChronFightUpdate; lastEvtData: Blasebal
                 </h3>
             </Link>
                 
-            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.lastEvtData.season}&time=${props.firstEvt.timestamp}`}>
+            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.lastEvtData.season}&time=${props.firstEvt.validFrom}`}>
                 <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
                     <Twemoji emoji={"\u{1FA78}"} />
                 </Tooltip>
@@ -46,18 +46,21 @@ type BossfightSecondary =
     | { type: "damage"; fight: BlaseballFight; damage: DamageResult };
 
 function BossfightUpdateList(props: { fightUpdates: ChronFightUpdate[]; temporalUpdates: ChronTemporalUpdate[] }) {
-    const start = props.fightUpdates[0]?.timestamp;
-    const end = props.fightUpdates[props.fightUpdates.length - 1]?.timestamp;
+    const start = props.fightUpdates[0]?.validFrom;
+    // hack: temporary fix while vcr doesnt return validTo
+    const end = props.fightUpdates[props.fightUpdates.length - 1]?.validTo ?? props.fightUpdates[props.fightUpdates.length - 1]?.validFrom;
 
     const temporalSecondary = props.temporalUpdates
-        .filter((upd) => upd.firstSeen >= start && upd.firstSeen < end)
-        .map((upd) => ({ timestamp: upd.firstSeen, data: { type: "temporal", data: upd.data } as BossfightSecondary }));
+        // todo: attempted fix for temporal duplicates, should be investigated when request count is reverted from 2500 to 250
+        .filter((upd, i) => upd.hash !== props.temporalUpdates[i - 1]?.hash)
+        .filter((upd) => upd.validFrom >= start && upd.validFrom < end)
+        .map((upd) => ({ timestamp: upd.validFrom, data: { type: "temporal", data: upd.data } as BossfightSecondary }));
 
     const damageSecondary = props.fightUpdates
         .filter((upd, i) => upd.hash !== props.fightUpdates[i - 1]?.hash)
         .filter((u) => u.data.damageResults !== "[]")
         .map((upd) => ({
-            timestamp: upd.timestamp,
+            timestamp: upd.validFrom,
             data: {
                 type: "damage",
                 fight: upd.data,
@@ -85,7 +88,9 @@ function BossfightUpdateList(props: { fightUpdates: ChronFightUpdate[]; temporal
                     : upd.data.fight.awayTeamEmoji;
 
             const teamHp = parseInt(
-                upd.data.damage.teamTarget === upd.data.fight.homeTeam ? upd.data.fight.homeHp : upd.data.fight.awayHp
+                upd.data.damage.teamTarget === upd.data.fight.homeTeam
+                    ? upd.data.fight.homeHp
+                    : upd.data.fight.awayHp
             );
 
             const teamMaxHp = parseInt(
@@ -133,7 +138,7 @@ export default function BossfightPage() {
     const { fightId } = useParams<GamePageParams>();
 
     const query = {
-        fight: fightId!,
+        id: fightId!,
     };
 
     const { updates: fightUpdates, error: updatesError, isLoading } = useFightUpdates(query);

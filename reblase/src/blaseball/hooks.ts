@@ -4,7 +4,8 @@ import {
     ChronGame,
     ChronGameUpdate,
     ChronPlayer,
-    ChronResponse,
+    ChronV1Response,
+    ChronV2Response,
     ChronTeam,
     ChronTemporalUpdate,
     GameListQuery,
@@ -23,6 +24,9 @@ import {
     TemporalResponse,
     TemporalUpdatesQuery,
     ChronStadium,
+    SunSunPressureQuery,
+    SunSunPressureResponse,
+    ChronSunSunPressure,
 } from "blaseball-lib/chronicler";
 import { BlaseballSimData, BlaseballStadium } from "blaseball-lib/models";
 
@@ -72,7 +76,7 @@ export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): G
 
             query.after = lastTimestamp;
             const response = await fetch(chroniclerApi.gameUpdates(query));
-            const json = (await response.json()) as ChronResponse<ChronGameUpdate>;
+            const json = (await response.json()) as ChronV1Response<ChronGameUpdate>;
 
             // Add the data we got to the extra state :)
             setExtraUpdates([...extraUpdates, ...json.data]);
@@ -94,12 +98,34 @@ interface FightUpdatesHookReturn {
 }
 
 export function useFightUpdates(query: FightUpdatesQuery): FightUpdatesHookReturn {
-    const { data, error } = useSWR<FightUpdatesResponse>(chroniclerApi.fightUpdates(query));
+    const { data, error } = useSWRInfinite<FightUpdatesResponse>(
+        (_, previous) => {
+            query = {...query, count: 1000};
+
+            // First page
+            if (!previous) return chroniclerApi.fightUpdates(query);
+
+            // Reached end
+            if (!previous.nextPage) return null;
+
+            // Next page
+            return chroniclerApi.fightUpdates({ ...query, page: previous.nextPage });
+        },
+        // todo: better way to do this?
+        { initialSize: 999 }
+    );
+
+    const allUpdates = [];
+    if (data) {
+        for (const page of data) {
+            allUpdates.push(...page.items);
+        }
+    }
 
     return {
-        updates: data?.data ?? [],
-        isLoading: !data,
+        updates: allUpdates,
         error,
+        isLoading: !data && !error,
     };
 }
 
@@ -112,21 +138,21 @@ interface PlayerTeamsHookReturn {
 }
 
 export function usePlayerTeamsList(): PlayerTeamsHookReturn {
-    const { data: players, error: playersError } = useSWR<ChronResponse<ChronPlayer>>(chroniclerApi.players());
-    const { data: teams, error: teamsError } = useSWR<ChronResponse<ChronTeam>>(chroniclerApi.teams());
+    const { data: players, error: playersError } = useSWR<ChronV2Response<ChronPlayer>>(chroniclerApi.players());
+    const { data: teams, error: teamsError } = useSWR<ChronV2Response<ChronTeam>>(chroniclerApi.teams());
 
     const teamsObj = useMemo(() => {
         const teamsObj: Record<string, ChronTeam> = {};
         if (teams) {
-            for (const team of teams.data) teamsObj[team.id] = team;
+            for (const team of teams.items) teamsObj[team.entityId] = team;
         }
 
         return teamsObj;
     }, [teams]);
 
     return {
-        players: players?.data ?? [],
-        teams: teams?.data ?? [],
+        players: players?.items ?? [],
+        teams: teams?.items ?? [],
         teamsObj,
         error: playersError || teamsError,
         isLoading: (!players || !teams) && !(playersError || teamsError),
@@ -160,7 +186,7 @@ export function useTemporal(): TemporalHookReturn {
     const allUpdates = [];
     if (data) {
         for (const page of data) {
-            allUpdates.push(...page.data);
+            allUpdates.push(...page.items);
         }
     }
 
@@ -181,7 +207,45 @@ export function useSimulation(): SimDataHookReturn {
     const { data, error } = useSWR<SimResponse>(chroniclerApi.simUpdates({ order: "desc", count: 1 }));
 
     return {
-        data: data?.data[0]?.data ?? null,
+        data: data?.items[0]?.data ?? null,
+        error,
+        isLoading: !data && !error,
+    };
+}
+
+interface SunSunPressureDataHookReturn {
+    data: ChronSunSunPressure[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useSunSunPressure(query: SunSunPressureQuery): SunSunPressureDataHookReturn {
+    const { data, error } = useSWRInfinite<SunSunPressureResponse>(
+        (_, previous) => {
+            const query: SunSunPressureQuery = { count: 250, order: "desc" };
+
+            // First page
+            if (!previous) return chroniclerApi.sunSunPressure(query);
+
+            // Reached end
+            if (!previous.nextPage) return null;
+
+            // Next page
+            return chroniclerApi.sunSunPressure({ ...query, page: previous.nextPage });
+        },
+        // todo: better way to do this?
+        { initialSize: 999 }
+    );
+
+    const allItems = [];
+    if (data) {
+        for (const page of data) {
+            allItems.push(...page.items);
+        }
+    }
+
+    return {
+        data: allItems,
         error,
         isLoading: !data && !error,
     };
@@ -193,8 +257,8 @@ export interface PlayerUpdatesHookReturn {
 }
 
 export function usePlayerUpdates(query: PlayerUpdatesQuery): PlayerUpdatesHookReturn {
-    const { data, error } = useSWR<ChronResponse<ChronPlayerUpdate>>(chroniclerApi.playerUpdates(query));
-    return { updates: data?.data, error };
+    const { data, error } = useSWR<ChronV2Response<ChronPlayerUpdate>>(chroniclerApi.playerUpdates(query));
+    return { updates: data?.items, error };
 }
 
 interface FightsHookReturn {
@@ -207,23 +271,23 @@ export function useFights(): FightsHookReturn {
     const { data, error } = useSWR<FightsResponse>(chroniclerApi.fights());
 
     return {
-        fights: data?.data ?? [],
+        fights: data?.items ?? [],
         isLoading: !data,
         error,
     };
 }
 
 interface StadiumHookReturn {
-    stadiums: BlaseballStadium[];
+    stadiums: ChronStadium[];
     error: any;
     isLoading: boolean;
 }
 
 export function useStadiums(): StadiumHookReturn {
-    const { data, error } = useSWR<ChronResponse<ChronStadium>>(chroniclerApi.stadiums());
+    const { data, error } = useSWR<ChronV2Response<ChronStadium>>(chroniclerApi.stadiums());
 
     return {
-        stadiums: (data?.data ?? []).map((s) => s.data),
+        stadiums: data?.items ?? [],
         error,
         isLoading: !data,
     };

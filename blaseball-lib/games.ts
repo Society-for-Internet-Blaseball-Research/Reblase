@@ -193,6 +193,12 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /Prize Match!/,
         /entered the Tunnels/,
         /Night Shift/,
+        /trade(d?)/,
+        /attempted a Heist/,
+        /They approached/,
+        /evaded them/,
+        /collected/,
+        /Weather Report arrived from History/,
     ]) {
         if (pattern.test(update)) return true;
     }

@@ -1,14 +1,13 @@
 ﻿import { useGameList, usePlayerTeamsList, useSimulation } from "../blaseball/hooks";
+import { BlaseballTeam } from "blaseball-lib/models";
 import React from "react";
 import Error from "../components/elements/Error";
-
 import { Container } from "../components/layout/Container";
 import { Loading } from "../components/elements/Loading";
 import { Link } from "react-router-dom";
 import { GameRow } from "../components/gamelist/GameRow";
 import { displaySeason } from "blaseball-lib/games";
 import { PlayerID } from "blaseball-lib/common";
-import { BlaseballTeam } from "blaseball-lib/models";
 
 function SingleDayGamesList(props: { sim: string; season: number; day: number }) {
     const { games, error, isLoading } = useGameList({ sim: props.sim, season: props.season, day: props.day });
@@ -18,7 +17,7 @@ function SingleDayGamesList(props: { sim: string; season: number; day: number })
     if (teamError) return <Error>{teamError.toString()}</Error>;
     if (isLoading || isLoadingPlayerTeams) return <Loading />;
     const teamsMap: Record<PlayerID, BlaseballTeam> = {};
-    for (const team of teams) teamsMap[team.id!] = team.data;
+    for (const team of teams) teamsMap[team.data.id!] = team.data;
 
     return (
         <div className="flex flex-col">

@@ -185,7 +185,9 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
                 if (!firstRemaining) break;
 
                 const at = group.updates[i];
-                if (at.type === "primary" && firstRemaining.timestamp < at.data.timestamp) {
+                const timestamp = (at.data as ChronGameUpdate)?.timestamp ?? (at.data as ChronFightUpdate).validFrom;
+
+                if (at.type === "primary" && firstRemaining.timestamp < timestamp) {
                     group.updates.splice(i, 0, { type: "secondary", data: remaining.shift()! });
                 }
             }

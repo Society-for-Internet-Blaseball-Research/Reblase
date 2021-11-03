@@ -26,7 +26,7 @@ export default function TeamPicker(props: TeamPickerProps) {
 
     const teamIds = props.type === "league" ? leagueTeams : coffeeTeams;
     const options = props.teams
-        .filter((team) => teamIds.includes(team.id))
+        .filter((team) => teamIds.includes(team.entityId))
         .sort((a, b) => {
         	const aName = a.data?.state?.scattered ? a.data.state.scattered.fullName : a.data.fullName;
         	const bName = b.data?.state?.scattered ? b.data.state.scattered.fullName : b.data.fullName;
@@ -39,12 +39,12 @@ export default function TeamPicker(props: TeamPickerProps) {
             isMulti={true}
             placeholder={props.placeholder}
             options={options}
-            value={options.filter((team) => props.selectedTeams?.includes(team.id) ?? [])}
+            value={options.filter((team) => props.selectedTeams?.includes(team.entityId) ?? [])}
             getOptionValue={(team) => team.data.fullName}
             formatOptionLabel={formatOptionLabel}
             onChange={(value) => {
                 if (props.setSelectedTeams) {
-                    props.setSelectedTeams((value as ChronTeam[])?.map((team) => team.id) ?? []);
+                    props.setSelectedTeams((value as ChronTeam[])?.map((team) => team.entityId) ?? []);
                 }
             }}
         />

@@ -24,6 +24,14 @@ function predictPitchersForGame(
     game: BlaseballGame,
     currentDay: number
 ) {
+    if (game.gameComplete)
+    {
+        return {
+            home: game.homePitcherName,
+            away: game.awayPitcherName,
+        };
+    }
+
     const home = predictGamePitcher(teams[game.homeTeam], game.day, currentDay, (id) => players[id]);
     const away = predictGamePitcher(teams[game.awayTeam], game.day, currentDay, (id) => players[id]);
 

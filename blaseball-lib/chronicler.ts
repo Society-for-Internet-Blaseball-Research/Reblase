@@ -5,6 +5,7 @@ import {
     BlaseballPlayer,
     BlaseballSimData,
     BlaseballStadium,
+    BlaseballSunSunPressure,
     BlaseballTeam,
     BlaseballTemporal,
 } from "./models";
@@ -12,16 +13,17 @@ import {
 export const BASE_URL = process.env.REACT_APP_SIBR_API ?? "/";
 
 export const chroniclerApi = {
-    gameList: (query: GameListQuery) => BASE_URL + "/games?" + queryString.stringify(query),
-    gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "/games/updates?" + queryString.stringify(query),
-    fights: () => BASE_URL + "/fights",
-    fightUpdates: (query: FightUpdatesQuery) => BASE_URL + "/fights/updates?" + queryString.stringify(query),
-    players: () => BASE_URL + "/players",
-    playerUpdates: (query: PlayerUpdatesQuery) => BASE_URL + "/players/updates?" + queryString.stringify(query),
-    teams: () => BASE_URL + "/teams",
-    temporalUpdates: (query: TemporalUpdatesQuery) => BASE_URL + "/temporal/updates?" + queryString.stringify(query),
-    simUpdates: (query: SimUpdatesQuery) => BASE_URL + "/sim/updates?" + queryString.stringify(query),
-    stadiums: () => BASE_URL + "/stadiums",
+    gameList: (query: GameListQuery) => BASE_URL + "v1/games?" + queryString.stringify(query),
+    gameUpdates: (query: GameUpdatesQuery) => BASE_URL + "v1/games/updates?" + queryString.stringify(query),
+    fights: () => BASE_URL + "v2/entities?type=Bossfight",
+    fightUpdates: (query: FightUpdatesQuery) => BASE_URL + "v2/versions?type=Bossfight&" + queryString.stringify(query),
+    players: () => BASE_URL + "v2/entities?type=Player",
+    playerUpdates: (query: PlayerUpdatesQuery) => BASE_URL + "v2/versions?type=Player&" + queryString.stringify(query),
+    teams: () => BASE_URL + "v2/entities?type=Team",
+    temporalUpdates: (query: TemporalUpdatesQuery) => BASE_URL + "v2/versions?type=Temporal&" + queryString.stringify(query),
+    simUpdates: (query: SimUpdatesQuery) => BASE_URL + "v2/entities?type=Sim&" + queryString.stringify(query),
+    stadiums: () => BASE_URL + "v2/entities?type=Stadium",
+    sunSunPressure: (query: SunSunPressureQuery) => BASE_URL + "v2/versions?type=SunSun&" + queryString.stringify(query),
 };
 
 export type PlayerUpdatesQuery = {
@@ -50,9 +52,10 @@ export type GameUpdatesQuery = {
 };
 
 export type FightUpdatesQuery = {
-    fight: string;
+    id: string;
     after?: string;
     count?: number;
+    page?: string;
 };
 
 export type SimUpdatesQuery = {
@@ -60,13 +63,25 @@ export type SimUpdatesQuery = {
     count?: number;
 };
 
+export type SunSunPressureQuery = {
+    order?: "asc" | "desc";
+    count?: number;
+    after?: string;
+    before?: string;
+    page?: string;
+}
+
 export type TemporalUpdatesQuery = {
     order?: "asc" | "desc";
     count?: number;
     page?: string;
 };
 
-export interface ChronResponse<T> {
+export interface ChronV2Response<T> {
+    items: T[];
+}
+
+export interface ChronV1Response<T> {
     data: T[];
 }
 
@@ -74,17 +89,17 @@ export interface PagedResponse {
     nextPage: string | null;
 }
 
-export interface GameListResponse extends ChronResponse<ChronGame> {}
-export interface GameUpdatesResponse extends ChronResponse<ChronGameUpdate>, PagedResponse {}
-export interface FightUpdatesResponse extends ChronResponse<ChronFightUpdate>, PagedResponse {}
-export interface FightsResponse extends ChronResponse<ChronFight> {}
-export interface PlayersResponse extends ChronResponse<ChronPlayer> {}
-export interface TeamsResponse extends ChronResponse<ChronTeam> {}
-export interface TemporalResponse extends ChronResponse<ChronTemporalUpdate>, PagedResponse {}
-export interface SimResponse extends ChronResponse<ChronSimUpdate> {}
+export interface GameListResponse extends ChronV1Response<ChronGame> {}
+export interface GameUpdatesResponse extends ChronV1Response<ChronGameUpdate>, PagedResponse {}
+export interface FightUpdatesResponse extends ChronV2Response<ChronFightUpdate>, PagedResponse {}
+export interface FightsResponse extends ChronV2Response<ChronFight> {}
+export interface PlayersResponse extends ChronV2Response<ChronPlayer> {}
+export interface TeamsResponse extends ChronV2Response<ChronTeam> {}
+export interface TemporalResponse extends ChronV2Response<ChronTemporalUpdate>, PagedResponse {}
+export interface SimResponse extends ChronV2Response<ChronSimUpdate> {}
+export interface SunSunPressureResponse extends ChronV2Response<ChronSunSunPressure>, PagedResponse {}
 
 export type Timestamp = string;
-export type PlayerPosition = "lineup" | "rotation" | "bullpen" | "bench";
 
 export interface ChronGame {
     gameId: string;
@@ -93,77 +108,31 @@ export interface ChronGame {
     data: BlaseballGame;
 }
 
-export interface ChronGameUpdate {
-    gameId: string;
+export interface HashedUpdate {
     hash: string;
+}
+
+export interface ChronGameUpdate extends HashedUpdate {
+    gameId: string;
     timestamp: Timestamp;
     data: BlaseballGame;
 }
 
-export interface ChronFightUpdate {
-    fightId: string;
-    hash: string;
-    timestamp: Timestamp;
-    data: BlaseballFight;
-}
-
-export interface ChronFight {
-    id: string;
-    lastUpdate: Timestamp;
-    data: BlaseballFight;
-}
-
-export interface ChronPlayer {
-    id: string;
-    lastUpdate: string;
-
-    teamId: string | null;
-    position: PlayerPosition | null;
-    rosterIndex: number | null;
-
-    data: BlaseballPlayer;
-}
-
-export interface ChronSiteUpdate {
-    timestamp: Timestamp;
-    path: string;
-    hash: string;
-    size: number;
-    downloadUrl: string;
-}
-
-export interface ChronTeam {
-    id: string;
-    lastUpdate: Timestamp;
-    data: BlaseballTeam;
-}
-
-export interface ChronTributeUpdate {
-    updateId: string;
-    timestamp: Timestamp;
-    players: Partial<Record<string, number>>;
-}
-
 export interface ChronEntityVersion<T> {
-    updateId: string;
-    firstSeen: Timestamp;
-    lastSeen: Timestamp;
+    nextPage: string;
+    entityId: string;
+    validFrom: Timestamp;
+    validTo: Timestamp;
     data: T;
 }
 
-export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseballTemporal> {}
-
+export interface ChronFight extends ChronEntityVersion<BlaseballFight>, HashedUpdate {}
+export interface ChronFightUpdate extends ChronEntityVersion<BlaseballFight>, HashedUpdate {}
+export interface ChronPlayer extends ChronEntityVersion<BlaseballPlayer> {}
+export interface ChronPlayerUpdate extends ChronEntityVersion<BlaseballPlayer> {}
+export interface ChronTeam extends ChronEntityVersion<BlaseballTeam>{}
+export interface ChronTeamUpdate extends ChronEntityVersion<BlaseballTeam> {}
+export interface ChronTemporalUpdate extends ChronEntityVersion<BlaseballTemporal>, HashedUpdate {}
 export interface ChronSimUpdate extends ChronEntityVersion<BlaseballSimData> {}
-
-export interface ChronPlayerUpdate extends ChronEntityVersion<BlaseballPlayer> {
-    playerId: string;
-}
-
-export interface ChronTeamUpdate extends ChronEntityVersion<BlaseballTeam> {
-    teamId: string;
-}
-
-export interface ChronStadium {
-    id: string;
-    data: BlaseballStadium;
-}
+export interface ChronStadium extends ChronEntityVersion<BlaseballStadium> {}
+export interface ChronSunSunPressure extends ChronEntityVersion<BlaseballSunSunPressure>, HashedUpdate {}

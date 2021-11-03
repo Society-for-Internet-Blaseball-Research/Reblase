@@ -79,6 +79,7 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     baseRunnerNames?: string[];
 
     phase: number;
+    rules: string;
     gameStart: boolean;
     gameComplete: boolean;
     finalized: boolean;
@@ -214,4 +215,10 @@ export interface BlaseballStadium extends BlaseballEntity<StadiumID> {
     teamId: string;
     model: number;
     mods: AttributeID[];
+}
+
+export interface BlaseballSunSunPressure {
+    current: number;
+    maximum: number;
+    recharge: number;
 }
