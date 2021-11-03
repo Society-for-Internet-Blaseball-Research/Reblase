@@ -20,6 +20,7 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     scoreLedger: string | null;
     scoreUpdate: string | null;
 
+    sim?: string;
     season: number;
     day: number;
     isPostseason: boolean;

@@ -7,7 +7,7 @@ import Error from "../components/elements/Error";
 import { Link } from "react-router-dom";
 import { useGameList, useTemporal } from "../blaseball/hooks";
 import dayjs from "dayjs";
-import { displaySeason, GameTeam, getAwayTeam, getHomeTeam } from "blaseball-lib/games";
+import { displaySeason, displaySim, GameTeam, getAwayTeam, getHomeTeam } from "blaseball-lib/games";
 import Twemoji from "components/elements/Twemoji";
 
 type TimedText = { text: string; timestamp: string };
@@ -24,6 +24,7 @@ interface GameEvent extends BaseEvent {
     type: "game";
 
     game: string;
+    sim: string;
     season: number;
     day: number;
     homeTeam: GameTeam;
@@ -111,6 +112,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
                         {evt.emoji} {evt.name}
                     </Link>
                     <Link to={`/game/${evt.game}`} className="text-sm">
+                        {evt.sim != "thisidisstaticyo" && <><strong>{displaySim(evt.sim)}</strong>, </>}
                         Season <strong>{displaySeason(evt.season)}</strong>, Day <strong>{evt.day + 1}</strong>
                     </Link>
                 </div>
@@ -178,6 +180,7 @@ export function EventsPage() {
             gameEvents.push({
                 type: "game",
                 game: game.gameId,
+                sim: game.data.sim ?? "thisidisstaticyo",
                 season: game.data.season,
                 day: game.data.day,
                 homeTeam: getHomeTeam(game.data),
