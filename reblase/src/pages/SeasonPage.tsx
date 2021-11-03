@@ -26,7 +26,7 @@ function groupByDay(games: ChronGame[]): GameDay[] {
     const days: Record<string, GameDay> = {};
     for (const game of games) {
         const day = game.data.day;
-        const gameHasDefaultRules = game.data.rules == "4ae9d46a-5408-460a-84fb-cbd8d03fff6c";
+        const gameHasDefaultRules = game.data.rules != "df2207cc-03a2-4f6f-9604-63421a4dd5e8";
         if (!gameHasDefaultRules) continue;
         if (!days[day]) days[day] = { games: [], season: game.data.season, day: game.data.day };
         days[day].games.push(game);
@@ -125,7 +125,7 @@ function GamesListFetching(props: {
     const semiCentennialGames = useMemo(() => {
         let gamesFiltered = games;
         gamesFiltered = gamesFiltered.filter((game) =>{
-            return game.data.rules != "4ae9d46a-5408-460a-84fb-cbd8d03fff6c";
+            return game.data.rules === "df2207cc-03a2-4f6f-9604-63421a4dd5e8";
         })
 
         return gamesFiltered;
