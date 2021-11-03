@@ -5,10 +5,11 @@ import { Container } from "../components/layout/Container";
 import { getOutcomes } from "../blaseball/outcome";
 import Error from "../components/elements/Error";
 import { Link } from "react-router-dom";
-import { useGameList, useTemporal } from "../blaseball/hooks";
+import { useGameList, useTemporal, useFeedSeasonList } from "../blaseball/hooks";
 import dayjs from "dayjs";
 import { displaySeason, displaySim, GameTeam, getAwayTeam, getHomeTeam, STATIC_ID } from "blaseball-lib/games";
 import Twemoji from "components/elements/Twemoji";
+import { BlaseballFeedSeasonList } from "blaseball-lib/models";
 
 type TimedText = { text: string; timestamp: string };
 
@@ -103,7 +104,7 @@ const temporalTypeByGamma: Partial<Record<number, TemporalType>> = {
     6: temporalTypes.namerifeht,
 };
 
-const EventRow = ({ evt }: { evt: BlaseEvent }) => {
+const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent, feedSeasons: BlaseballFeedSeasonList | null}) => {
     return (
         <div className="border-b border-gray-300 dark:border-gray-700 py-2">
             {evt.type === "game" ? (
@@ -112,7 +113,7 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
                         {evt.emoji} {evt.name}
                     </Link>
                     <Link to={`/game/${evt.game}`} className="text-sm">
-                        {evt.sim != STATIC_ID && <><strong>{displaySim(evt.sim}</strong>, </>}
+                        {evt.sim != STATIC_ID && <><strong>{displaySim(evt.sim, feedSeasons)}</strong>, </>}
                         Season <strong>{displaySeason(evt.season)}</strong>, Day <strong>{evt.day + 1}</strong>
                     </Link>
                 </div>
@@ -154,9 +155,10 @@ const EventRow = ({ evt }: { evt: BlaseEvent }) => {
 export function EventsPage() {
     const { games, error, isLoading } = useGameList({ outcomes: true, order: "desc" });
     const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useTemporal();
+    const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
 
-    if (error || temporalError) return <Error>{(error || temporalError).toString()}</Error>;
-    if (isLoading || temporalIsLoading) return <Loading />;
+    if (error || temporalError || feedSeasonError) return <Error>{(error || temporalError || feedSeasonError).toString()}</Error>;
+    if (isLoading || temporalIsLoading || feedSeasonIsLoading) return <Loading />;
 
     const gameEvents: BlaseEvent[] = [];
     for (const game of games) {
@@ -229,7 +231,7 @@ export function EventsPage() {
 
             <div className="flex flex-col">
                 {allEvents.map((evt, idx) => (
-                    <EventRow evt={evt} key={idx} />
+                    <EventRow evt={evt} feedSeasons={feedSeasonList?.data ?? null} key={idx} />
                 ))}
             </div>
         </Container>

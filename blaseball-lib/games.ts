@@ -1,5 +1,5 @@
 import { PlayerID, TeamID } from "./common";
-import { BlaseballGame } from "./models";
+import { BlaseballFeedSeasonList, BlaseballGame } from "./models";
 
 export const STATIC_ID = "thisidisstaticyo";
 
@@ -212,8 +212,9 @@ export function displaySeason(seasonNumber: number) {
     return (seasonNumber + 1).toString();
 }
 
-export function displaySim(sim: string) {
-    if (sim == "gamma4") return "Gamma 1"
-    if (sim == "gamma8") return "Gamma 2"
-    return "";
+export function displaySim(sim: string, feedSeasons: BlaseballFeedSeasonList | null) {
+    if (sim == STATIC_ID || !feedSeasons) return "";
+    const feedSeasonIndex = feedSeasons.collection.findIndex((seasonEntry) => seasonEntry.sim == sim);
+    if (feedSeasonIndex == -1) return "Unknown SIM";
+    return feedSeasons.collection[feedSeasonIndex].name;
 }
