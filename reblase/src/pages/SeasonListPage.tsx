@@ -78,7 +78,7 @@ export function SeasonListPage() {
     const { games, error, isLoading } = useGameList(query);
     const { feedSeasonList, error: feedSeasonListError, isLoading: isLoadingFeedSeasonList } = useFeedSeasonList();
 
-    if (error || isLoadingFeedSeasonList) return <Error>{(error || feedSeasonListError).toString()}</Error>;
+    if (error || feedSeasonListError) return <Error>{(error || feedSeasonListError).toString()}</Error>;
     if (isLoading || isLoadingFeedSeasonList) return <Loading />;
 
     const shortCircuitSeasons: Record<string, Record<number, ChronGame>> = {};
