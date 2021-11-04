@@ -218,3 +218,11 @@ export function displaySim(sim: string, feedSeasons: BlaseballFeedSeasonList | n
     if (feedSeasonIndex == -1) return "Unknown SIM";
     return feedSeasons.collection[feedSeasonIndex].name;
 }
+
+export function shouldSimBeShown(sim: string, feedSeasons: BlaseballFeedSeasonList | null) {
+    if (sim == STATIC_ID) return true;
+    if (!feedSeasons) return false;
+    if (sim == "gamma4") return false; // hardcoding this because we don't have data but the site does
+    const feedSeasonIndex = feedSeasons.collection.findIndex((seasonEntry) => seasonEntry.sim == sim);
+    return feedSeasonIndex !== -1;
+}
