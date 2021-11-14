@@ -31,8 +31,8 @@ export default function OutcomePicker(props: OutcomePickerProps) {
             placeholder={props.placeholder}
             value={items.filter((item) => (props.selectedOutcomes ?? []).indexOf(item.value) !== -1)}
             onChange={(newItems, _) => {
-                const ids = ((newItems ?? []) as any[]).map((item) => item.value as string);
-                if (props.setSelectedOutcomes) props.setSelectedOutcomes(ids);
+                const outcomes = ((newItems ?? []) as any[]).map((item) => item.value as string);
+                if (props.setSelectedOutcomes) props.setSelectedOutcomes(outcomes);
             }}
         />
     );
