@@ -1,4 +1,3 @@
-import { ChronGame } from "blaseball-lib/chronicler";
 import { BlaseballDisplayExperimental } from "../../../blaseball-lib/models";
 import dayjs from "dayjs";
 
@@ -23,6 +22,7 @@ const spilloverOutcome: OutcomeType = { name: "Spillover", emoji: "\u{23F0}", se
 
 export const calculatedOutcomeTypes: OutcomeType[] = [
     shameOutcome,
+    spilloverOutcome,
 ];
 
 export const outcomeTypes: OutcomeType[] = [
@@ -68,7 +68,13 @@ export const experimentalOutcomeTypes: OutcomeType[] = [
     { name: "Quest", emoji: "\u{1F409}", search: [/finds a heart/i, /retreats from the sound/i], color: "gray"},
 ];
 
-export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string, startTime?: string | null, endTime?: string | null): Outcome[] {
+export function getOutcomes(
+    outcomes: string[],
+    shame?: boolean,
+    awayTeam?: string,
+    startTime?: string | null,
+    endTime?: string | null
+): Outcome[] {
     const foundOutcomes = [];
 
     if (shame && awayTeam) {
@@ -88,7 +94,7 @@ export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: stri
             const outcome = {
                 ...spilloverOutcome,
                 text: "The game spilled over.",
-            }
+            };
             foundOutcomes.push(outcome);
         }
     }
