@@ -176,7 +176,7 @@ const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent; feedSeasons: Blasebal
 };
 
 export function EventsPage() {
-    const { games, error, isLoading } = useGameList({ outcomes: true, order: "desc" });
+    const { games, error, isLoading } = useGameList({ order: "desc" });
     const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useAllTemporal();
     const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
 
@@ -194,6 +194,10 @@ export function EventsPage() {
             game.endTime
         );
         for (const outcome of outcomes) {
+            if (outcome.name === "Party" || outcome.name === "Shame")
+                // too damn many
+                continue;
+
             const lastEvent = gameEvents[gameEvents.length - 1];
             if (
                 lastEvent &&
@@ -204,10 +208,6 @@ export function EventsPage() {
                 lastEvent.text.push(outcome.text);
                 continue;
             }
-
-            if (outcome.name === "Party")
-                // too damn many
-                continue;
 
             gameEvents.push({
                 type: "game",
