@@ -254,7 +254,7 @@ export function SeasonPage() {
                     <div className="font-semibold mb-1">Filter by stadium</div>
                     <StadiumPicker
                         placeholder="Select stadium(s)..."
-                        teams={teams}
+                        games={games}
                         selectedStadiums={selectedStadiums}
                         setSelectedStadiums={setSelectedStadiums}
                     />
