@@ -60,7 +60,7 @@ export const allWeatherTypes: WeatherType[] = [
         emoji: "\u{1F328}",
         background: "#68969e",
         color: "#ffffff",
-        forbidden: true,
+        forbidden: false,
     },
     {
         id: 6,
