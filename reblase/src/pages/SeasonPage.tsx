@@ -197,7 +197,7 @@ export function SeasonPage() {
     const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
     let { fights } = useFights();
     fights = fights.filter((f) => f.data.season === season);
-    const { games } = useGameList({
+    const { games, error: gamesError, isLoading: isLoadingGames } = useGameList({
         season: season,
         sim: sim,
         started: !showFutureGames ? true : undefined,
@@ -206,8 +206,8 @@ export function SeasonPage() {
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
 
-    if (error || feedSeasonError) return <Error>{(error || feedSeasonError).toString()}</Error>;
-    if (isLoadingPlayerTeams || feedSeasonIsLoading) return <Loading />;
+    if (error || feedSeasonError || gamesError) return <Error>{(error || feedSeasonError || gamesError).toString()}</Error>;
+    if (isLoadingPlayerTeams || feedSeasonIsLoading || isLoadingGames) return <Loading />;
 
     const gammaString = sim != STATIC_ID ? displaySim(sim, feedSeasonList?.data ?? null) + ", ": "";
 
