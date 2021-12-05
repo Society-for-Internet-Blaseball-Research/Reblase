@@ -36,7 +36,8 @@ function groupByDay(games: ChronGame[]): GameDay[] {
 
     // Can't find a better way to do this because JS sorting is hard
     // 120 should be an upper bound (inb4 falsehoods....)
-    for (let i = 0; i < 120; i++) {
+    // (future message from gamma9: [narrator voice] it wasn't.)
+    for (let i = 0; i < 200; i++) {
         if (days[i]) daysList.push(days[i]);
     }
 
