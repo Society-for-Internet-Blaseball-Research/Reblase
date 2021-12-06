@@ -199,6 +199,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /evaded them/,
         /collected/,
         /Weather Report arrived from History/,
+        /was Frozen/,
     ]) {
         if (pattern.test(update)) return true;
     }
