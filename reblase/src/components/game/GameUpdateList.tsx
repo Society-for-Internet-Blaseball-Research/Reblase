@@ -97,7 +97,7 @@ export function addInningHeaderRows(
             const header: Element = { type: "heading", inning: payload.inning, top: payload.topOfInning, update };
 
             // We're skipping "inning 0" so if this is the inning 1 header, "push" it before the first events
-            if (payload.inning === 0 && payload.topOfInning) {
+            if (payload.inning === 0 && payload.topOfInning && direction == "asc") {
                 elements.unshift(header);
             } else {
                 elements.push(header);
@@ -127,8 +127,10 @@ export function addInningHeaderRows(
         // Add the row
         elements.push(row);
 
-        lastInning = payload.inning;
-        lastTopOfInning = payload.topOfInning;
+        if (payload.inning !== -1) {
+            lastInning = payload.inning;
+            lastTopOfInning = payload.topOfInning;
+        }
         lastHash = update.hash;
     }
 
