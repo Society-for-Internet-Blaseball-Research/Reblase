@@ -14,6 +14,10 @@ interface OutcomeType {
 
 const shameOutcome: OutcomeType = { name: "Shame", emoji: "\u{1F7E3}", search: [], color: "purple" };
 
+export const calculatedOutcomeTypes: OutcomeType[] = [
+    shameOutcome,
+];
+
 export const outcomeTypes: OutcomeType[] = [
     shameOutcome,
     { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "gray" },

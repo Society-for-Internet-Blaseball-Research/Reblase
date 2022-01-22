@@ -10,7 +10,7 @@ import { useFights, useGameList, usePlayerTeamsList, useSimulation, useFeedSeaso
 import { ChronGame } from "blaseball-lib/chronicler";
 import TeamPicker from "../components/elements/TeamPicker";
 import OutcomePicker from "../components/elements/OutcomePicker";
-import { getOutcomes } from "../blaseball/outcome";
+import { getOutcomes, calculatedOutcomeTypes } from "../blaseball/outcome";
 import WeatherPicker from "../components/elements/WeatherPicker";
 import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
@@ -97,7 +97,7 @@ function GamesListFetching(props: {
         started: !props.showFutureGames ? true : undefined,
         team: props.teams ? props.teams.join(",") : undefined,
         weather: props.weather ? props.weather.join(",") : undefined,
-        outcomes: props.outcomes ? true : undefined,
+        outcomes: props.outcomes && props.outcomes.every((x) => calculatedOutcomeTypes.map((x) => x.name).indexOf(x) === -1) ? true : undefined,
     });
 
     const { data: simData, error: simError, isLoading: simIsLoading } = useSimulation();
