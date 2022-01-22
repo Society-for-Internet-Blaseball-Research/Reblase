@@ -198,12 +198,17 @@ export function SeasonPage() {
     const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
     let { fights } = useFights();
     fights = fights.filter((f) => f.data.season === season);
+    const { games, error: gamesError, isLoading: isLoadingGames } = useGameList({
+        season: season,
+        sim: sim,
+        started: !showFutureGames ? true : undefined,
+    });
 
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
 
-    if (error || feedSeasonError) return <Error>{(error || feedSeasonError).toString()}</Error>;
-    if (isLoadingPlayerTeams || feedSeasonIsLoading) return <Loading />;
+    if (error || feedSeasonError || gamesError) return <Error>{(error || feedSeasonError || gamesError).toString()}</Error>;
+    if (isLoadingPlayerTeams || feedSeasonIsLoading || isLoadingGames) return <Loading />;
 
     const gammaString = sim != STATIC_ID ? displaySim(sim, feedSeasonList?.data ?? null) + ", ": "";
 
@@ -221,7 +226,7 @@ export function SeasonPage() {
                     <div className="font-semibold mb-1">Filter by team</div>
                     <TeamPicker
                         placeholder="Select team(s)..."
-                        type={season >= 0 ? "league" : "coffee"}
+                        games={games}
                         teams={teams}
                         selectedTeams={selectedTeams}
                         setSelectedTeams={setSelectedTeams}
@@ -250,7 +255,7 @@ export function SeasonPage() {
                     <div className="font-semibold mb-1">Filter by stadium</div>
                     <StadiumPicker
                         placeholder="Select stadium(s)..."
-                        teams={teams}
+                        games={games}
                         selectedStadiums={selectedStadiums}
                         setSelectedStadiums={setSelectedStadiums}
                     />
