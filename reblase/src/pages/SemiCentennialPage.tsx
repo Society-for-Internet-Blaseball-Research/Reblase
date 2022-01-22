@@ -139,11 +139,11 @@ export default function SemiCentennialPage() {
     };
 
     const { updates: gameUpdates, error: updatesError, isLoading } = useGameUpdates(query, false);
-    const { updates: temporalUpdates, error: temporalError } = useTemporal();
-    const { data: sunSunPressureUpdates, error: sunSunPressureError} = useSunSunPressure({});
+    const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useTemporal();
+    const { data: sunSunPressureUpdates, error: sunSunPressureError, isLoading: sunSunPressureIsLoading } = useSunSunPressure({});
 
     if (updatesError || temporalError || sunSunPressureError) return <Error>{(updatesError || temporalError || sunSunPressureError).toString()}</Error>;
-    if (isLoading) return <Loading />;
+    if (isLoading || temporalIsLoading || sunSunPressureIsLoading) return <Loading />;
 
     const first = gameUpdates[0];
     const last = gameUpdates[gameUpdates.length - 1]?.data;

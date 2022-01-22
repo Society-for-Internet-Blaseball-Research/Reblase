@@ -6,7 +6,7 @@ import { Loading } from "../components/elements/Loading";
 import { Container } from "../components/layout/Container";
 import Error from "../components/elements/Error";
 import { cache } from "swr";
-import { useFights, useGameList, usePlayerTeamsList, useSimulation } from "../blaseball/hooks";
+import { useFights, useGameList, usePlayerTeamsList, useSimulation, useFeedSeasonList } from "../blaseball/hooks";
 import { ChronGame } from "blaseball-lib/chronicler";
 import TeamPicker from "../components/elements/TeamPicker";
 import OutcomePicker from "../components/elements/OutcomePicker";
@@ -18,7 +18,7 @@ import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
 import { FightRow, SemiCentennialRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
-import { displaySeason, displaySim } from "blaseball-lib/games";
+import { displaySeason, displaySim, STATIC_ID } from "blaseball-lib/games";
 import StadiumPicker from "components/elements/StadiumPicker";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
@@ -132,7 +132,7 @@ function GamesListFetching(props: {
         return gamesFiltered;
     }, [games]);
 
-    if (error || simError) return <Error>{error}</Error>;
+    if (error || simError) return <Error>{(error || simError).toString()}</Error>;
     if (isLoading || simIsLoading) return <Loading />;
 
     const currentDay = simData?.day ?? 0;
@@ -184,7 +184,7 @@ interface SeasonPageParams {
 export function SeasonPage() {
     const location = useLocation();
 
-    const { season: seasonStr, sim = "thisidisstaticyo" } = useParams<SeasonPageParams>();
+    const { season: seasonStr, sim = STATIC_ID } = useParams<SeasonPageParams>();
     const season = parseInt(seasonStr) - 1;
 
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
@@ -195,14 +195,17 @@ export function SeasonPage() {
     const [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
 
     const { players, teams, error, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
+    const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
     let { fights } = useFights();
     fights = fights.filter((f) => f.data.season === season);
 
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
 
-    if (error) return <Error>{error.toString()}</Error>;
-    if (isLoadingPlayerTeams) return <Loading />;
+    if (error || feedSeasonError) return <Error>{(error || feedSeasonError).toString()}</Error>;
+    if (isLoadingPlayerTeams || feedSeasonIsLoading) return <Loading />;
+
+    const gammaString = sim != STATIC_ID ? displaySim(sim, feedSeasonList?.data ?? null) + ", ": "";
 
     return (
         <Container className={"mt-4"}>
@@ -210,7 +213,7 @@ export function SeasonPage() {
                 <Link to="/seasons">&larr; Back to Seasons</Link>
             </p>
             <h2 className="text-2xl font-semibold mb-4">
-                <Link to={location.pathname}>Games in {sim != "thisidisstaticyo" ? displaySim(sim) + ", " : ""}Season {displaySeason(season)}</Link>
+                <Link to={location.pathname}>Games in {gammaString}Season {displaySeason(season)}</Link>
             </h2>
 
             <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
