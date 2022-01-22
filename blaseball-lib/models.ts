@@ -20,6 +20,7 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     scoreLedger: string | null;
     scoreUpdate: string | null;
 
+    sim?: string;
     season: number;
     day: number;
     isPostseason: boolean;
@@ -128,19 +129,19 @@ export interface BlaseballPlayer extends BlaseballEntity<PlayerID>, BlaseballAtt
 }
 
 export interface BlaseballTeamDescriptor {
-	fullName: string;
-	nickname: string;
-	location: string;
+    fullName: string;
+    nickname: string;
+    location: string;
 }
 
 export interface BlaseballTeamState {
-	nullified?: boolean;
-	scattered?: BlaseballTeamDescriptor;
+    nullified?: boolean;
+    scattered?: BlaseballTeamDescriptor;
 }
 
 export interface BlaseballTeam
     extends BlaseballEntity<TeamID>,
-    	BlaseballTeamDescriptor,
+        BlaseballTeamDescriptor,
         BlaseballAttributes,
         BlaseballAttributesDeprecated,
         TeamRoster {
@@ -221,4 +222,14 @@ export interface BlaseballSunSunPressure {
     current: number;
     maximum: number;
     recharge: number;
+}
+
+export interface BlaseballFeedSeasonEntry {
+    sim: string;
+    name: string;
+    seasons: number[];
+}
+
+export interface BlaseballFeedSeasonList {
+    collection: BlaseballFeedSeasonEntry[];
 }

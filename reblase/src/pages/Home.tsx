@@ -1,4 +1,4 @@
-﻿import { useGameList, usePlayerTeamsList, useSimulation } from "../blaseball/hooks";
+﻿import { useFeedSeasonList, useGameList, usePlayerTeamsList, useSimulation } from "../blaseball/hooks";
 import { BlaseballTeam } from "blaseball-lib/models";
 import React from "react";
 import Error from "../components/elements/Error";
@@ -6,7 +6,7 @@ import { Container } from "../components/layout/Container";
 import { Loading } from "../components/elements/Loading";
 import { Link } from "react-router-dom";
 import { GameRow } from "../components/gamelist/GameRow";
-import { displaySeason } from "blaseball-lib/games";
+import { displaySeason, displaySim, STATIC_ID } from "blaseball-lib/games";
 import { PlayerID } from "blaseball-lib/common";
 
 function SingleDayGamesList(props: { sim: string; season: number; day: number }) {
@@ -40,11 +40,13 @@ function SingleDayGamesList(props: { sim: string; season: number; day: number })
 export function Home() {
     // Load games from the game list, or show error if there's an error, or loading if they're loading
     const { data: sim, error, isLoading } = useSimulation();
+    const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
 
-    if (error) return <Error>{error.toString()}</Error>;
-    if (isLoading || !sim) return <Loading />;
+    if (error || feedSeasonError) return <Error>{(error || feedSeasonError).toString()}</Error>;
+    if (isLoading || !sim || feedSeasonIsLoading) return <Loading />;
 
     const season = sim.phase >= 12 && sim.phase <= 15 ? -1 : sim.season;
+    const gammaString = sim.id != STATIC_ID ? displaySim(sim.id!, feedSeasonList?.data ?? null) + ", ": "";
 
     return (
         <Container>
@@ -54,12 +56,12 @@ export function Home() {
                 <h3 className="text-2xl font-semibold">Current games</h3>
 
                 <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
-                    Gamma 2, Season {displaySeason(season)}, Day {sim.day + 1}
+                    {gammaString}Season {displaySeason(season)}, Day {sim.day + 1}
                 </h4>
 
                 {sim && <SingleDayGamesList sim={sim.id!} season={season} day={sim.day} />}
                 <Link className="block mt-2" to={`/season/${sim.season + 1}/${sim.id}`}>
-                    View all Gamma 2, Season {displaySeason(season)} games &rarr;
+                    View all {gammaString}Season {displaySeason(season)} games &rarr;
                 </Link>
             </div>
         </Container>
