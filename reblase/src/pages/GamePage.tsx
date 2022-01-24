@@ -8,7 +8,7 @@ import Error from "../components/elements/Error";
 import { useGameUpdates, useFeedSeasonList } from "../blaseball/hooks";
 import { BlaseballFeedSeasonList, BlaseballGame } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
-import { displaySimAndSeasonPlaintext, displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
+import { displaySimAndSeasonPlaintext, displaySimSeasonAndDayPlaintext, STATIC_ID } from "blaseball-lib/games";
 import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "components/elements/Twemoji";
 
@@ -57,7 +57,9 @@ interface GamePageOptionsProps {
     options: GamePageOptions;
     setOptions: (opts: GamePageOptions) => void;
     gameComplete: boolean;
+    id: string;
     season: number;
+    sim: string;
     timestamp: string;
 }
 
@@ -99,13 +101,21 @@ const GamePageOptions = (props: GamePageOptionsProps) => {
                 </CheckBox>
             )}
 
-            <a
-                href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.season}&time=${props.timestamp}`}
-            >
-                <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
-                    <Twemoji emoji={"\u{1FA78}"} />
+            <a href={`https://www.blaseball.com/watch/${props.id}`}>
+                <Tooltip placement="top" overlay={<span>View on Blaseball.com</span>}>
+                    <Twemoji emoji={"\u{26BE}"} />
                 </Tooltip>
             </a>
+
+            {props.sim == STATIC_ID && (
+                <a
+                    href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.season}&time=${props.timestamp}`}
+                >
+                    <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
+                        <Twemoji emoji={"\u{1FA78}"} />
+                    </Tooltip>
+                </a>
+            )}
         </div>
     );
 };
@@ -147,8 +157,10 @@ export function GamePage() {
                 options={options}
                 setOptions={setOptions}
                 gameComplete={last?.gameComplete ?? true}
+                id={gameId! ?? "null"}
                 season={first?.data?.season}
                 timestamp={first?.timestamp}
+                sim={first?.data.sim ?? STATIC_ID}
             />
 
             <UpdatesListFetching
