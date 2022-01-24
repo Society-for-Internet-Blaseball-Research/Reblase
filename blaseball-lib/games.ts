@@ -214,6 +214,7 @@ export function displaySeason(seasonNumber: number) {
 }
 
 export function displaySim(sim: string, feedSeasons: BlaseballFeedSeasonList | null) {
+    if (sim == "gamma10") return "Gamma 4";
     if (sim == STATIC_ID || !feedSeasons) return "";
     const feedSeasonIndex = feedSeasons.collection.findIndex((seasonEntry) => seasonEntry.sim == sim);
     if (feedSeasonIndex == -1) return "Unknown SIM";
@@ -221,6 +222,7 @@ export function displaySim(sim: string, feedSeasons: BlaseballFeedSeasonList | n
 }
 
 export function shouldSimBeShown(sim: string, feedSeasons: BlaseballFeedSeasonList | null) {
+    if (sim == "gamma10") return true; // hack while we wait for TGB to update feed_season_list.json
     if (sim == STATIC_ID) return true;
     if (!feedSeasons) return false;
     if (sim == "gamma4") return false; // hardcoding this because we don't have data but the site does
