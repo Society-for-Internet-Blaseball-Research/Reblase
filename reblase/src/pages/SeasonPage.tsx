@@ -24,12 +24,14 @@ import StadiumPicker from "components/elements/StadiumPicker";
 type GameDay = { games: ChronGame[]; season: number; day: number };
 function groupByDay(games: ChronGame[]): GameDay[] {
     const days: Record<string, GameDay> = {};
+    let maxDay = -1;
     for (const game of games) {
         const day = game.data.day;
         const gameHasDefaultRules = game.data.rules != "df2207cc-03a2-4f6f-9604-63421a4dd5e8";
         if (!gameHasDefaultRules) continue;
         if (!days[day]) days[day] = { games: [], season: game.data.season, day: game.data.day };
         days[day].games.push(game);
+        if (maxDay < day) maxDay = day;
     }
 
     const daysList = [];
@@ -38,7 +40,7 @@ function groupByDay(games: ChronGame[]): GameDay[] {
     // 120 should be an upper bound (inb4 falsehoods....)
     // (future message from gamma9: [narrator voice] it wasn't.)
     // (future message from gamma10: screaming)
-    for (let i = 0; i < 250; i++) {
+    for (let i = 0; i <= maxDay; i++) {
         if (days[i]) daysList.push(days[i]);
     }
 
