@@ -63,7 +63,7 @@ function SeasonRow(props: { game: ChronGame; feedSeasonList?: BlaseballFeedSeaso
     );
 }
 
-function SeasonGroup(props: { games: ChronGame[]; feedSeasonList?: BlaseballFeedSeasonList}) {
+function SeasonGroup(props: { games: ChronGame[]; feedSeasonList?: BlaseballFeedSeasonList }) {
     return (
         <div className="flex flex-col mb-6">
             {props.games.map((seasonGame) => (
@@ -118,10 +118,10 @@ export function SeasonListPage() {
                 // lol
                 if (a.data.season < 0) a.data.season += 100;
                 if (b.data.season < 0) b.data.season += 100;
-    
+
                 return b.data.season - a.data.season;
             } else {
-                return a.data.sim > b.data.sim ? -1 : 1;
+                return b.data.sim!.localeCompare(a.data.sim!, undefined, { numeric: true });
             }
         });
 
