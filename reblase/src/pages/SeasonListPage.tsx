@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { useFeedSeasonList, useGameList } from "../blaseball/hooks";
 import { ChronGame } from "blaseball-lib/chronicler";
-import { displaySeason, displaySim, shouldSimBeShown, STATIC_ID } from "blaseball-lib/games";
+import { didSimHaveMultipleSeasons, displaySeason, displaySim, shouldSimBeShown, STATIC_ID } from "blaseball-lib/games";
 import { BlaseballFeedSeasonList } from "blaseball-lib/models";
 import Twemoji from "components/elements/Twemoji";
 
@@ -29,9 +29,18 @@ function getSeasonData(game: ChronGame, feedSeasonList?: BlaseballFeedSeasonList
     if (override) return override;
 
     const start = game.startTime ?? null;
-    const end = start ? dayjs(start).add(6, "day").toISOString() : null;
-    const name = game.data.sim && game.data.sim !== STATIC_ID
-            ? `${displaySim(game.data.sim, feedSeasonList ?? null)}, Season ${displaySeason(game.data.season)}`
+    const wasSeasonMultiweek = !didSimHaveMultipleSeasons(game.data.sim);
+
+    const end = start
+        ? dayjs(start)
+              .add(wasSeasonMultiweek ? 13 : 6, "day")
+              .toISOString()
+        : null;
+    const name =
+        game.data.sim && game.data.sim !== STATIC_ID
+            ? wasSeasonMultiweek
+                ? displaySim(game.data.sim, feedSeasonList ?? null)
+                : `${displaySim(game.data.sim, feedSeasonList ?? null)}, Season ${displaySeason(game.data.season)}`
             : `Season ${displaySeason(game.data.season)}`;
 
     return { name, start, end };
