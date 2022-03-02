@@ -23,7 +23,9 @@ const GameHeading = ({ evt }: PayloadProps) => {
     return (
         <>
             <p className="mb-2">
-                <Link to={`/season/${evt.season + 1}/${evt.sim}`}>&larr; Back to Season {displaySeason(evt.season)}</Link>
+                <Link to={evt.sim ? `/season/${evt.season + 1}/${evt.sim}` : `/season/${evt.season + 1}`}>
+                    &larr; Back to Season {displaySeason(evt.season)}
+                </Link>
             </p>
             <Link to={location.pathname}>
                 <h2 className="text-3xl font-semibold">
