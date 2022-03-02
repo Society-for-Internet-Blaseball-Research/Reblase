@@ -229,3 +229,7 @@ export function shouldSimBeShown(sim: string, feedSeasons: BlaseballFeedSeasonLi
     const feedSeasonIndex = feedSeasons.collection.findIndex((seasonEntry) => seasonEntry.sim == sim);
     return feedSeasonIndex !== -1;
 }
+
+export function didSimHaveMultipleSeasons(sim: string | undefined) {
+    return sim !== "gamma10" && sim !== "gamma9";
+}
