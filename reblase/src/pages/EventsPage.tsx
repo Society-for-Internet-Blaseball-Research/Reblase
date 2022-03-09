@@ -7,7 +7,7 @@ import Error from "../components/elements/Error";
 import { Link } from "react-router-dom";
 import { useGameList, useTemporal, useFeedSeasonList } from "../blaseball/hooks";
 import dayjs from "dayjs";
-import { displaySeason, displaySim, GameTeam, getAwayTeam, getHomeTeam, STATIC_ID } from "blaseball-lib/games";
+import { displaySeason, displaySim, didSimHaveMultipleSeasons, GameTeam, getAwayTeam, getHomeTeam, STATIC_ID } from "blaseball-lib/games";
 import Twemoji from "components/elements/Twemoji";
 import { BlaseballFeedSeasonList } from "blaseball-lib/models";
 
@@ -114,7 +114,8 @@ const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent, feedSeasons: Blasebal
                     </Link>
                     <Link to={`/game/${evt.game}`} className="text-sm">
                         {evt.sim != STATIC_ID && <><strong>{displaySim(evt.sim, feedSeasons)}</strong>, </>}
-                        Season <strong>{displaySeason(evt.season)}</strong>, Day <strong>{evt.day + 1}</strong>
+                        {didSimHaveMultipleSeasons(evt.sim) && <>Season <strong>{displaySeason(evt.season)}</strong>, </>}
+                        Day <strong>{evt.day + 1}</strong>
                     </Link>
                 </div>
             ) : (

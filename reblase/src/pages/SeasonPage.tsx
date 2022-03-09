@@ -14,11 +14,11 @@ import { getOutcomes, calculatedOutcomeTypes } from "../blaseball/outcome";
 import WeatherPicker from "../components/elements/WeatherPicker";
 import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
-import { BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
+import { BlaseballFeedSeasonList, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
 import { FightRow, SemiCentennialRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
-import { displaySeason, displaySim, STATIC_ID } from "blaseball-lib/games";
+import { displaySimAndSeasonPlaintext, STATIC_ID } from "blaseball-lib/games";
 import StadiumPicker from "components/elements/StadiumPicker";
 
 type GameDay = { games: ChronGame[]; season: number; day: number };
@@ -48,10 +48,12 @@ function groupByDay(games: ChronGame[]): GameDay[] {
 const GamesList = React.memo(
     (props: {
         days: GameDay[];
+        sim: string;
         players: BlaseballPlayer[];
         teams: BlaseballTeam[];
         showFutureWeather: boolean;
         currentDay: number;
+        feedSeasonList?: BlaseballFeedSeasonList;
     }) => {
         const teamsMap: Record<PlayerID, BlaseballTeam> = {};
         for (const team of props.teams) teamsMap[team.id!] = team;
@@ -64,10 +66,12 @@ const GamesList = React.memo(
                     return (
                         <DayTable
                             key={day}
+                            sim={props.sim}
                             season={season}
                             day={day}
                             currentDay={props.currentDay}
                             games={games}
+                            feedSeasonList={props.feedSeasonList}
                             teams={teamsMap}
                             players={playersMap}
                             showFutureWeather={props.showFutureWeather}
@@ -89,6 +93,7 @@ function GamesListFetching(props: {
     showFutureGames: boolean;
     showFutureWeather: boolean;
 
+    feedSeasonList?: BlaseballFeedSeasonList;
     allPlayers: BlaseballPlayer[];
     allTeams: BlaseballTeam[];
 }) {
@@ -98,7 +103,10 @@ function GamesListFetching(props: {
         started: !props.showFutureGames ? true : undefined,
         team: props.teams ? props.teams.join(",") : undefined,
         weather: props.weather ? props.weather.join(",") : undefined,
-        outcomes: props.outcomes && props.outcomes.every((x) => calculatedOutcomeTypes.map((x) => x.name).indexOf(x) === -1) ? true : undefined,
+        outcomes:
+            props.outcomes && props.outcomes.every((x) => calculatedOutcomeTypes.map((x) => x.name).indexOf(x) === -1)
+                ? true
+                : undefined,
     });
 
     const { data: simData, error: simError, isLoading: simIsLoading } = useSimulation();
@@ -126,9 +134,9 @@ function GamesListFetching(props: {
 
     const semiCentennialGames = useMemo(() => {
         let gamesFiltered = games;
-        gamesFiltered = gamesFiltered.filter((game) =>{
+        gamesFiltered = gamesFiltered.filter((game) => {
             return game.data.rules === "df2207cc-03a2-4f6f-9604-63421a4dd5e8";
-        })
+        });
 
         return gamesFiltered;
     }, [games]);
@@ -157,11 +165,13 @@ function GamesListFetching(props: {
             ) : null}
 
             <GamesList
+                sim={props.sim}
                 days={days}
                 players={props.allPlayers}
                 teams={props.allTeams}
                 showFutureWeather={props.showFutureWeather}
                 currentDay={currentDay}
+                feedSeasonList={props.feedSeasonList}
             />
         </>
     );
@@ -199,7 +209,11 @@ export function SeasonPage() {
     const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
     let { fights } = useFights();
     fights = fights.filter((f) => f.data.season === season);
-    const { games, error: gamesError, isLoading: isLoadingGames } = useGameList({
+    const {
+        games,
+        error: gamesError,
+        isLoading: isLoadingGames,
+    } = useGameList({
         season: season,
         sim: sim,
         started: !showFutureGames ? true : undefined,
@@ -208,10 +222,9 @@ export function SeasonPage() {
     // Never reuse caches across multiple seasons, then it feels slower because instant rerender...
     useEffect(() => cache.clear(), [season]);
 
-    if (error || feedSeasonError || gamesError) return <Error>{(error || feedSeasonError || gamesError).toString()}</Error>;
+    if (error || feedSeasonError || gamesError)
+        return <Error>{(error || feedSeasonError || gamesError).toString()}</Error>;
     if (isLoadingPlayerTeams || feedSeasonIsLoading || isLoadingGames) return <Loading />;
-
-    const gammaString = sim != STATIC_ID ? displaySim(sim, feedSeasonList?.data ?? null) + ", ": "";
 
     return (
         <Container className={"mt-4"}>
@@ -219,7 +232,9 @@ export function SeasonPage() {
                 <Link to="/seasons">&larr; Back to Seasons</Link>
             </p>
             <h2 className="text-2xl font-semibold mb-4">
-                <Link to={location.pathname}>Games in {gammaString}Season {displaySeason(season)}</Link>
+                <Link to={location.pathname}>
+                    Games in {displaySimAndSeasonPlaintext(sim, season, feedSeasonList?.data)}
+                </Link>
             </h2>
 
             <div className="mb-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -298,6 +313,7 @@ export function SeasonPage() {
                 stadiums={selectedStadiums.length ? selectedStadiums : null}
                 showFutureGames={showFutureGames}
                 showFutureWeather={showFutureWeather}
+                feedSeasonList={feedSeasonList?.data}
                 allPlayers={players.map((p) => p.data)}
                 allTeams={teams.map((p) => p.data)}
             />

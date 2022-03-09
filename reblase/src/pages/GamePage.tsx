@@ -5,18 +5,19 @@ import Tooltip from "rc-tooltip";
 import { UpdatesListFetching } from "../components/game/GameUpdateList";
 import { cache } from "swr";
 import Error from "../components/elements/Error";
-import { useGameUpdates } from "../blaseball/hooks";
-import { BlaseballGame } from "blaseball-lib/models";
+import { useGameUpdates, useFeedSeasonList } from "../blaseball/hooks";
+import { BlaseballFeedSeasonList, BlaseballGame } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
-import { displaySeason } from "blaseball-lib/games";
+import { displaySimAndSeasonPlaintext, displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
 import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "components/elements/Twemoji";
 
 interface PayloadProps {
     evt: BlaseballGame;
+    feedSeasonList?: BlaseballFeedSeasonList;
 }
 
-const GameHeading = ({ evt }: PayloadProps) => {
+const GameHeading = ({ evt, feedSeasonList }: PayloadProps) => {
     const location = useLocation();
     const weather = getWeather(evt.weather);
 
@@ -24,12 +25,12 @@ const GameHeading = ({ evt }: PayloadProps) => {
         <>
             <p className="mb-2">
                 <Link to={evt.sim ? `/season/${evt.season + 1}/${evt.sim}` : `/season/${evt.season + 1}`}>
-                    &larr; Back to Season {displaySeason(evt.season)}
+                    &larr; Back to {displaySimAndSeasonPlaintext(evt.sim, evt.season, feedSeasonList)}
                 </Link>
             </p>
             <Link to={location.pathname}>
                 <h2 className="text-3xl font-semibold">
-                    Season {displaySeason(evt.season)}, Day {evt.day + 1}
+                    {displaySimSeasonAndDayPlaintext(evt.sim, evt.season, evt.day, feedSeasonList)}
                 </h2>
             </Link>
 
@@ -98,7 +99,9 @@ const GamePageOptions = (props: GamePageOptionsProps) => {
                 </CheckBox>
             )}
 
-            <a href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.season}&time=${props.timestamp}`}>
+            <a
+                href={`https://before.sibr.dev/_before/jump?redirect=%2Fleague&season=${props.season}&time=${props.timestamp}`}
+            >
                 <Tooltip placement="top" overlay={<span>Remember Before?</span>}>
                     <Twemoji emoji={"\u{1FA78}"} />
                 </Tooltip>
@@ -127,7 +130,8 @@ export function GamePage() {
         started: true,
     };
     const { updates, error, isLoading } = useGameUpdates(query, options.autoUpdate);
-    if (error) return <Error>{error.toString()}</Error>;
+    const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
+    if (error || feedSeasonError) return <Error>{error.toString() || feedSeasonError.toString()}</Error>;
 
     const first = updates[0];
     const last = updates[updates.length - 1]?.data;
@@ -137,18 +141,19 @@ export function GamePage() {
 
     return (
         <div className="container mx-auto px-4">
-            {last && <GameHeading evt={last} />}
+            {last && <GameHeading evt={last} feedSeasonList={feedSeasonList?.data} />}
 
-            <GamePageOptions 
+            <GamePageOptions
                 options={options}
                 setOptions={setOptions}
                 gameComplete={last?.gameComplete ?? true}
                 season={first?.data?.season}
-                timestamp={first?.timestamp}/>
+                timestamp={first?.timestamp}
+            />
 
             <UpdatesListFetching
                 updates={updates}
-                isLoading={isLoading}
+                isLoading={isLoading || feedSeasonIsLoading}
                 order={options.reverse ? "desc" : "asc"}
                 filterImportant={options.onlyImportant}
                 autoRefresh={options.autoUpdate}
