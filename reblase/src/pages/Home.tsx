@@ -1,15 +1,27 @@
 ﻿import { useFeedSeasonList, useGameList, usePlayerTeamsList, useSimulation } from "../blaseball/hooks";
-import { BlaseballTeam } from "blaseball-lib/models";
+import { BlaseballFeedSeasonList, BlaseballTeam } from "blaseball-lib/models";
 import React from "react";
 import Error from "../components/elements/Error";
 import { Container } from "../components/layout/Container";
 import { Loading } from "../components/elements/Loading";
 import { Link } from "react-router-dom";
 import { GameRow } from "../components/gamelist/GameRow";
-import { displaySeason, displaySim, STATIC_ID } from "blaseball-lib/games";
+import {
+    displaySeason,
+    displaySim,
+    didSimHaveMultipleSeasons,
+    STATIC_ID,
+    displaySimSeasonAndDayPlaintext,
+    displaySimAndSeasonPlaintext,
+} from "blaseball-lib/games";
 import { PlayerID } from "blaseball-lib/common";
 
-function SingleDayGamesList(props: { sim: string; season: number; day: number }) {
+function SingleDayGamesList(props: {
+    sim: string;
+    season: number;
+    day: number;
+    feedSeasonList?: BlaseballFeedSeasonList;
+}) {
     const { games, error, isLoading } = useGameList({ sim: props.sim, season: props.season, day: props.day });
     const { players, teams, error: teamError, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
 
@@ -28,6 +40,7 @@ function SingleDayGamesList(props: { sim: string; season: number; day: number })
                         game={game}
                         teams={teamsMap}
                         showWeather={true}
+                        feedSeasonList={props.feedSeasonList}
                         predictedAwayPitcher={null}
                         predictedHomePitcher={null}
                     />
@@ -46,7 +59,6 @@ export function Home() {
     if (isLoading || !sim || feedSeasonIsLoading) return <Loading />;
 
     const season = sim.phase >= 12 && sim.phase <= 15 ? -1 : sim.season;
-    const gammaString = sim.id != STATIC_ID ? displaySim(sim.id!, feedSeasonList?.data ?? null) + ", ": "";
 
     return (
         <Container>
@@ -56,12 +68,20 @@ export function Home() {
                 <h3 className="text-2xl font-semibold">Current games</h3>
 
                 <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
-                    {gammaString}Season {displaySeason(season)}, Day {sim.day + 1}
+                    {displaySimSeasonAndDayPlaintext(sim.id, sim.season, sim.day, feedSeasonList?.data)}
                 </h4>
 
-                {sim && <SingleDayGamesList sim={sim.id!} season={season} day={sim.day} />}
+                {sim && (
+                    <SingleDayGamesList
+                        sim={sim.id!}
+                        season={season}
+                        day={sim.day}
+                        feedSeasonList={feedSeasonList?.data}
+                    />
+                )}
                 <Link className="block mt-2" to={`/season/${sim.season + 1}/${sim.id}`}>
-                    View all {gammaString}Season {displaySeason(season)} games &rarr;
+                    <>View all </>
+                    {displaySimAndSeasonPlaintext(sim.id, sim.season, feedSeasonList?.data)} games &rarr;
                 </Link>
             </div>
         </Container>

@@ -213,7 +213,7 @@ export function displaySeason(seasonNumber: number) {
     return (seasonNumber + 1).toString();
 }
 
-export function displaySim(sim: string, feedSeasons: BlaseballFeedSeasonList | null) {
+export function displaySim(sim: string, feedSeasons: BlaseballFeedSeasonList | undefined | null) {
     if (sim == "gamma10") return "Gamma 4";
     if (sim == STATIC_ID || !feedSeasons) return "";
     const feedSeasonIndex = feedSeasons.collection.findIndex((seasonEntry) => seasonEntry.sim == sim);
@@ -232,4 +232,38 @@ export function shouldSimBeShown(sim: string, feedSeasons: BlaseballFeedSeasonLi
 
 export function didSimHaveMultipleSeasons(sim: string | undefined) {
     return sim !== "gamma10" && sim !== "gamma9";
+}
+
+export function displaySimAndSeasonPlaintext(
+    sim: string | undefined,
+    season: number,
+    feedSeasons: BlaseballFeedSeasonList | undefined | null
+) {
+    if (sim === STATIC_ID || !sim) {
+        return `Season ${displaySeason(season)}`;
+    }
+
+    const simHadMultipleSeasons = didSimHaveMultipleSeasons(sim);
+    if (simHadMultipleSeasons) {
+        return `${displaySim(sim, feedSeasons)}, Season ${displaySeason(season)}`;
+    }
+
+    return displaySim(sim, feedSeasons);
+}
+
+export function displaySimSeasonAndDayPlaintext(
+    sim: string | undefined,
+    season: number,
+    day: number,
+    feedSeasons: BlaseballFeedSeasonList | undefined | null
+) {
+    const simIsStaticIdYo = sim === STATIC_ID || !sim;
+
+    if (sim === STATIC_ID || !sim) {
+        return `Season ${displaySeason(season)}, Day ${day + 1}`;
+    }
+
+    return `${!simIsStaticIdYo ? displaySim(sim!, feedSeasons) + ", " : ""}${
+        !simIsStaticIdYo && didSimHaveMultipleSeasons(sim) ? "Season " + displaySeason(season) + ", " : ""
+    }Day ${day + 1}`;
 }

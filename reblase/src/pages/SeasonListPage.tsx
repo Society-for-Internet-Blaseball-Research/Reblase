@@ -6,7 +6,12 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { useFeedSeasonList, useGameList } from "../blaseball/hooks";
 import { ChronGame } from "blaseball-lib/chronicler";
-import { didSimHaveMultipleSeasons, displaySeason, displaySim, shouldSimBeShown, STATIC_ID } from "blaseball-lib/games";
+import {
+    didSimHaveMultipleSeasons,
+    displaySimAndSeasonPlaintext,
+    shouldSimBeShown,
+    STATIC_ID,
+} from "blaseball-lib/games";
 import { BlaseballFeedSeasonList } from "blaseball-lib/models";
 import Twemoji from "components/elements/Twemoji";
 
@@ -36,12 +41,7 @@ function getSeasonData(game: ChronGame, feedSeasonList?: BlaseballFeedSeasonList
               .add(wasSeasonMultiweek ? 13 : 6, "day")
               .toISOString()
         : null;
-    const name =
-        game.data.sim && game.data.sim !== STATIC_ID
-            ? wasSeasonMultiweek
-                ? displaySim(game.data.sim, feedSeasonList ?? null)
-                : `${displaySim(game.data.sim, feedSeasonList ?? null)}, Season ${displaySeason(game.data.season)}`
-            : `Season ${displaySeason(game.data.season)}`;
+    const name = displaySimAndSeasonPlaintext(game.data.sim, game.data.season, feedSeasonList);
 
     return { name, start, end };
 }
