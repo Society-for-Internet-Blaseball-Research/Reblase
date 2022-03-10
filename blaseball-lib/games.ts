@@ -251,6 +251,26 @@ export function displaySimAndSeasonPlaintext(
     return displaySim(sim, feedSeasons);
 }
 
+export function displaySimAndSeasonShorthand(
+    sim: string | undefined,
+    season: number,
+    feedSeasons: BlaseballFeedSeasonList | undefined | null
+) {
+    if (sim === STATIC_ID || !sim) {
+        return season === -1 ? "S\u2615" : `S${season + 1}`;
+    }
+
+    const simString = displaySim(sim, feedSeasons);
+    const gammaNumber = parseInt(simString.split(" ")[1]);
+
+    const simHadMultipleSeasons = didSimHaveMultipleSeasons(sim);
+    if (simHadMultipleSeasons) {
+        return `G${gammaNumber}/S${season + 1}`;
+    }
+
+    return `G${gammaNumber}`;
+}
+
 export function displaySimSeasonAndDayPlaintext(
     sim: string | undefined,
     season: number,
