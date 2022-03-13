@@ -206,6 +206,7 @@ export function EventsPage() {
 
     const temporalEvents = [];
     let lastEvent: TemporalEvent | null = null;
+    let lastTime: dayjs.Dayjs | null = null;
     for (const update of temporalUpdates) {
         const doc = update.data?.doc;
         if (!doc || !doc.epsilon || !doc.zeta) {
@@ -213,6 +214,12 @@ export function EventsPage() {
             continue;
         }
 
+        if (lastTime && lastTime.diff(update.validFrom, "minute") > 5) {
+            console.log(`resetting: old=${lastTime.format()}, new=${update.validFrom}`);
+            lastEvent = null;
+        }
+
+        lastTime = dayjs(update.validFrom);
         const type = temporalTypeByGamma[doc.gamma] ?? temporalTypes.unknown;
 
         if (lastEvent && lastEvent.name === type.name) {
