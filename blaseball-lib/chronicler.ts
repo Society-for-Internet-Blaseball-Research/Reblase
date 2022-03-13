@@ -71,6 +71,7 @@ export type SunSunPressureQuery = {
 export type TemporalUpdatesQuery = {
     order?: "asc" | "desc";
     count?: number;
+    before?: string;
     page?: string;
 };
 

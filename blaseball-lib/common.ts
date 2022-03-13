@@ -70,3 +70,11 @@ export interface TeamRoster {
     bullpen: PlayerID[];
     bench: PlayerID[];
 }
+
+export enum FeedCategory {
+    Game = 0,
+    Changes = 1,
+    Abilities = 2,
+    Outcomes = 3,
+    Narrative = 4,
+}
