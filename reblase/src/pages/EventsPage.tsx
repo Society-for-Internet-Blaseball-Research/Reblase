@@ -87,6 +87,11 @@ const temporalTypes = {
         color: "red",
         emoji: "\u{1F525}",
     },
+    macrophone: {
+        name: "Macrophone",
+        color: "pink",
+        emoji: "\u{1F3A4}",
+    },
     unknown: {
         name: "???",
         color: "black",
@@ -102,6 +107,7 @@ const temporalTypeByGamma: Partial<Record<number, TemporalType>> = {
     4: temporalTypes.microphone,
     5: temporalTypes.lootcrates,
     6: temporalTypes.namerifeht,
+    7: temporalTypes.macrophone,
 };
 
 const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent, feedSeasons: BlaseballFeedSeasonList | null}) => {
