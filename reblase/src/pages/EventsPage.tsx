@@ -110,7 +110,7 @@ const temporalTypeByGamma: Partial<Record<number, TemporalType>> = {
     7: temporalTypes.macrophone,
 };
 
-const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent, feedSeasons: BlaseballFeedSeasonList | null}) => {
+const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent; feedSeasons: BlaseballFeedSeasonList | null }) => {
     return (
         <div className="border-b border-gray-300 dark:border-gray-700 py-2">
             {evt.type === "game" ? (
@@ -164,7 +164,8 @@ export function EventsPage() {
     const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useTemporal();
     const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
 
-    if (error || temporalError || feedSeasonError) return <Error>{(error || temporalError || feedSeasonError).toString()}</Error>;
+    if (error || temporalError || feedSeasonError)
+        return <Error>{(error || temporalError || feedSeasonError).toString()}</Error>;
     if (isLoading || temporalIsLoading || feedSeasonIsLoading) return <Loading />;
 
     const gameEvents: BlaseEvent[] = [];
