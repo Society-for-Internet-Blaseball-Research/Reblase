@@ -29,7 +29,12 @@ import {
     ChronSunSunPressure,
     ChronFeedSeasonList,
 } from "blaseball-lib/chronicler";
-import { BlaseballSimData } from "blaseball-lib/models";
+import {
+    eventuallyApi,
+    EventuallyTemporalUpdatesQuery,
+    EARLIEST_FEED_CONSIDERATION_DATE,
+} from "blaseball-lib/eventually";
+import { BlaseballFeedEntry, BlaseballFeedTemporalMetadata, BlaseballSimData } from "blaseball-lib/models";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -101,7 +106,7 @@ interface FightUpdatesHookReturn {
 export function useFightUpdates(query: FightUpdatesQuery): FightUpdatesHookReturn {
     const { data, error } = useSWRInfinite<FightUpdatesResponse>(
         (_, previous) => {
-            query = {...query, count: 1000};
+            query = { ...query, count: 1000 };
 
             // First page
             if (!previous) return chroniclerApi.fightUpdates(query);
@@ -167,9 +172,9 @@ interface TemporalHookReturn {
 }
 
 export function useTemporal(): TemporalHookReturn {
-    const { data, error } = useSWRInfinite<TemporalResponse>(
+    const { data: chronData, error: chronError } = useSWRInfinite<TemporalResponse>(
         (_, previous) => {
-            const query: TemporalUpdatesQuery = { count: 250, order: "desc" };
+            const query: TemporalUpdatesQuery = { count: 250, order: "desc", before: EARLIEST_FEED_CONSIDERATION_DATE };
 
             // First page
             if (!previous) return chroniclerApi.temporalUpdates(query);
@@ -184,17 +189,60 @@ export function useTemporal(): TemporalHookReturn {
         { initialSize: 999 }
     );
 
-    const allUpdates = [];
-    if (data) {
-        for (const page of data) {
+    const { data: eventuallyData, error: eventuallyError } = useSWRInfinite<BlaseballFeedEntry[]>(
+        (_, previous) => {
+            const query: EventuallyTemporalUpdatesQuery = { count: 250, order: "desc" };
+
+            // First page
+            if (!previous) return eventuallyApi.temporalUpdates(query);
+
+            const last_entry = previous[-1];
+            if (!last_entry) return null;
+            if (!last_entry.created) return null;
+            if (last_entry.created.localeCompare(EARLIEST_FEED_CONSIDERATION_DATE) < 0) return null;
+
+            return eventuallyApi.temporalUpdates({ ...query, after: last_entry.created });
+        },
+        { initialSize: 999 }
+    );
+
+    const allUpdates: ChronTemporalUpdate[] = [];
+    if (chronData) {
+        for (const page of chronData) {
             allUpdates.push(...page.items);
+        }
+    }
+
+    if (eventuallyData) {
+        for (const page of eventuallyData) {
+            for (const feedEntry of page) {
+                const feed_metadata = feedEntry.metadata as BlaseballFeedTemporalMetadata;
+                if (!feed_metadata) break;
+
+                allUpdates.push({
+                    nextPage: "no-pages",
+                    hash: "no-hash",
+                    entityId: feedEntry.id,
+                    validFrom: feedEntry.created,
+                    validTo: feedEntry.created,
+                    data: {
+                        doc: {
+                            zeta: feedEntry.description,
+                            gamma: feed_metadata.being,
+                            // we're only considering feed events after s24, and there haven't been any non-takeover temporal events yet
+                            // a problem for future us
+                            epsilon: true,
+                        },
+                    },
+                });
+            }
         }
     }
 
     return {
         updates: allUpdates,
-        error,
-        isLoading: !data && !error,
+        error: chronError || eventuallyError,
+        isLoading: !chronData && !chronError && !eventuallyData && !eventuallyError,
     };
 }
 
