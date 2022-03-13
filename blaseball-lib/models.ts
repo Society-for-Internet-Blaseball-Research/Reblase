@@ -3,6 +3,7 @@ import {
     BlaseballAttributes,
     BlaseballAttributesDeprecated,
     BlaseballEntity,
+    FeedCategory,
     GameID,
     LeagueID,
     PlayerID,
@@ -169,10 +170,10 @@ export interface BlaseballTemporal {
 }
 
 export interface BlaseballTemporalDoc extends BlaseballEntity<"whatistime"> {
-    alpha: number;
-    beta: number;
+    alpha?: number;
+    beta?: number;
     zeta: string;
-    delta: boolean;
+    delta?: boolean;
     gamma: number;
     epsilon: boolean;
 }
@@ -232,4 +233,37 @@ export interface BlaseballFeedSeasonEntry {
 
 export interface BlaseballFeedSeasonList {
     collection: BlaseballFeedSeasonEntry[];
+}
+
+export interface BlaseballFeedEntry {
+    id: string;
+
+    description: string;
+    blurb: string;
+
+    nuts: number;
+
+    playerTags: PlayerID[];
+    teamTags: TeamID[];
+    gameTags: GameID[];
+
+    metadata: object;
+
+    created: string;
+
+    season: number;
+    sim: string;
+    tournament: number;
+    day: number;
+
+    phase: number;
+
+    type: number;
+    category: FeedCategory;
+}
+
+export interface BlaseballFeedTemporalMetadata {
+    being: number;
+    _eventually_ingest_source?: string;
+    _eventually_ingest_time?: number;
 }
