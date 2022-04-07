@@ -75,14 +75,11 @@ const Duration = React.memo(
         const arrow = props.topOfInning ? "\u25B2" : "\u25BC";
 
         return (
-            <Link
-                className="text-center text-sm tabular-nums text-gray-700 dark:text-gray-300"
-                to={`/game/${props.gameId}`}
-            >
+            <span className="text-center text-sm tabular-nums text-gray-700 dark:text-gray-300">
                 <span className="w-4 inline-block text-right mr-1">{props.inning + 1}</span>
                 <span className="text-xs pr-2 border-r border-gray-500 mr-2">{arrow}</span>
                 {duration}
-            </Link>
+            </span>
         );
     }
 );
@@ -232,7 +229,7 @@ export const GameRow = React.memo(
         return (
             <Link
                 to={`/game/${props.game.gameId}`}
-                className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 dark-hover:bg-gray-800"
+                className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 focus:bg-gray-200 dark-hover:bg-gray-800"
             >
                 <div className="contents md:hidden">
                     <TwoLineTeamScore home={home} away={away} />
