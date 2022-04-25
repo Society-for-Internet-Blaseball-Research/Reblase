@@ -167,6 +167,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /The Shame Pit/,
         /Red Hot/,
         /they peck [\w\s]+ free!/,
+        /pecked [\w\s]+ free!/,
         /Big Peanut/,
         /flock of Crows/,
         /murder of Crows/,
