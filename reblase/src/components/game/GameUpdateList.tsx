@@ -150,6 +150,8 @@ interface GameUpdateListProps<TSecondary> {
     renderSecondary?: (update: SecondaryUpdate<TSecondary>) => React.ReactNode;
 }
 
+type Group<TSecondary> = { firstUpdate: GameOrFight, updates: GroupValue<TSecondary>[] }
+
 type GroupValue<TSecondary> =
     | { type: "primary"; data: GameOrFight }
     | { type: "secondary"; data: SecondaryUpdate<TSecondary> };
@@ -168,14 +170,17 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
     );
 
     const grouped = [];
+    let lastGroup: Group<TSecondary> | null = null;
+
     for (const elem of elements) {
         if (elem.type === "heading") {
-            grouped.push({
+            lastGroup = {
                 firstUpdate: elem.update,
                 updates: [] as GroupValue<TSecondary>[],
-            });
+            };
+            grouped.push(lastGroup);
         } else {
-            grouped[grouped.length - 1].updates.push({ type: "primary", data: elem.update });
+            lastGroup!.updates.push({ type: "primary", data: elem.update });
         }
     }
 
@@ -195,7 +200,7 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
             }
         }
 
-        grouped[grouped.length - 1].updates.push(...remaining.map((d) => ({ type: "secondary" as const, data: d })));
+        lastGroup!.updates.push(...remaining.map((d) => ({ type: "secondary" as const, data: d })));
     }
 
     const scrollTarget = window.location.hash.replace("#", "");
