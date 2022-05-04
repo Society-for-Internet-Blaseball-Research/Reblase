@@ -49,13 +49,13 @@ export type GameListQuery = {
 export type GameUpdatesQuery = {
     game: string;
     started: boolean;
-    after?: string;
+    after?: Timestamp;
     count?: number;
 };
 
 export type FightUpdatesQuery = {
     id: string;
-    after?: string;
+    after?: Timestamp;
     count?: number;
     page?: string;
 };
@@ -71,7 +71,8 @@ export type SunSunPressureQuery = {
 export type TemporalUpdatesQuery = {
     order?: "asc" | "desc";
     count?: number;
-    before?: string;
+    after?: Timestamp;
+    before?: Timestamp;
     page?: string;
 };
 
