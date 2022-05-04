@@ -60,14 +60,6 @@ export type FightUpdatesQuery = {
     page?: string;
 };
 
-export type SunSunPressureQuery = {
-    order?: "asc" | "desc";
-    count?: number;
-    after?: string;
-    before?: string;
-    page?: string;
-}
-
 export type TemporalUpdatesQuery = {
     order?: "asc" | "desc";
     count?: number;
