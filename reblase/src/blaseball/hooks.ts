@@ -24,7 +24,6 @@ import {
     TemporalResponse,
     TemporalUpdatesQuery,
     ChronStadium,
-    SunSunPressureQuery,
     SunSunPressureResponse,
     ChronSunSunPressure,
     ChronFeedSeasonList,
@@ -171,7 +170,7 @@ interface TemporalHookReturn {
     isLoading: boolean;
 }
 
-export function useTemporal(): TemporalHookReturn {
+export function useAllTemporal(): TemporalHookReturn {
     const { data: chronData, error: chronError } = useSWRInfinite<TemporalResponse>(
         (_, previous) => {
             const query: TemporalUpdatesQuery = { count: 250, order: "desc", before: EARLIEST_FEED_CONSIDERATION_DATE };
@@ -246,6 +245,44 @@ export function useTemporal(): TemporalHookReturn {
     };
 }
 
+interface TemporalHookReturn {
+    updates: ChronTemporalUpdate[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useTemporalForGame(gameId: string): TemporalHookReturn {
+    const { data: gameData } = useSWR<GameUpdatesResponse>(
+        chroniclerApi.gameUpdates({ game: gameId, count: 1, started: true })
+    );
+
+    const { data: chronData, error: chronError } = useSWR<TemporalResponse>(() =>
+        chroniclerApi.temporalUpdates({ count: 1000, order: "asc", after: gameData!.data[0].timestamp })
+    );
+
+    return {
+        updates: chronData?.items ?? [],
+        error: chronError,
+        isLoading: !chronData && !chronError,
+    };
+}
+
+export function useTemporalForFight(fightId: string): TemporalHookReturn {
+    const { data: fightData } = useSWR<FightUpdatesResponse>(
+        chroniclerApi.fightUpdates({ id: fightId, count: 1 })
+    );
+
+    const { data: chronData, error: chronError } = useSWR<TemporalResponse>(() =>
+        chroniclerApi.temporalUpdates({ count: 1000, order: "asc", after: fightData!.items[0].validFrom })
+    );
+
+    return {
+        updates: chronData?.items ?? [],
+        error: chronError,
+        isLoading: !chronData && !chronError,
+    };
+}
+
 interface SimDataHookReturn {
     data: BlaseballSimData | null;
     error: any;
@@ -268,35 +305,19 @@ interface SunSunPressureDataHookReturn {
     isLoading: boolean;
 }
 
-export function useSunSunPressure(query: SunSunPressureQuery): SunSunPressureDataHookReturn {
-    const { data, error } = useSWRInfinite<SunSunPressureResponse>(
-        (_, previous) => {
-            const query: SunSunPressureQuery = { count: 250, order: "desc" };
-
-            // First page
-            if (!previous) return chroniclerApi.sunSunPressure(query);
-
-            // Reached end
-            if (!previous.nextPage) return null;
-
-            // Next page
-            return chroniclerApi.sunSunPressure({ ...query, page: previous.nextPage });
-        },
-        // todo: better way to do this?
-        { initialSize: 999 }
+export function useSunSunPressureForGame(gameId: string): SunSunPressureDataHookReturn {
+    const { data: gameData } = useSWR<GameUpdatesResponse>(
+        chroniclerApi.gameUpdates({ game: gameId, count: 1, started: true })
     );
 
-    const allItems = [];
-    if (data) {
-        for (const page of data) {
-            allItems.push(...page.items);
-        }
-    }
+    const { data: chronData, error: chronError } = useSWR<SunSunPressureResponse>(() =>
+        chroniclerApi.sunSunPressure({ count: 1000, order: "desc", after: gameData!.data[0].timestamp })
+    );
 
     return {
-        data: allItems,
-        error,
-        isLoading: !data && !error,
+        data: chronData?.items ?? [],
+        error: chronError,
+        isLoading: !chronData && !chronError,
     };
 }
 

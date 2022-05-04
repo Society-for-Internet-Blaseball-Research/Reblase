@@ -1,6 +1,6 @@
 import { ChronFightUpdate, ChronTemporalUpdate } from "blaseball-lib/chronicler";
 import { BlaseballFight, BlaseballTemporal, DamageResult } from "blaseball-lib/models";
-import { useFightUpdates, useTemporal } from "blaseball/hooks";
+import { useFightUpdates, useTemporalForFight } from "blaseball/hooks";
 import { Loading } from "components/elements/Loading";
 import Twemoji from "components/elements/Twemoji";
 import { Container } from "components/layout/Container";
@@ -141,8 +141,8 @@ export default function BossfightPage() {
         id: fightId!,
     };
 
+    const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useTemporalForFight(fightId);
     const { updates: fightUpdates, error: updatesError, isLoading } = useFightUpdates(query);
-    const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useTemporal();
 
     if (updatesError || temporalError) return <Error>{(updatesError || temporalError).toString()}</Error>;
     if (isLoading || temporalIsLoading) return <Loading />;
