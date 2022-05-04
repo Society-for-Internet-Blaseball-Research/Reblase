@@ -215,7 +215,6 @@ export function EventsPage() {
         }
 
         if (lastTime && lastTime.diff(update.validFrom, "minute") > 5) {
-            console.log(`resetting: old=${lastTime.format()}, new=${update.validFrom}`);
             lastEvent = null;
         }
 
