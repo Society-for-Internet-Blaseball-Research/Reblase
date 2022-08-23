@@ -14,9 +14,9 @@ export interface TeamPickerProps {
 
 export default function TeamPicker(props: TeamPickerProps) {
     const formatOptionLabel = (option: ChronTeam, meta: { context: string }) => {
-    	const fullName = option.data?.state?.scattered ? option.data.state.scattered.fullName : option.data.fullName;
-    	const nickname = option.data?.state?.scattered ? option.data.state.scattered.nickname : option.data.nickname;
-    	return (
+        const fullName = option.data?.state?.scattered ? option.data.state.scattered.fullName : option.data.fullName;
+        const nickname = option.data?.state?.scattered ? option.data.state.scattered.nickname : option.data.nickname;
+        return (
             <span>
                 <Twemoji className="mr-1" emoji={option.data.emoji} />
                 {meta.context === "menu" ? fullName : nickname}
@@ -32,9 +32,9 @@ export default function TeamPicker(props: TeamPickerProps) {
     const options = props.teams
         .filter((team) => teamIds.includes(team.entityId))
         .sort((a, b) => {
-        	const aName = a.data?.state?.scattered ? a.data.state.scattered.fullName : a.data.fullName;
-        	const bName = b.data?.state?.scattered ? b.data.state.scattered.fullName : b.data.fullName;
-        	return aName.localeCompare(bName);
+            const aName = a.data?.state?.scattered ? a.data.state.scattered.fullName : a.data.fullName;
+            const bName = b.data?.state?.scattered ? b.data.state.scattered.fullName : b.data.fullName;
+            return aName.localeCompare(bName);
         });
 
     return (
