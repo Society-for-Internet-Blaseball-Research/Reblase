@@ -44,7 +44,9 @@ export default function TeamPicker(props: TeamPickerProps) {
             placeholder={props.placeholder}
             options={options}
             value={options.filter((team) => props.selectedTeams?.includes(team.entityId) ?? [])}
-            getOptionValue={(team) => team.data.fullName}
+            getOptionValue={(team) =>
+                team.data.state?.scattered ? team.data.state.scattered.fullName : team.data.fullName
+            }
             formatOptionLabel={formatOptionLabel}
             onChange={(value) => {
                 if (props.setSelectedTeams) {
