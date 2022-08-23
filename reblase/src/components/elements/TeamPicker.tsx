@@ -51,6 +51,10 @@ export default function TeamPicker(props: TeamPickerProps) {
                     props.setSelectedTeams((value as ChronTeam[])?.map((team) => team.entityId) ?? []);
                 }
             }}
+            filterOption={(candidate, input) => {
+                console.log(candidate);
+                return candidate.value.toLowerCase().includes(input.toLowerCase());
+            }}
         />
     );
 }
