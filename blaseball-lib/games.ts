@@ -175,6 +175,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /Sun 2 smiles/,
         /Sun 30 smiled/,
         /Black Hole swallow/,
+        /Event Horizon activates/,
         /is Beaned by/,
         /is Percolated/,
         /tastes the infinite/,
