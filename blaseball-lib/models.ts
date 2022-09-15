@@ -25,6 +25,9 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     season: number;
     day: number;
     isPostseason: boolean;
+    isPrizeMatch: boolean?;
+    isTitleMatch: boolean?;
+    tournament: number;
     weather: number;
 
     inning: number;
