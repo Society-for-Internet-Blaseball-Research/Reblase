@@ -14,22 +14,56 @@ import { getOutcomes, calculatedOutcomeTypes } from "../blaseball/outcome";
 import WeatherPicker from "../components/elements/WeatherPicker";
 import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
-import { BlaseballFeedSeasonList, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
+import { BlaseballFeedSeasonList, BlaseballPlayer, BlaseballTeam, BlaseballGame } from "blaseball-lib/models";
 import { PlayerID } from "blaseball-lib/common";
 import { FightRow, SemiCentennialRow } from "components/gamelist/GameRow";
 import Twemoji from "components/elements/Twemoji";
 import { displaySimAndSeasonPlaintext, STATIC_ID } from "blaseball-lib/games";
 import StadiumPicker from "components/elements/StadiumPicker";
 
-type GameDay = { games: ChronGame[]; season: number; day: number };
+export enum GameKind {
+    Regular,
+    Postseason,
+    Fiesta,
+    Title,
+    Prize,
+}
+
+type GameDay = {
+    games: ChronGame[];
+    season: number;
+    day: number;
+    kind: GameKind;
+};
+
+function getKindForGame(game: BlaseballGame): GameKind {
+    if (game.isTitleMatch) return GameKind.Title;
+    if (game.isPrizeMatch) return GameKind.Prize;
+    if (game.isPostseason) {
+        // falsehoods
+        if (game.sim != "gamma10") return GameKind.Postseason;
+        return game.tournament == -1 ? GameKind.Fiesta : GameKind.Postseason;
+    }
+    return GameKind.Regular;
+}
+
 function groupByDay(games: ChronGame[]): GameDay[] {
     const days: Record<string, GameDay> = {};
     let maxDay = -1;
+    let currentRunOfPostseasonDays = [];
+
     for (const game of games) {
         const day = game.data.day;
         const gameHasDefaultRules = game.data.rules != "df2207cc-03a2-4f6f-9604-63421a4dd5e8";
         if (!gameHasDefaultRules) continue;
-        if (!days[day]) days[day] = { games: [], season: game.data.season, day: game.data.day };
+        if (!days[day]) {
+            days[day] = {
+                games: [],
+                season: game.data.season,
+                day: game.data.day,
+                kind: getKindForGame(game.data),
+            };
+        }
         days[day].games.push(game);
         if (maxDay < day) maxDay = day;
     }
@@ -64,13 +98,14 @@ const GamesList = React.memo(
 
         return (
             <div>
-                {props.days.map(({ games, season, day }) => {
+                {props.days.map(({ games, season, day, kind }) => {
                     return (
                         <DayTable
                             key={day}
                             sim={props.sim}
                             season={season}
                             day={day}
+                            kind={kind}
                             currentDay={props.currentDay}
                             games={games}
                             feedSeasonList={props.feedSeasonList}
