@@ -7,12 +7,14 @@ import { ChronGame } from "blaseball-lib/chronicler";
 import { predictGamePitcher } from "blaseball-lib/team";
 import { BlaseballFeedSeasonList, BlaseballGame, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
+import { GameKind } from "../../pages/SeasonPage";
 
 interface DayTableProps {
     games: ChronGame[];
     sim?: string;
     season: number;
     day: number;
+    kind: GameKind;
     currentDay: number;
     showFutureWeather: boolean;
     feedSeasonList?: BlaseballFeedSeasonList;
