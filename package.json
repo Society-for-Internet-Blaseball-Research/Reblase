@@ -3,5 +3,6 @@
     "workspaces": [
         "reblase",
         "blaseball-lib"
-    ]
+    ],
+    "dependencies": {}
 }
