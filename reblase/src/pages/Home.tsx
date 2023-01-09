@@ -16,73 +16,14 @@ import {
 } from "blaseball-lib/games";
 import { PlayerID } from "blaseball-lib/common";
 
-function SingleDayGamesList(props: {
-    sim: string;
-    season: number;
-    day: number;
-    feedSeasonList?: BlaseballFeedSeasonList;
-}) {
-    const { games, error, isLoading } = useGameList({ sim: props.sim, season: props.season, day: props.day });
-    const { players, teams, error: teamError, isLoading: isLoadingPlayerTeams } = usePlayerTeamsList();
-
-    if (error) return <Error>{error.toString()}</Error>;
-    if (teamError) return <Error>{teamError.toString()}</Error>;
-    if (isLoading || isLoadingPlayerTeams) return <Loading />;
-    const teamsMap: Record<PlayerID, BlaseballTeam> = {};
-    for (const team of teams) teamsMap[team.data.id!] = team.data;
-
-    return (
-        <div className="flex flex-col">
-            {games.map((game) => {
-                return (
-                    <GameRow
-                        key={game.gameId}
-                        game={game}
-                        teams={teamsMap}
-                        showWeather={true}
-                        feedSeasonList={props.feedSeasonList}
-                        predictedAwayPitcher={null}
-                        predictedHomePitcher={null}
-                    />
-                );
-            })}
-        </div>
-    );
-}
-
 export function Home() {
-    // Load games from the game list, or show error if there's an error, or loading if they're loading
-    const { data: sim, error, isLoading } = useSimulation();
-    const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
-
-    if (error || feedSeasonError) return <Error>{(error || feedSeasonError).toString()}</Error>;
-    if (isLoading || !sim || feedSeasonIsLoading) return <Loading />;
-
-    const season = sim.phase >= 12 && sim.phase <= 15 ? -1 : sim.season;
-
     return (
         <Container>
             <p className="mb-4">Hi! {"\u{1F44B}"} Select a season up top to view more games.</p>
 
             <div>
-                <h3 className="text-2xl font-semibold">Current games</h3>
-
-                <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
-                    {displaySimSeasonAndDayPlaintext(sim.id, sim.season, sim.day, feedSeasonList?.data)}
-                </h4>
-
-                {sim && (
-                    <SingleDayGamesList
-                        sim={sim.id!}
-                        season={season}
-                        day={sim.day}
-                        feedSeasonList={feedSeasonList?.data}
-                    />
-                )}
-                <Link className="block mt-2" to={`/season/${sim.season + 1}/${sim.id}`}>
-                    <>View all </>
-                    {displaySimAndSeasonPlaintext(sim.id, sim.season, feedSeasonList?.data)} games &rarr;
-                </Link>
+                <h3 className="text-2xl font-semibold">On the Return of Blaseball</h3>
+                <p>Reblase is currently only working for beta game data -- SIBR are actively working on getting it back up and running for the return, but it'll probably be a few weeks until that happens. Until then, this site will still work to display data for the beta seasons.</p>
             </div>
         </Container>
     );
