@@ -29,6 +29,7 @@ import {
     SunSunPressureResponse,
     ChronSunSunPressure,
     ChronFeedSeasonList,
+    Timestamp,
 } from "blaseball-lib/chronicler";
 import {
     eventuallyApi,
@@ -38,10 +39,14 @@ import {
 import { 
     BlaseballFeedEntry, 
     BlaseballFeedTemporalMetadata,
+    BlaseballGameBatchChangedState,
+    BlaseballGameBatchChanges,
     BlaseballGameExperimental,
+    BlaseballGameUpdateExperimental,
     BlaseballSimData,
     BlaseballSimExperimental
 } from "blaseball-lib/models";
+import { GameID } from "blaseball-lib/common";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -115,6 +120,99 @@ export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): G
 
     return {
         updates: allUpdates,
+        isLoading: !initialData,
+        error,
+    };
+}
+
+interface GameUpdatesExperimentalQuery {
+    id: GameID,
+    after?: Timestamp,
+    count?: number;
+}
+
+interface GameUpdatesExperimentalHookReturn {
+    updates: BlaseballGameUpdateExperimental[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, autoupdating: boolean): GameUpdatesExperimentalHookReturn {
+    const { data: initialData, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query));
+
+    const updates = initialData?.items.flatMap((update) => {
+        const data = update.data;
+
+        if (update.data.gameStates.length == 0)
+        {
+            return [];
+        }
+
+        const gameState = update.data.gameStates[0];
+
+        let updatesFromState: BlaseballGameUpdateExperimental[] = [];
+
+        const first: BlaseballGameUpdateExperimental = {
+            id: data.id,
+            startTime: data.startTime,
+            updated: data.updated,
+        
+            awayTeam: data.awayTeam,
+            homeTeam: data.homeTeam,
+        
+            awayPitcher: data.awayPitcher,
+            homePitcher: data.homePitcher,
+ 
+            day: data.day,
+            seasonId: data.seasonId,
+            numberInSeries: data.numberInSeries,
+            seriesLength: data.seriesLength,
+ 
+            weather: data.weather,
+ 
+            started: data.started,
+            completed: data.completed,
+ 
+            gameLoserId: data.gameLoserId,
+            gameWinnerId: data.gameWinnerId,
+       
+            gameState,
+
+            displayText: "",
+            displayDelay: 4, //this seems like the value which is usually there?
+            displayOrder: 0,
+            displayTime: "",
+        };
+
+        updatesFromState.push(first);
+
+        if (update.data.gameEventBatches.length == 0)
+        {
+            return updatesFromState;
+        }
+
+        let batches: BlaseballGameBatchChangedState[] = JSON.parse(update.data.gameEventBatches[0].batchData);
+        
+        updatesFromState = updatesFromState.concat(
+            batches.map((b) => {
+                return {
+                    ...first, 
+                    displayText: b.displayText, 
+                    displayDelay: b.displayDelay, 
+                    displayTime: b.displayTime, 
+                    displayOrder: b.displayOrder, 
+                    ...b.changedState
+                }
+            })
+        );
+
+        return updatesFromState;
+    });
+
+    console.log("all updates", updates);
+
+    return {
+        updates: updates ?? [],
         isLoading: !initialData,
         error,
     };
