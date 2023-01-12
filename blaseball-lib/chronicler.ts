@@ -1,4 +1,5 @@
 import queryString from "query-string";
+import { GameID } from "./common";
 import {
     BlaseballFight,
     BlaseballGame,
@@ -28,6 +29,13 @@ export const chroniclerApi = {
     feedSeasonList: () => BASE_URL + "v2/entities?type=FeedSeasonList",
 };
 
+export const BASE_EXPERIMENTAL_URL = process.env.REACT_APP_SIBR_API_NEW ?? "/";
+
+export const chroniclerExperimentalApi = {
+    gameList: (query: GameListQueryExperimental) => BASE_EXPERIMENTAL_URL + "v0/versions?kind=game&" + queryString.stringify(query),
+    sim: (query: QueryExperimental) => BASE_EXPERIMENTAL_URL + "v0/versions?kind=sim&" + queryString.stringify(query),
+};
+
 export type PlayerUpdatesQuery = {
     player?: string;
     order?: "asc" | "desc";
@@ -45,6 +53,16 @@ export type GameListQuery = {
     weather?: string;
     sim?: string;
 };
+
+export type GameListQueryExperimental = {
+    order?: "asc" | "desc";
+    id?: GameID;
+}
+
+export type QueryExperimental = {
+    order?: "asc" | "desc";
+    count?: number;
+}
 
 export type GameUpdatesQuery = {
     game: string;
@@ -67,6 +85,12 @@ export type TemporalUpdatesQuery = {
     before?: Timestamp;
     page?: string;
 };
+
+export type SunSunPressureQuery = {
+    order?: "asc" | "desc";
+    count?: number;
+    after?: Timestamp;
+}
 
 export interface ChronV2Response<T> {
     items: T[];
@@ -98,6 +122,17 @@ export interface ChronGame {
     startTime: Timestamp | null;
     endTime: Timestamp | null;
     data: BlaseballGame;
+}
+
+export interface ChronExperimental<T> {
+    items: ChronEntityVersionExperimental<T>[];
+}
+
+export interface ChronEntityVersionExperimental<T>{
+    kind: "game" | "team" | "player" | "sim";
+    entity_id: "string";
+    valid_from: Timestamp;
+    data: T;
 }
 
 export interface HashedUpdate {
