@@ -6,6 +6,7 @@ import {
     ChronPlayer,
     ChronV1Response,
     ChronV2Response,
+    ChronExperimental,
     ChronTeam,
     ChronTemporalUpdate,
     GameListQuery,
@@ -13,6 +14,7 @@ import {
     GameUpdatesQuery,
     GameUpdatesResponse,
     chroniclerApi,
+    chroniclerExperimentalApi,
     ChronPlayerUpdate,
     PlayerUpdatesQuery,
     FightUpdatesQuery,
@@ -33,7 +35,13 @@ import {
     EventuallyTemporalUpdatesQuery,
     EARLIEST_FEED_CONSIDERATION_DATE,
 } from "blaseball-lib/eventually";
-import { BlaseballFeedEntry, BlaseballFeedTemporalMetadata, BlaseballSimData } from "blaseball-lib/models";
+import { 
+    BlaseballFeedEntry, 
+    BlaseballFeedTemporalMetadata,
+    BlaseballGameExperimental,
+    BlaseballSimData,
+    BlaseballSimExperimental
+} from "blaseball-lib/models";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -46,6 +54,22 @@ export function useGameList(query: GameListQuery): GameListHookReturn {
 
     return {
         games: data?.data ?? [],
+        error,
+        isLoading: !data,
+    };
+}
+
+interface GameListExperimentalHookReturn {
+    games: BlaseballGameExperimental[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useGameListExperimental(): GameListExperimentalHookReturn {
+    const { data, error } = useSWR<BlaseballGameExperimental[]>((process.env.REACT_APP_SIBR_API_MIRROR ?? "") + "/games");
+
+    return {
+        games: data ?? [],
         error,
         isLoading: !data,
     };
@@ -321,6 +345,22 @@ export function useSimulation(): SimDataHookReturn {
 
     return {
         data: data?.items[0]?.data ?? null,
+        error,
+        isLoading: !data && !error,
+    };
+}
+
+interface SimDataExperimentalHookReturn {
+    data: BlaseballSimExperimental | null;
+    error: any;
+    isLoading: boolean;
+}
+
+export function useSimulationExperimental(): SimDataExperimentalHookReturn {
+    const { data, error } = useSWR<ChronExperimental<BlaseballSimExperimental>>(chroniclerExperimentalApi.sim({order: "desc", count: 1}));
+
+    return {
+        data: data?.items[0].data ?? null,
         error,
         isLoading: !data && !error,
     };
