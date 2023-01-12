@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
 import { getOutcomes, Outcome } from "../../blaseball/outcome";
 import { getWeather } from "blaseball-lib/weather";
-import { BlaseballFeedSeasonList, BlaseballTeam } from "blaseball-lib/models";
+import { BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballTeam } from "blaseball-lib/models";
 import Twemoji from "../elements/Twemoji";
 import { displaySimAndSeasonShorthand } from "blaseball-lib/games";
 
@@ -192,6 +192,19 @@ const SeasonDay = React.memo(
     }
 );
 
+const SeasonDayExperimental = React.memo(
+    (props: {
+        day: number | string;
+        className?: string;
+    }) => {
+        return (
+            <div className={`text-sm font-semibold ${props.className}`}>
+                S1/{typeof props.day === "number" ? props.day + 1 : props.day}
+            </div>
+        );
+    }
+);
+
 export const GameRow = React.memo(
     (props: {
         game: ChronGame;
@@ -297,6 +310,101 @@ export const GameRow = React.memo(
         );
     },
     (prev, next) => prev.game.gameId === next.game.gameId && prev.showWeather === next.showWeather
+);
+
+export const GameRowExperimental = React.memo(
+    (props: {
+        game: BlaseballGameExperimental;
+        teams: Record<string, BlaseballTeam>;
+        showWeather: boolean;
+    }) => {
+        const data = props.game;
+
+        const homeTeam: BlaseballTeam = props.teams[data.homeTeam.id];
+        const awayTeam: BlaseballTeam = props.teams[data.awayTeam.id];
+
+        const gameState = data.gameStates[0];
+
+        const home = {
+            name: homeTeam?.state?.scattered ? homeTeam.state.scattered.nickname : data.homeTeam.nickname,
+            emoji: data.homeTeam.emoji,
+            score: gameState.homeScore,
+            pitcher: data.homePitcher.name,
+            predictedPitcher: null,
+            win: data.gameWinnerId == data.homeTeam.id,
+        };
+
+        const away = {
+            name: awayTeam?.state?.scattered ? awayTeam.state.scattered.nickname : data.awayTeam.nickname,
+            emoji: data.awayTeam.emoji,
+            score: gameState.awayScore,
+            pitcher: data.awayPitcher.name,
+            predictedPitcher: null,
+            win: data.gameWinnerId == data.awayTeam.id,
+        };
+
+        // hacks
+        const weather = props.showWeather ? 3000 : null;
+
+        return (
+            <Link
+                to={`/game/${data.id}`}
+                className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 focus:bg-gray-200 dark-hover:bg-gray-800"
+            >
+                <div className="contents md:hidden">
+                    <TwoLineTeamScore home={home} away={away} />
+
+                    <div className="flex flex-col justify-center items-end">
+                        <div className="flex flex-row space-x-2">
+                            <Weather weather={weather} className="text-sm" />
+                            <SeasonDayExperimental
+                                day={data.day}
+                                className="text-right"
+                            />
+                        </div>
+
+                        <div className="flex flex-row justify-end items-baseline space-x-2">
+                            <Duration
+                                gameId={props.game.id}
+                                startTime={props.game.startTime}
+                                endTime={props.game.updated}
+                                inning={gameState.inning}
+                                topOfInning={gameState.topOfInning}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="hidden md:contents">
+                    <SeasonDayExperimental
+                        day={data.day}
+                        className="text-right"
+                    />
+                    <OneLineTeamScore home={home} away={away} />
+                    <StandalonePitchers
+                        gameComplete={data.completed}
+                        awayPitcher={data.awayPitcher.name}
+                        homePitcher={data.homePitcher.name}
+                        predictedAwayPitcher={null}
+                        predictedHomePitcher={null}
+                        className="flex flex-1"
+                    />
+
+                    <div className="flex flex-row justify-end items-baseline space-x-2">
+                        <Duration
+                            gameId={props.game.id}
+                            startTime={props.game.startTime}
+                            endTime={props.game.updated}
+                            inning={gameState.inning}
+                            topOfInning={gameState.topOfInning}
+                        />
+                        <Weather weather={weather} />
+                    </div>
+                </div>
+            </Link>
+        );
+    },
+    (prev, next) => prev.game.id === next.game.id && prev.showWeather === next.showWeather
 );
 
 export const FightRow = React.memo(
