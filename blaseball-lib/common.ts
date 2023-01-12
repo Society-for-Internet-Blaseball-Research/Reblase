@@ -8,6 +8,7 @@ export type DivisionID = string;
 export type SeasonID = string;
 export type PlayoffsID = string;
 export type StadiumID = string;
+export type WeatherID = string;
 
 export interface BlaseballEntity<T> {
     id?: T;
