@@ -2,10 +2,10 @@
 import React from "react";
 
 import "./DayTable.css";
-import { GameRow } from "./GameRow";
+import { GameRow, GameRowExperimental } from "./GameRow";
 import { ChronGame } from "blaseball-lib/chronicler";
 import { predictGamePitcher } from "blaseball-lib/team";
-import { BlaseballFeedSeasonList, BlaseballGame, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
+import { BlaseballFeedSeasonList, BlaseballGame, BlaseballGameExperimental, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
 
 interface DayTableProps {
@@ -73,6 +73,43 @@ export const DayTable = function DayTable(props: DayTableProps) {
                         feedSeasonList={props.feedSeasonList}
                         predictedAwayPitcher={predictedPitchers.away}
                         predictedHomePitcher={predictedPitchers.home}
+                    />
+                );
+            })}
+        </>
+    );
+};
+
+interface DayTableExperimentalProps {
+    games: BlaseballGameExperimental[];
+    day: number;
+    currentDay: number;
+    showFutureWeather: boolean;
+    teams: Record<string, BlaseballTeam>;
+}
+
+export const DayTableExperimental = function DayTable(props: DayTableExperimentalProps) {
+    const startedGame = props.games.find((g) => g.startTime !== null);
+    const timestamp = startedGame ? dayjs(startedGame.startTime!) : null;
+
+    return (
+        <>
+            <div className="flex flex-row items-baseline mt-4 space-x-2">
+                <span className="font-semibold">
+                    {displaySimSeasonAndDayPlaintext(undefined, 1, props.day, undefined)}
+                </span>
+                <span className="flex-1 text-right lg:text-left text-sm text-gray-700 dark:text-gray-300">
+                    {timestamp?.format("YYYY-MM-DD HH:mm")}
+                </span>
+            </div>
+
+            {props.games.map((game) => {
+                return (
+                    <GameRowExperimental
+                        key={game.id}
+                        game={game}
+                        teams={props.teams}
+                        showWeather={props.showFutureWeather || game.startTime !== null}
                     />
                 );
             })}
