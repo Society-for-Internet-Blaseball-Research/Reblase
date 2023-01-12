@@ -263,6 +263,14 @@ export const allWeatherTypes: WeatherType[] = [
         color: "#ff8d13",
         forbidden: false,
     },
+    {
+        id: 3000,
+        name: "Horizon",
+        emoji: "\u{1F573}",
+        background: "#36001b",
+        color: "#ffc400",
+        forbidden: true,
+    }
 ];
 
 export function getWeather(id: number): WeatherType {
