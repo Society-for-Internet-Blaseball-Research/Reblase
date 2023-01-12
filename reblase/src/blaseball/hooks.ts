@@ -164,6 +164,33 @@ export function usePlayerTeamsList(): PlayerTeamsHookReturn {
     };
 }
 
+interface TeamsHookReturn {
+    teams: ChronTeam[];
+    teamsObj: Partial<Record<string, ChronTeam>>;
+    error?: any;
+    isLoading: boolean;
+}
+
+export function useTeamsList(): TeamsHookReturn {
+    const { data: teams, error: teamsError } = useSWR<ChronV2Response<ChronTeam>>(chroniclerApi.teams());
+
+    const teamsObj = useMemo(() => {
+        const teamsObj: Record<string, ChronTeam> = {};
+        if (teams) {
+            for (const team of teams.items) teamsObj[team.entityId] = team;
+        }
+
+        return teamsObj;
+    }, [teams]);
+
+    return {
+        teams: teams?.items ?? [],
+        teamsObj,
+        error: teamsError,
+        isLoading: !teams && !teamsError,
+    };
+}
+
 interface TemporalHookReturn {
     updates: ChronTemporalUpdate[];
     error: any;
