@@ -1,3 +1,4 @@
+import { BlaseballBaserunnerExperimental } from "blaseball-lib/models";
 import Tooltip from "rc-tooltip";
 import React from "react";
 
@@ -99,3 +100,49 @@ export default function BaseDisplay(props: BaseDisplayProps) {
         </svg>
     );
 }
+
+export interface BaseDisplayExperimentalProps {
+    baseRunners?: BlaseballBaserunnerExperimental[];
+    totalBases: number;
+}
+
+export function BaseDisplayExperimental(props: BaseDisplayExperimentalProps) {
+    const highestOccupiedBase = Math.max(...props.baseRunners?.map((x) => x.base) ?? [0]);
+    
+    const baseCount = Math.max(highestOccupiedBase + 1, props.totalBases);
+    console.log("baserunners=", props.baseRunners, "numberOfBases=", baseCount);
+
+    const baseElements = [];
+    for (let i = 0; i < baseCount; i++) {
+        const baseIndex = baseCount - i - 1;
+        const runnerNames = props.baseRunners?.filter((base) => base.base === baseIndex)?.map((base) => base.name) ?? [];
+        baseElements.push(
+            <Base
+                key={i}
+                filled={runnerNames.length > 0}
+                baseX={baseSpacing * i}
+                baseY={[0, baseSpacing][baseIndex % 2]}
+                runnerName={runnerNames ? runnerNames.join(", ") : null}
+            />
+        );
+    }
+
+    const verticalBases = 2;
+    const horizontalBases = baseCount;
+
+    const totalWidth = Math.round(axisSize * baseSpacing * (horizontalBases - 1) + padding * 2);
+    const totalHeight = Math.round(axisSize * baseSpacing * (verticalBases - 1) + padding * 2);
+    return (
+        <svg
+            style={{
+                marginTop: "-0.125rem",
+            }}
+            width={totalWidth}
+            height={totalHeight}
+            viewBox={`-${padding} ${padding - totalHeight} ${totalWidth} ${totalHeight}`}
+        >
+            {baseElements}
+        </svg>
+    );
+}
+

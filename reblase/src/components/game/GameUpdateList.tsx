@@ -1,11 +1,12 @@
-﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam } from "blaseball-lib/games";
+﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam, getBattingTeamExperimental, getPitchingTeamExperimental } from "blaseball-lib/games";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
+import { UpdateRowExperimental } from "./UpdateRowExperimental";
 
 import "../../style/GamePage.css";
 import Emoji from "../elements/Emoji";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
-import { BlaseballGame } from "blaseball-lib/models";
+import { BlaseballGame, BlaseballGameUpdateExperimental } from "blaseball-lib/models";
 import Spinner from "components/elements/Spinner";
 import { Loading } from "components/elements/Loading";
 
@@ -35,6 +36,30 @@ export function UpdatesListFetching(props: UpdatesListFetchingProps) {
     );
 }
 
+interface UpdatesListFetchingExperimentalProps {
+    isLoading: boolean;
+    updates: BlaseballGameUpdateExperimental[];
+    order: "asc" | "desc";
+    filterImportant: boolean;
+    autoRefresh: boolean;
+}
+
+export function UpdatesListFetchingExperimental(props: UpdatesListFetchingExperimentalProps) {
+    return (
+        <div className="flex flex-col mt-2">
+            {props.autoRefresh && (
+                <span className="italic text-gray-600 dark:text-gray-400">
+                    <Spinner /> Live-updating...
+                </span>
+            )}
+
+            <GameUpdateListExperimental updates={props.updates} updateOrder={props.order} filterImportant={props.filterImportant} />
+
+            {props.isLoading && <Loading />}
+        </div>
+    );
+}
+
 interface UpdateProps {
     evt: BlaseballGame;
 }
@@ -49,6 +74,39 @@ export const InningHeader = React.memo(function InningHeader(props: UpdateProps)
         <div className="col-span-4 lg:col-span-5 mb-2 my-4">
             <h4 className="text-xl font-semibold">
                 {arrow} {halfString} of {props.evt.inning + 1}
+            </h4>
+
+            <div className="text-sm">
+                <strong>
+                    <Emoji emoji={pitchingTeam.emoji} /> {pitchingTeam.name}
+                </strong>{" "}
+                fielding, with <strong>{pitchingTeam.pitcherName}</strong> pitching
+            </div>
+
+            <div className="text-sm">
+                <strong>
+                    <Emoji emoji={battingTeam.emoji} /> {battingTeam.name}
+                </strong>{" "}
+                batting
+            </div>
+        </div>
+    );
+});
+
+interface UpdateExperimentalProps {
+    evt: BlaseballGameUpdateExperimental;
+}
+
+export const InningHeaderExperimental = React.memo(function InningHeaderExperimental(props: UpdateExperimentalProps) {
+    const arrow = props.evt.gameState.topOfInning ? "\u25B2" : "\u25BC";
+    const halfString = props.evt.gameState.topOfInning ? "Top" : "Bottom";
+    const pitchingTeam = getPitchingTeamExperimental(props.evt);
+    const battingTeam = getBattingTeamExperimental(props.evt);
+
+    return (
+        <div className="col-span-4 lg:col-span-5 mb-2 my-4">
+            <h4 className="text-xl font-semibold">
+                {arrow} {halfString} of {props.evt.gameState.inning + 1}
             </h4>
 
             <div className="text-sm">
@@ -132,6 +190,52 @@ export function addInningHeaderRows(
             lastTopOfInning = payload.topOfInning;
         }
         lastHash = update.hash;
+    }
+
+    return elements;
+}
+
+type ElementExperimental =
+    | { type: "row"; update: BlaseballGameUpdateExperimental }
+    | { type: "heading"; update: BlaseballGameUpdateExperimental; inning: number; top: boolean };
+
+export function addInningHeaderRowsExperimental(
+    updates: BlaseballGameUpdateExperimental[],
+    direction: "asc" | "desc",
+    filterImportant: boolean
+): ElementExperimental[] {
+    const elements: ElementExperimental[] = [];
+
+    let lastInning = -1;
+    let lastTopOfInning = true;
+    for (const update of updates) {
+        // Basic dedupe
+        const gameState = update.gameState;
+        const row: ElementExperimental = { type: "row", update };
+
+        // if (!update.displayText) continue;
+        if (filterImportant && !isGameUpdateImportant(update.displayText, null)) continue;
+
+        const isNewHalfInning = lastInning !== gameState.inning || lastTopOfInning !== gameState.topOfInning;
+        if (isNewHalfInning && gameState.inning > -1) {
+            // New inning, add header
+            const header: ElementExperimental = { type: "heading", inning: gameState.inning, top: gameState.topOfInning, update };
+
+            // We're skipping "inning 0" so if this is the inning 1 header, "push" it before the first events
+            if (gameState.inning === 0 && gameState.topOfInning && direction == "asc") {
+                elements.unshift(header);
+            } else {
+                elements.push(header);
+            }
+        }
+
+        // Add the row
+        elements.push(row);
+
+        if (gameState.inning !== -1) {
+            lastInning = gameState.inning;
+            lastTopOfInning = gameState.topOfInning;
+        }
     }
 
     return elements;
@@ -235,3 +339,66 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
         </div>
     );
 }
+
+interface GameUpdateListExperimentalProps {
+    updates: BlaseballGameUpdateExperimental[];
+    updateOrder: "asc" | "desc";
+    filterImportant: boolean;
+}
+
+type GroupExperimental = { firstUpdate: BlaseballGameUpdateExperimental, updates: BlaseballGameUpdateExperimental[] }
+
+export function GameUpdateListExperimental(props: GameUpdateListExperimentalProps) {
+    const updates = [...props.updates];
+
+    updates.sort((a, b) => a.gameState.step - b.gameState.step);
+
+    if (props.updateOrder === "desc") updates.reverse();
+
+    const elements = useMemo(
+        () => addInningHeaderRowsExperimental(updates, props.updateOrder, props.filterImportant),
+        [updates, props.updateOrder, props.filterImportant]
+    );
+
+    const grouped = [];
+    let lastGroup: GroupExperimental | null = null;
+
+    for (const elem of elements) {
+        if (elem.type === "heading") {
+            lastGroup = {
+                firstUpdate: elem.update,
+                updates: [] as BlaseballGameUpdateExperimental[],
+            };
+            grouped.push(lastGroup);
+        } else {
+            lastGroup!.updates.push(elem.update);
+        }
+    }
+
+    const scrollTarget = parseInt(window.location.hash.replace("#", ""));
+
+    return (
+        <div className="flex flex-col">
+            {grouped
+                .filter((g) => g.updates.length > 0)
+                .map((group) => (
+                    <div>
+                        <InningHeaderExperimental key={group.firstUpdate.gameState.step + "_heading"} evt={group.firstUpdate} />
+                        <div className="flex flex-col">
+                            {group.updates.map((update) => {
+                                const highlight = update.gameState.step === scrollTarget;
+                                return (
+                                    <UpdateRowExperimental
+                                        key={update.gameState.step + "_update"}
+                                        update={update}
+                                        highlight={highlight}
+                                    />
+                                );                                
+                            })}
+                        </div>
+                    </div>
+                ))}
+        </div>
+    );
+}
+    

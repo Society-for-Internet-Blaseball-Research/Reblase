@@ -95,7 +95,7 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     stadiumId?: string | null;
 }
 
-export interface BlaseballGameExperimental {
+interface BlaseballGameInformationExperimental {
     id: GameID;
 
     startTime: Timestamp;
@@ -117,11 +117,26 @@ export interface BlaseballGameExperimental {
     started: boolean;
     completed: boolean;
 
-    gameEventBatches: BlaseballGameBatch[];
-    gameStates: BlaseballGameStateExperimental[];
-    
     gameLoserId: TeamID;
     gameWinnerId: TeamID;
+}
+
+interface BlaseballDisplayExperimental {
+    displayText: string;
+    displayTime: Timestamp;
+    displayDelay: number;
+    displayOrder: number;
+}
+
+export interface BlaseballGameExperimental extends BlaseballGameInformationExperimental {
+    gameEventBatches: BlaseballGameEventExperimental[];
+    gameStates: BlaseballGameStateExperimental[];
+}
+
+export interface BlaseballGameUpdateExperimental extends BlaseballGameInformationExperimental, BlaseballDisplayExperimental {
+    gameState: BlaseballGameStateExperimental;
+
+    baserunners?: BlaseballBaserunnerExperimental[];
 }
 
 export interface BlaseballGameEventExperimental { 
@@ -129,14 +144,6 @@ export interface BlaseballGameEventExperimental {
 
     batchStep: number;
     batchData: string;
-}
-
-export interface BlaseballGameBatch {
-    displayText: string;
-    displayTime: Timestamp;
-    displayDelay: number;
-    displayOrder: number;
-    changedState: BlaseballGameBatchChanges | null;
 }
 
 export interface BlaseballGameBatchChanges {
@@ -159,7 +166,12 @@ export interface BlaseballGameBatchChanges {
     strikesNeeded?: number;
 
     baseRunners?: BlaseballBaserunnerExperimental[];
+    defenders?: BlaseballPlayerExperimental[];
     totalBases: number;
+}
+
+export interface BlaseballGameBatchChangedState extends BlaseballDisplayExperimental {
+    changedState: BlaseballGameBatchChanges;
 }
 
 export interface BlaseballGameStateExperimental {
@@ -182,7 +194,7 @@ export interface BlaseballGameStateExperimental {
     strikes: number;
     strikesNeeded: number;
 
-    baseRunners: BlaseballBaserunnerExperimental[];
+    baseRunners?: BlaseballBaserunnerExperimental[];
     totalBases: number;
 }
 
@@ -203,9 +215,8 @@ export interface BlaseballPlayerExperimental {
     name: string;
 }
 
-export interface BlaseballBaserunnerExperimental {
-    baseNumber: number;
-    player: BlaseballPlayerExperimental;
+export interface BlaseballBaserunnerExperimental extends BlaseballPlayerExperimental {
+    base: number;
 }
 
 export interface BlaseballWeatherExperimental {

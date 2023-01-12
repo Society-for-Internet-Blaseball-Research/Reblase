@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router";
 import { PageLayout } from "./components/layout/PageLayout";
 import { SWRConfig } from "swr";
 import { GamePage } from "./pages/GamePage";
+import { GamePageExperimental } from "./pages/GamePageExperimental";
 import { SeasonPage } from "./pages/SeasonPage";
 import { SeasonPageExperimental } from "./pages/SeasonPageExperimental";
 import { Home } from "./pages/Home";
@@ -23,6 +24,7 @@ export default function App() {
         <SWRConfig value={swrConfig}>
             <PageLayout>
                 <Switch>
+                    <Route path="/experimental/game/:gameId" component={GamePageExperimental} />
                     <Route path="/experimental/season/:season" component={SeasonPageExperimental} />
                     <Route path="/game/:gameId" component={GamePage} />
                     <Route path="/bossfight/:fightId" component={BossfightPage} />
