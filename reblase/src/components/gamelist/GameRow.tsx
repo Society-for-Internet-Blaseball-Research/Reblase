@@ -323,12 +323,12 @@ export const GameRowExperimental = React.memo(
         const homeTeam: BlaseballTeam = props.teams[data.homeTeam.id];
         const awayTeam: BlaseballTeam = props.teams[data.awayTeam.id];
 
-        const gameState = data.gameStates[0];
+        const gameState = (data.gameStates.length > 0 && data.gameStates[0]) || null;
 
         const home = {
             name: homeTeam?.state?.scattered ? homeTeam.state.scattered.nickname : data.homeTeam.nickname,
             emoji: data.homeTeam.emoji,
-            score: gameState.homeScore,
+            score: gameState?.homeScore ?? 0,
             pitcher: data.homePitcher.name,
             predictedPitcher: null,
             win: data.gameWinnerId == data.homeTeam.id,
@@ -337,7 +337,7 @@ export const GameRowExperimental = React.memo(
         const away = {
             name: awayTeam?.state?.scattered ? awayTeam.state.scattered.nickname : data.awayTeam.nickname,
             emoji: data.awayTeam.emoji,
-            score: gameState.awayScore,
+            score: gameState?.awayScore ?? 0,
             pitcher: data.awayPitcher.name,
             predictedPitcher: null,
             win: data.gameWinnerId == data.awayTeam.id,
@@ -368,8 +368,8 @@ export const GameRowExperimental = React.memo(
                                 gameId={props.game.id}
                                 startTime={props.game.startTime}
                                 endTime={props.game.updated}
-                                inning={gameState.inning}
-                                topOfInning={gameState.topOfInning}
+                                inning={gameState?.inning ?? 0}
+                                topOfInning={gameState?.topOfInning ?? false}
                             />
                         </div>
                     </div>
@@ -395,9 +395,9 @@ export const GameRowExperimental = React.memo(
                             gameId={props.game.id}
                             startTime={props.game.startTime}
                             endTime={props.game.updated}
-                            inning={gameState.inning}
-                            topOfInning={gameState.topOfInning}
-                        />
+                            inning={gameState?.inning ?? 0}
+                            topOfInning={gameState?.topOfInning ?? false}
+                    />
                         <Weather weather={weather} />
                     </div>
                 </div>
