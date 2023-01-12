@@ -1,3 +1,4 @@
+import { Timestamp } from "./chronicler";
 import {
     AttributeID,
     BlaseballAttributes,
@@ -13,6 +14,7 @@ import {
     StadiumID,
     TeamID,
     TeamRoster,
+    WeatherID,
 } from "./common";
 
 export interface BlaseballGame extends BlaseballEntity<GameID> {
@@ -91,6 +93,141 @@ export interface BlaseballGame extends BlaseballEntity<GameID> {
     repeatCount?: number;
 
     stadiumId?: string | null;
+}
+
+export interface BlaseballGameExperimental {
+    id: GameID;
+
+    startTime: Timestamp;
+    updated: Timestamp;
+
+    awayTeam: BlaseballTeamExperimental;
+    homeTeam: BlaseballTeamExperimental;
+
+    awayPitcher: BlaseballPlayerExperimental;
+    homePitcher: BlaseballPlayerExperimental;
+
+    day: number;
+    seasonId: SeasonID;
+    numberInSeries: number;
+    seriesLength: number;
+
+    weather: BlaseballWeatherExperimental;
+
+    started: boolean;
+    completed: boolean;
+
+    gameEventBatches: BlaseballGameBatch[];
+    gameStates: BlaseballGameStateExperimental[];
+    
+    gameLoserId: TeamID;
+    gameWinnerId: TeamID;
+}
+
+export interface BlaseballGameEventExperimental { 
+    gameId: GameID;
+
+    batchStep: number;
+    batchData: string;
+}
+
+export interface BlaseballGameBatch {
+    displayText: string;
+    displayTime: Timestamp;
+    displayDelay: number;
+    displayOrder: number;
+    changedState: BlaseballGameBatchChanges | null;
+}
+
+export interface BlaseballGameBatchChanges {
+    awayScore?: number;
+    homeScore?: number;
+    shame?: boolean;
+
+    inning?: number;
+    topOfInning?: boolean;
+
+    batter?: BlaseballPlayerExperimental | null;
+    pitcher?: BlaseballPlayerExperimental | null;
+    teamAtBat?: "HOME" | "AWAY";
+
+    balls?: number;
+    ballsNeeded?: number;
+    outs?: number;
+    outsNeeded?: number;
+    strikes?: number;
+    strikesNeeded?: number;
+
+    baseRunners?: BlaseballBaserunnerExperimental[];
+    totalBases: number;
+}
+
+export interface BlaseballGameStateExperimental {
+    awayScore: number;
+    homeScore: number;
+    shame: boolean;
+
+    step: number; // is this display order in the batch changes? 
+    inning: number;
+    topOfInning: boolean;
+
+    batter: BlaseballPlayerExperimental | null;
+    pitcher: BlaseballPlayerExperimental | null;
+    teamAtBat: "HOME" | "AWAY";
+
+    balls: number;
+    ballsNeeded: number;
+    outs: number;
+    outsNeeded: number;
+    strikes: number;
+    strikesNeeded: number;
+
+    baseRunners: BlaseballBaserunnerExperimental[];
+    totalBases: number;
+}
+
+export interface BlaseballTeamExperimental {
+    emoji: string;
+    gameWinner: boolean;
+    id: TeamID;
+    name: string;
+    nickname: string;
+    primaryColor: string;
+    secondaryColor: string;
+    shorthand: string;
+    slogan: string;
+}
+
+export interface BlaseballPlayerExperimental {
+    id: PlayerID;
+    name: string;
+}
+
+export interface BlaseballBaserunnerExperimental {
+    baseNumber: number;
+    player: BlaseballPlayerExperimental;
+}
+
+export interface BlaseballWeatherExperimental {
+    id: WeatherID;
+    name: string;
+    weatherEffects: [];
+}
+
+export interface BlaseballSimExperimental {
+    startDayNumber: number;
+    endDayNumber: number;
+
+    startTime: Timestamp;
+    endTime: Timestamp;
+    
+    simData: BlaseballSimDataExperimental;
+}
+
+export interface BlaseballSimDataExperimental {
+    currentDay: number;
+    currentSeasonId: SeasonID;
+    currentSeasonNumber: boolean; // this exists?! 
 }
 
 export interface DamageResult {
