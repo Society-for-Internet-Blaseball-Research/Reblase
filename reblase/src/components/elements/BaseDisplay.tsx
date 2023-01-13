@@ -107,7 +107,7 @@ export interface BaseDisplayExperimentalProps {
 }
 
 export function BaseDisplayExperimental(props: BaseDisplayExperimentalProps) {
-    const highestOccupiedBase = Math.max(...props.baseRunners?.map((x) => x.base) ?? [0]);
+    const highestOccupiedBase = Math.max(...props.baseRunners?.map((x) => x.base - 1) ?? [0]);
     
     const baseCount = Math.max(highestOccupiedBase + 1, props.totalBases);
     console.log("baserunners=", props.baseRunners, "numberOfBases=", baseCount);
@@ -115,7 +115,7 @@ export function BaseDisplayExperimental(props: BaseDisplayExperimentalProps) {
     const baseElements = [];
     for (let i = 0; i < baseCount; i++) {
         const baseIndex = baseCount - i - 1;
-        const runnerNames = props.baseRunners?.filter((base) => base.base === baseIndex)?.map((base) => base.name) ?? [];
+        const runnerNames = props.baseRunners?.filter((base) => (base.base - 1) === baseIndex)?.map((base) => base.name) ?? [];
         baseElements.push(
             <Base
                 key={i}
