@@ -77,10 +77,10 @@ function GamesListFetchingExperimental(props: {
     const { data: simData, error: simError, isLoading: simIsLoading } = useSimulationExperimental();
 
     const days = useMemo(() => {
-        let gamesFiltered = games;
+        let gamesFiltered = props.showFutureGames ? games : games.filter((game) => game.started);
 
         return groupByDay(gamesFiltered).reverse();
-    }, [games]);
+    }, [games, props.showFutureGames]);
 
     if (error || simError) return <Error>{(error || simError).toString()}</Error>;
     if (isLoading || simIsLoading) return <Loading />;

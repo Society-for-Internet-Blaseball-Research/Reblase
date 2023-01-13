@@ -366,7 +366,7 @@ export const GameRowExperimental = React.memo(
                         <div className="flex flex-row justify-end items-baseline space-x-2">
                             <Duration
                                 gameId={props.game.id}
-                                startTime={props.game.startTime}
+                                startTime={props.game.started ? props.game.startTime : null}
                                 endTime={props.game.updated}
                                 inning={gameState?.inning ?? 0}
                                 topOfInning={gameState?.topOfInning ?? false}
@@ -393,7 +393,7 @@ export const GameRowExperimental = React.memo(
                     <div className="flex flex-row justify-end items-baseline space-x-2">
                         <Duration
                             gameId={props.game.id}
-                            startTime={props.game.startTime}
+                            startTime={props.game.started ? props.game.startTime : null}
                             endTime={props.game.updated}
                             inning={gameState?.inning ?? 0}
                             topOfInning={gameState?.topOfInning ?? false}
