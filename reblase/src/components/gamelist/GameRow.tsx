@@ -348,7 +348,7 @@ export const GameRowExperimental = React.memo(
 
         return (
             <Link
-                to={`/game/${data.id}`}
+                to={`/experimental/game/${data.id}`}
                 className="flex flex-row px-2 py-2 border-b border-gray-300 dark:border-gray-700 space-x-2 items-baseline hover:bg-gray-200 focus:bg-gray-200 dark-hover:bg-gray-800"
             >
                 <div className="contents md:hidden">
