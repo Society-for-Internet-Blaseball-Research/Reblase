@@ -151,6 +151,8 @@ export interface BlaseballGameBatchChanges {
     homeScore?: number;
     shame?: boolean;
 
+    started?: boolean;
+    completed?: boolean;
     inning?: number;
     topOfInning?: boolean;
 
@@ -165,7 +167,7 @@ export interface BlaseballGameBatchChanges {
     strikes?: number;
     strikesNeeded?: number;
 
-    baseRunners?: BlaseballBaserunnerExperimental[];
+    baserunners?: BlaseballBaserunnerExperimental[];
     defenders?: BlaseballPlayerExperimental[];
     totalBases: number;
 }
@@ -194,8 +196,33 @@ export interface BlaseballGameStateExperimental {
     strikes: number;
     strikesNeeded: number;
 
-    baseRunners?: BlaseballBaserunnerExperimental[];
+    baserunners?: BlaseballBaserunnerExperimental[];
     totalBases: number;
+}
+
+export interface CompositeGameState {
+    batter: BlaseballPlayerExperimental | null;
+    pitcher: BlaseballPlayerExperimental | null;
+    //defenders: Option<Vec<PlayerRef>>, don't care
+    baserunners: BlaseballBaserunnerExperimental[];
+    
+    started: boolean;
+    completed: boolean;
+    teamAtBat: "HOME" | "AWAY";
+    
+    balls: number;
+    strikes: number;
+    outs: number;
+    
+    awayScore: number;
+    homeScore: number;
+    shame: boolean;
+
+    inning: number;
+    topOfInning: boolean;
+
+    displayText: string;
+    displayTime: Timestamp;
 }
 
 export interface BlaseballTeamExperimental {

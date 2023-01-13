@@ -5,17 +5,18 @@ import { UpdatesListFetchingExperimental } from "../components/game/GameUpdateLi
 import { cache } from "swr";
 import Error from "../components/elements/Error";
 import { useGameUpdatesExperimental } from "../blaseball/hooks";
-import { BlaseballGameUpdateExperimental } from "blaseball-lib/models";
+import { BlaseballGameExperimental, BlaseballGameUpdateExperimental } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
 import { displaySimAndSeasonPlaintext, displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
 import { getWeather } from "blaseball-lib/weather";
 import Twemoji from "components/elements/Twemoji";
+import { Loading } from "components/elements/Loading";
 
 interface PayloadProps {
-    evt: BlaseballGameUpdateExperimental;
+    game: BlaseballGameExperimental,
 }
 
-const GameHeading = ({ evt }: PayloadProps) => {
+const GameHeading = ({ game }: PayloadProps) => {
     const location = useLocation();
     const weather = getWeather(3000);
 
@@ -28,14 +29,14 @@ const GameHeading = ({ evt }: PayloadProps) => {
             </p>
             <Link to={location.pathname}>
                 <h2 className="text-3xl font-semibold">
-                    {displaySimSeasonAndDayPlaintext(undefined, 0, evt.day, null)}
+                    {displaySimSeasonAndDayPlaintext(undefined, 0, game.day, null)}
                 </h2>
             </Link>
 
             <h3 className="mb-2">
-                <strong>{evt.awayTeam.name}</strong>
+                <strong>{game.awayTeam.name}</strong>
                 <small> vs. </small>
-                <strong>{evt.homeTeam.name}</strong>
+                <strong>{game.homeTeam.name}</strong>
             </h3>
 
             <p className="mb-2">
@@ -116,17 +117,30 @@ export function GamePageExperimental() {
     const query = {
         id: gameId ?? "null",
     };
-    const { updates, error, isLoading } = useGameUpdatesExperimental(query, options.autoUpdate);
+    const { firstGame, updates, error, isLoading } = useGameUpdatesExperimental(query, options.autoUpdate);
     if (error) return <Error>{error.toString()}</Error>;
 
     const last = updates[updates.length - 1];
 
+    if (isLoading || !firstGame) return (<Loading></Loading>)
+
     // Stop autoupdating once the game is over
     if (last?.completed && options.autoUpdate) setOptions({ ...options, autoUpdate: false });
 
+    const firstUpdate = updates[0];
+
+    const helpMe: BlaseballGameUpdateExperimental = {
+        ...firstGame,
+        gameState: {...firstUpdate, step: 0, ballsNeeded: 4, strikesNeeded: 3, outsNeeded: 3, totalBases: 3},
+        displayText: firstUpdate.displayText,
+        displayTime: firstUpdate.displayTime,
+        displayDelay: 0,
+        displayOrder: 0,
+    };
+
     return (
         <div className="container mx-auto px-4">
-            {last && <GameHeading evt={last} />}
+            {last && <GameHeading game={firstGame} />}
 
             <GamePageOptions
                 options={options}
@@ -135,8 +149,9 @@ export function GamePageExperimental() {
             />
 
             <UpdatesListFetchingExperimental
+                game={helpMe}
                 updates={updates}
-                isLoading={isLoading}
+                isLoading={isLoading || !firstGame}
                 order={options.reverse ? "desc" : "asc"}
                 filterImportant={options.onlyImportant}
                 autoRefresh={options.autoUpdate}

@@ -1,5 +1,5 @@
 import { PlayerID, TeamID } from "./common";
-import { BlaseballFeedSeasonList, BlaseballGame, BlaseballGameExperimental, BlaseballGameUpdateExperimental } from "./models";
+import { BlaseballFeedSeasonList, BlaseballGame, BlaseballGameExperimental, BlaseballGameUpdateExperimental, CompositeGameState } from "./models";
 
 export const STATIC_ID = "thisidisstaticyo";
 
