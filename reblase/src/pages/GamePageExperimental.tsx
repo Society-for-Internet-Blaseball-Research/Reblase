@@ -23,12 +23,12 @@ const GameHeading = ({ evt }: PayloadProps) => {
         <>
             <p className="mb-2">
                 <Link to={`/experimental/season/1`}>
-                    &larr; Back to {displaySimAndSeasonPlaintext(undefined, 1, null)}
+                    &larr; Back to {displaySimAndSeasonPlaintext(undefined, 0, null)}
                 </Link>
             </p>
             <Link to={location.pathname}>
                 <h2 className="text-3xl font-semibold">
-                    {displaySimSeasonAndDayPlaintext(undefined, 1, evt.day, null)}
+                    {displaySimSeasonAndDayPlaintext(undefined, 0, evt.day, null)}
                 </h2>
             </Link>
 

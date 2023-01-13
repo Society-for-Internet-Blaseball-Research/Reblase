@@ -96,7 +96,7 @@ export const DayTableExperimental = function DayTable(props: DayTableExperimenta
         <>
             <div className="flex flex-row items-baseline mt-4 space-x-2">
                 <span className="font-semibold">
-                    {displaySimSeasonAndDayPlaintext(undefined, 1, props.day, undefined)}
+                    {displaySimSeasonAndDayPlaintext(undefined, 0, props.day, undefined)}
                 </span>
                 <span className="flex-1 text-right lg:text-left text-sm text-gray-700 dark:text-gray-300">
                     {timestamp?.format("YYYY-MM-DD HH:mm")}
