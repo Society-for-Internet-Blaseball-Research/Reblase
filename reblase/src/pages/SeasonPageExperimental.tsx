@@ -143,7 +143,7 @@ export function SeasonPageExperimental() {
                     />
                 </div>
 
-                <div>
+                <div className="col-start-1">
                     <div className="font-semibold mb-1">Options</div>
                     <Checkbox value={showFutureGames} setValue={setShowFutureGames}>
                         Show future games
