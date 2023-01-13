@@ -2,11 +2,11 @@
 import { Circles } from "../elements/Circles";
 import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
-import Emoji from "../elements/Emoji";
 import { BlaseballGameUpdateExperimental } from "blaseball-lib/models";
 import { BaseDisplayExperimental } from "../elements/BaseDisplay";
 import clsx from "clsx";
 import "./UpdateRow.css";
+import Twemoji from "components/elements/Twemoji";
 
 interface WrappedUpdateProps {
     update: BlaseballGameUpdateExperimental;
@@ -52,7 +52,7 @@ function Batter({ evt }: UpdateProps) {
 
     return (
         <span className="UpdateRow-Batter">
-            <Emoji emoji={team.emoji} />
+            <Twemoji emoji={team.emoji} />
             <span className="ml-1">{team.batterName}</span>
         </span>
     );
