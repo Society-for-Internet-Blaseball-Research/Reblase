@@ -4,11 +4,11 @@ import { UpdateRow } from "./UpdateRow";
 import { UpdateRowExperimental } from "./UpdateRowExperimental";
 
 import "../../style/GamePage.css";
-import Emoji from "../elements/Emoji";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
 import { BlaseballGame, BlaseballGameUpdateExperimental } from "blaseball-lib/models";
 import Spinner from "components/elements/Spinner";
 import { Loading } from "components/elements/Loading";
+import Twemoji from "components/elements/Twemoji";
 
 type GameOrFight = ChronFightUpdate | ChronGameUpdate;
 
@@ -78,14 +78,14 @@ export const InningHeader = React.memo(function InningHeader(props: UpdateProps)
 
             <div className="text-sm">
                 <strong>
-                    <Emoji emoji={pitchingTeam.emoji} /> {pitchingTeam.name}
+                    <Twemoji emoji={pitchingTeam.emoji} /> {pitchingTeam.name}
                 </strong>{" "}
                 fielding, with <strong>{pitchingTeam.pitcherName}</strong> pitching
             </div>
 
             <div className="text-sm">
                 <strong>
-                    <Emoji emoji={battingTeam.emoji} /> {battingTeam.name}
+                    <Twemoji emoji={battingTeam.emoji} /> {battingTeam.name}
                 </strong>{" "}
                 batting
             </div>
@@ -111,14 +111,14 @@ export const InningHeaderExperimental = React.memo(function InningHeaderExperime
 
             <div className="text-sm">
                 <strong>
-                    <Emoji emoji={pitchingTeam.emoji} /> {pitchingTeam.name}
+                    <Twemoji emoji={pitchingTeam.emoji} /> {pitchingTeam.name}
                 </strong>{" "}
                 fielding, with <strong>{pitchingTeam.pitcherName}</strong> pitching
             </div>
 
             <div className="text-sm">
                 <strong>
-                    <Emoji emoji={battingTeam.emoji} /> {battingTeam.name}
+                    <Twemoji emoji={battingTeam.emoji} /> {battingTeam.name}
                 </strong>{" "}
                 batting
             </div>

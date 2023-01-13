@@ -10,7 +10,7 @@ export default React.memo((props: { emoji: string } & HTMLAttributes<HTMLSpanEle
                 __html: twemoji.parse(emojiStr, {
                     folder: "svg",
                     ext: ".svg",
-                }),
+                }).replace("twemoji.maxcdn.com/v/13.0.1/svg", "bricks.sibr.dev/twemoji"),
             }}
             {...props}
         />
