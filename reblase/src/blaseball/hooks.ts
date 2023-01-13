@@ -44,7 +44,8 @@ import {
     BlaseballGameExperimental,
     BlaseballGameUpdateExperimental,
     BlaseballSimData,
-    BlaseballSimExperimental
+    BlaseballSimExperimental,
+    CompositeGameState
 } from "blaseball-lib/models";
 import { GameID } from "blaseball-lib/common";
 
@@ -132,7 +133,8 @@ interface GameUpdatesExperimentalQuery {
 }
 
 interface GameUpdatesExperimentalHookReturn {
-    updates: BlaseballGameUpdateExperimental[];
+    firstGame: BlaseballGameExperimental | null;
+    updates: CompositeGameState[];
     error: any;
     isLoading: boolean;
 }
@@ -150,38 +152,30 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
 
         const gameState = update.data.gameStates[0];
 
-        let updatesFromState: BlaseballGameUpdateExperimental[] = [];
+        let updatesFromState: CompositeGameState[] = [];
 
-        const first: BlaseballGameUpdateExperimental = {
-            id: data.id,
-            startTime: data.startTime,
-            updated: data.updated,
-        
-            awayTeam: data.awayTeam,
-            homeTeam: data.homeTeam,
-        
-            awayPitcher: data.awayPitcher,
-            homePitcher: data.homePitcher,
- 
-            day: data.day,
-            seasonId: data.seasonId,
-            numberInSeries: data.numberInSeries,
-            seriesLength: data.seriesLength,
- 
-            weather: data.weather,
- 
+        const first: CompositeGameState = {
+            batter: gameState.batter,
+            pitcher: gameState.pitcher,
+            baserunners: gameState.baserunners ?? [],
+            
             started: data.started,
             completed: data.completed,
- 
-            gameLoserId: data.gameLoserId,
-            gameWinnerId: data.gameWinnerId,
-       
-            gameState,
-
+            teamAtBat: gameState.teamAtBat,
+            
+            balls: gameState.balls,
+            strikes: gameState.strikes,
+            outs: gameState.outs,
+            
+            awayScore: gameState.awayScore,
+            homeScore: gameState.homeScore,
+            shame: gameState.shame,
+        
+            inning: gameState.inning,
+            topOfInning: gameState.topOfInning,
+            
             displayText: "",
-            displayDelay: 4, //this seems like the value which is usually there?
-            displayOrder: 0,
-            displayTime: "",
+            displayTime: data.updated,
         };
 
         updatesFromState.push(first);
@@ -196,12 +190,22 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
         updatesFromState = updatesFromState.concat(
             batches.map((b) => {
                 return {
-                    ...first, 
-                    displayText: b.displayText, 
-                    displayDelay: b.displayDelay, 
-                    displayTime: b.displayTime, 
-                    displayOrder: b.displayOrder, 
-                    ...b.changedState
+                    batter: b.changedState.batter ?? first.batter,
+                    pitcher: b.changedState.pitcher ?? first.pitcher,
+                    baserunners: b.changedState.baserunners ?? first.baserunners,
+                    started: b.changedState.started ?? first.started,
+                    completed: b.changedState.completed ?? first.completed,
+                    teamAtBat: b.changedState.teamAtBat ?? first.teamAtBat,
+                    balls: b.changedState.balls ?? first.balls,
+                    strikes: b.changedState.strikes ?? first.strikes,
+                    outs: b.changedState.outs ?? first.outs,
+                    awayScore: b.changedState.awayScore ?? first.awayScore,
+                    homeScore: b.changedState.homeScore ?? first.homeScore,
+                    shame: b.changedState.shame ?? first.shame,
+                    inning: b.changedState.inning ?? first.inning,
+                    topOfInning: b.changedState.topOfInning ?? first.topOfInning,
+                    displayText: b.displayText ?? first.displayText,
+                    displayTime: b.displayTime ?? first.displayTime,
                 }
             })
         );
@@ -212,6 +216,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
     console.log("all updates", updates);
 
     return {
+        firstGame: initialData && initialData.items[0].data || null,
         updates: updates ?? [],
         isLoading: !initialData,
         error,

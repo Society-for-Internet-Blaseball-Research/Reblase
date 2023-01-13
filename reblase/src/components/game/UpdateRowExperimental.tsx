@@ -2,35 +2,29 @@
 import { Circles } from "../elements/Circles";
 import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
-import { BlaseballGameUpdateExperimental } from "blaseball-lib/models";
+import { BlaseballGameUpdateExperimental, CompositeGameState } from "blaseball-lib/models";
 import { BaseDisplayExperimental } from "../elements/BaseDisplay";
 import clsx from "clsx";
 import "./UpdateRow.css";
 import Twemoji from "components/elements/Twemoji";
 
-interface WrappedUpdateProps {
-    update: BlaseballGameUpdateExperimental;
-}
-
 interface UpdateProps {
-    evt: BlaseballGameUpdateExperimental;
+    game: BlaseballGameUpdateExperimental;
+    evt: CompositeGameState;
 }
 
-function Timestamp({ update }: WrappedUpdateProps) {
-    // const updateTime = dayjs((update as BlaseballGameUpdateExperimental)?.validFrom);
-    const time = "TODO"; // updateTime.format("mm:ss");
-
-    const linkHref = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + update.gameState.step;
+function Timestamp({ game, evt: _ }: UpdateProps) {
+    const linkHref = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + game.displayTime;
 
     return (
         <a href={linkHref} className="UpdateRow-Timestamp">
-            {time}
+            {game.displayTime}
         </a>
     );
 }
 
 function Score({ evt }: UpdateProps) {
-    return <span className="UpdateRow-Score tag">{`${evt.gameState.awayScore} - ${evt.gameState.homeScore}`}</span>;
+    return <span className="UpdateRow-Score tag">{`${evt.awayScore} - ${evt.homeScore}`}</span>;
 }
 
 function GameLog({ evt }: UpdateProps) {
@@ -43,8 +37,8 @@ function GameLog({ evt }: UpdateProps) {
     );
 }
 
-function Batter({ evt }: UpdateProps) {
-    const team = getBattingTeamExperimental(evt);
+function Batter({ game, evt: _ }: UpdateProps) {
+    const team = getBattingTeamExperimental(game);
 
     if (!team.batterName)
         // "hide" when there's no batter
@@ -58,35 +52,35 @@ function Batter({ evt }: UpdateProps) {
     );
 }
 
-function AtBatInfo({ evt }: UpdateProps) {
+function AtBatInfo({ game, evt }: UpdateProps) {
+    const team = getBattingTeamExperimental(game);
     return (
         <div className="UpdateRow-AtBat">
-            <BlaseRunners evt={evt} />
+            <BlaseRunners game={game} evt={evt} />
             <span className="flex space-x-1">
-                <Circles label="Balls" amount={evt.gameState.balls} total={evt.gameState.ballsNeeded - 1} />
-                <Circles label="Strikes" amount={evt.gameState.strikes} total={evt.gameState.strikesNeeded - 1} />
-                <Circles label="Outs" amount={evt.gameState.outs} total={evt.gameState.outsNeeded - 1} />
+                <Circles label="Balls" amount={evt.balls} total={team.maxBalls - 1} />
+                <Circles label="Strikes" amount={evt.strikes} total={team.maxStrikes - 1} />
+                <Circles label="Outs" amount={evt.outs} total={team.maxOuts - 1} />
             </span>
         </div>
     );
 }
-function BlaseRunners({ evt }: UpdateProps) {
+function BlaseRunners({ game, evt }: UpdateProps) {
+    const team = getBattingTeamExperimental(game);
     return (
         <BaseDisplayExperimental
             baseRunners={evt.baserunners}
-            totalBases={evt.gameState.totalBases}
+            totalBases={team.totalBases}
         />
     );
 }
 
-interface UpdateRowProps extends WrappedUpdateProps {
+interface UpdateRowProps extends UpdateProps {
     highlight: boolean;
 }
 
 export const UpdateRowExperimental = React.memo(
-    function UpdateRowExperimental({ update, highlight }: UpdateRowProps) {
-        const evt = update;
-
+    function UpdateRowExperimental({ game, evt, highlight }: UpdateRowProps) {
         const scrollRef = useRef<HTMLDivElement>(null);
         useEffect(() => {
             if (highlight) {
@@ -99,11 +93,11 @@ export const UpdateRowExperimental = React.memo(
                 ref={highlight ? scrollRef : undefined}
                 className={"UpdateRow" + (highlight ? " UpdateRow-Highlight" : "")}
             >
-                <GameLog evt={evt} />
-                <Timestamp update={update} />
-                <Score evt={evt} />
-                <Batter evt={evt} />
-                <AtBatInfo evt={evt} />
+                <GameLog game={game} evt={evt} />
+                <Timestamp game={game} evt={evt} />
+                <Score game={game} evt={evt} />
+                <Batter game={game} evt={evt} />
+                <AtBatInfo game={game} evt={evt} />
             </div>
         );
     },

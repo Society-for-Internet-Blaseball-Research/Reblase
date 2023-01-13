@@ -5,10 +5,11 @@ import { UpdateRowExperimental } from "./UpdateRowExperimental";
 
 import "../../style/GamePage.css";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
-import { BlaseballGame, BlaseballGameUpdateExperimental } from "blaseball-lib/models";
+import { BlaseballGame, BlaseballGameUpdateExperimental, CompositeGameState } from "blaseball-lib/models";
 import Spinner from "components/elements/Spinner";
 import { Loading } from "components/elements/Loading";
 import Twemoji from "components/elements/Twemoji";
+import dayjs from "dayjs";
 
 type GameOrFight = ChronFightUpdate | ChronGameUpdate;
 
@@ -38,7 +39,8 @@ export function UpdatesListFetching(props: UpdatesListFetchingProps) {
 
 interface UpdatesListFetchingExperimentalProps {
     isLoading: boolean;
-    updates: BlaseballGameUpdateExperimental[];
+    game: BlaseballGameUpdateExperimental;
+    updates: CompositeGameState[];
     order: "asc" | "desc";
     filterImportant: boolean;
     autoRefresh: boolean;
@@ -53,7 +55,7 @@ export function UpdatesListFetchingExperimental(props: UpdatesListFetchingExperi
                 </span>
             )}
 
-            <GameUpdateListExperimental updates={props.updates} updateOrder={props.order} filterImportant={props.filterImportant} />
+            <GameUpdateListExperimental firstGame={props.game} updates={props.updates} updateOrder={props.order} filterImportant={props.filterImportant} />
 
             {props.isLoading && <Loading />}
         </div>
@@ -94,19 +96,20 @@ export const InningHeader = React.memo(function InningHeader(props: UpdateProps)
 });
 
 interface UpdateExperimentalProps {
-    evt: BlaseballGameUpdateExperimental;
+    first: BlaseballGameUpdateExperimental;
+    evt: CompositeGameState;
 }
 
 export const InningHeaderExperimental = React.memo(function InningHeaderExperimental(props: UpdateExperimentalProps) {
-    const arrow = props.evt.gameState.topOfInning ? "\u25B2" : "\u25BC";
-    const halfString = props.evt.gameState.topOfInning ? "Top" : "Bottom";
-    const pitchingTeam = getPitchingTeamExperimental(props.evt);
-    const battingTeam = getBattingTeamExperimental(props.evt);
+    const arrow = props.evt.topOfInning ? "\u25B2" : "\u25BC";
+    const halfString = props.evt.topOfInning ? "Top" : "Bottom";
+    const pitchingTeam = getPitchingTeamExperimental(props.first);
+    const battingTeam = getBattingTeamExperimental(props.first);
 
     return (
         <div className="col-span-4 lg:col-span-5 mb-2 my-4">
             <h4 className="text-xl font-semibold">
-                {arrow} {halfString} of {props.evt.gameState.inning + 1}
+                {arrow} {halfString} of {props.evt.inning + 1}
             </h4>
 
             <div className="text-sm">
@@ -196,11 +199,11 @@ export function addInningHeaderRows(
 }
 
 type ElementExperimental =
-    | { type: "row"; update: BlaseballGameUpdateExperimental }
-    | { type: "heading"; update: BlaseballGameUpdateExperimental; inning: number; top: boolean };
+    | { type: "row"; update: CompositeGameState }
+    | { type: "heading"; update: CompositeGameState; inning: number; top: boolean };
 
 export function addInningHeaderRowsExperimental(
-    updates: BlaseballGameUpdateExperimental[],
+    updates: CompositeGameState[],
     direction: "asc" | "desc",
     filterImportant: boolean
 ): ElementExperimental[] {
@@ -210,7 +213,7 @@ export function addInningHeaderRowsExperimental(
     let lastTopOfInning = true;
     for (const update of updates) {
         // Basic dedupe
-        const gameState = update.gameState;
+        const gameState = update;
         const row: ElementExperimental = { type: "row", update };
 
         // if (!update.displayText) continue;
@@ -341,17 +344,18 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
 }
 
 interface GameUpdateListExperimentalProps {
-    updates: BlaseballGameUpdateExperimental[];
+    firstGame: BlaseballGameUpdateExperimental;
+    updates: CompositeGameState[];
     updateOrder: "asc" | "desc";
     filterImportant: boolean;
 }
 
-type GroupExperimental = { firstUpdate: BlaseballGameUpdateExperimental, updates: BlaseballGameUpdateExperimental[] }
+type GroupExperimental = { firstUpdate: CompositeGameState, updates: CompositeGameState[] }
 
 export function GameUpdateListExperimental(props: GameUpdateListExperimentalProps) {
     const updates = [...props.updates];
 
-    updates.sort((a, b) => a.gameState.step - b.gameState.step);
+    updates.sort((a, b) => dayjs(a.displayTime).unix() - dayjs(b.displayTime).unix());
 
     if (props.updateOrder === "desc") updates.reverse();
 
@@ -367,7 +371,7 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
         if (elem.type === "heading") {
             lastGroup = {
                 firstUpdate: elem.update,
-                updates: [] as BlaseballGameUpdateExperimental[],
+                updates: [] as CompositeGameState[],
             };
             grouped.push(lastGroup);
         } else {
@@ -375,7 +379,7 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
         }
     }
 
-    const scrollTarget = parseInt(window.location.hash.replace("#", ""));
+    const scrollTarget = window.location.hash.replace("#", "");
 
     return (
         <div className="flex flex-col">
@@ -383,14 +387,15 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                 .filter((g) => g.updates.length > 0)
                 .map((group) => (
                     <div>
-                        <InningHeaderExperimental key={group.firstUpdate.gameState.step + "_heading"} evt={group.firstUpdate} />
+                        <InningHeaderExperimental key={group.firstUpdate.displayTime + "_heading"} first={props.firstGame} evt={group.firstUpdate} />
                         <div className="flex flex-col">
                             {group.updates.map((update) => {
-                                const highlight = update.gameState.step === scrollTarget;
+                                const highlight = update.displayTime === scrollTarget;
                                 return (
                                     <UpdateRowExperimental
-                                        key={update.gameState.step + "_update"}
-                                        update={update}
+                                        key={update.displayTime + "_update"}
+                                        game={props.firstGame}
+                                        evt={update}
                                         highlight={highlight}
                                     />
                                 );                                
