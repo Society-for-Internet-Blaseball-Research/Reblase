@@ -159,6 +159,8 @@ interface GameUpdatesExperimentalHookReturn {
 export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, autoupdating: boolean): GameUpdatesExperimentalHookReturn {
     const { data: initialData, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query));
 
+    let lastUpdate: CompositeGameState | null = null;
+
     const updates = initialData?.items.flatMap((update) => {
         const data = update.data;
 
@@ -171,7 +173,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
 
         let updatesFromState: CompositeGameState[] = [];
 
-        const first: CompositeGameState = {
+        let newUpdate = {
             batter: gameState.batter,
             pitcher: gameState.pitcher,
             baserunners: gameState.baserunners ?? [],
@@ -198,7 +200,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
             batchStep: -1,
         };
 
-        updatesFromState.push(first);
+        updatesFromState.push(newUpdate);
 
         if (update.data.gameEventBatches.length == 0)
         {
@@ -210,28 +212,32 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
         
         updatesFromState = updatesFromState.concat(
             batches.map((b) => {
+                const updateToApplyPatchTo = lastUpdate ?? newUpdate;
+
                 return {
-                    batter: b.changedState.batter ?? first.batter,
-                    pitcher: b.changedState.pitcher ?? first.pitcher,
-                    baserunners: b.changedState.baserunners ?? first.baserunners,
-                    started: b.changedState.started ?? first.started,
-                    complete: b.changedState.complete ?? first.complete,
-                    teamAtBat: b.changedState.teamAtBat ?? first.teamAtBat,
-                    balls: b.changedState.balls ?? first.balls,
-                    strikes: b.changedState.strikes ?? first.strikes,
-                    outs: b.changedState.outs ?? first.outs,
-                    awayScore: b.changedState.awayScore ?? first.awayScore,
-                    homeScore: b.changedState.homeScore ?? first.homeScore,
-                    shame: b.changedState.shame ?? first.shame,
-                    inning: b.changedState.inning ?? first.inning,
-                    topOfInning: b.changedState.topOfInning ?? first.topOfInning,
-                    displayText: b.displayText ?? first.displayText,
-                    displayTime: b.displayTime ?? first.displayTime,
+                    batter: b.changedState.batter ?? updateToApplyPatchTo.batter,
+                    pitcher: b.changedState.pitcher ?? updateToApplyPatchTo.pitcher,
+                    baserunners: b.changedState.baserunners ?? updateToApplyPatchTo.baserunners,
+                    started: b.changedState.started ?? updateToApplyPatchTo.started,
+                    complete: b.changedState.complete ?? updateToApplyPatchTo.complete,
+                    teamAtBat: b.changedState.teamAtBat ?? updateToApplyPatchTo.teamAtBat,
+                    balls: b.changedState.balls ?? updateToApplyPatchTo.balls,
+                    strikes: b.changedState.strikes ?? updateToApplyPatchTo.strikes,
+                    outs: b.changedState.outs ?? updateToApplyPatchTo.outs,
+                    awayScore: b.changedState.awayScore ?? updateToApplyPatchTo.awayScore,
+                    homeScore: b.changedState.homeScore ?? updateToApplyPatchTo.homeScore,
+                    shame: b.changedState.shame ?? updateToApplyPatchTo.shame,
+                    inning: b.changedState.inning ?? updateToApplyPatchTo.inning,
+                    topOfInning: b.changedState.topOfInning ?? updateToApplyPatchTo.topOfInning,
+                    displayText: b.displayText ?? updateToApplyPatchTo.displayText,
+                    displayTime: b.displayTime ?? updateToApplyPatchTo.displayTime,
                     displayOrder: b.displayOrder,
                     batchStep: gameEventBatch.batchStep,
                 }
             })
         );
+
+        lastUpdate = newUpdate;
 
         return updatesFromState;
     });
