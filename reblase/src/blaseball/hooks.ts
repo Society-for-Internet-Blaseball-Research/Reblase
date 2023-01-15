@@ -30,6 +30,7 @@ import {
     ChronSunSunPressure,
     ChronFeedSeasonList,
     Timestamp,
+    GameListQueryExperimental,
 } from "blaseball-lib/chronicler";
 import {
     eventuallyApi,
@@ -76,6 +77,22 @@ export function useGameListExperimental(): GameListExperimentalHookReturn {
 
     return {
         games: data ?? [],
+        error,
+        isLoading: !data,
+    };
+}
+
+interface FilteredGameListExperimentalHookReturn {
+    games: BlaseballGameExperimental[];
+    error: any;
+    isLoading: boolean;
+}
+
+export function useFilteredGameListExperimental(query: GameListQueryExperimental): FilteredGameListExperimentalHookReturn {
+    const { data, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query));
+
+    return {
+        games: data?.items.map((item) => item.data) ?? [],
         error,
         isLoading: !data,
     };
