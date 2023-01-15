@@ -125,7 +125,7 @@ export function GamePageExperimental() {
     if (isLoading || !firstGame) return (<Loading></Loading>)
 
     // Stop autoupdating once the game is over
-    if (last?.completed && options.autoUpdate) setOptions({ ...options, autoUpdate: false });
+    if (last?.complete && options.autoUpdate) setOptions({ ...options, autoUpdate: false });
 
     const firstUpdate = updates[0];
 
@@ -145,7 +145,7 @@ export function GamePageExperimental() {
             <GamePageOptions
                 options={options}
                 setOptions={setOptions}
-                gameComplete={last?.completed ?? true}
+                gameComplete={last?.complete ?? true}
             />
 
             <UpdatesListFetchingExperimental

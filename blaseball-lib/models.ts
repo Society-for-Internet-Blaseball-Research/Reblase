@@ -115,7 +115,7 @@ interface BlaseballGameInformationExperimental {
     weather: BlaseballWeatherExperimental;
 
     started: boolean;
-    completed: boolean;
+    complete: boolean;
 
     gameLoserId: TeamID;
     gameWinnerId: TeamID;
@@ -152,7 +152,7 @@ export interface BlaseballGameBatchChanges {
     shame?: boolean;
 
     started?: boolean;
-    completed?: boolean;
+    complete?: boolean;
     inning?: number;
     topOfInning?: boolean;
 
@@ -207,7 +207,7 @@ export interface CompositeGameState {
     baserunners: BlaseballBaserunnerExperimental[];
     
     started: boolean;
-    completed: boolean;
+    complete: boolean;
     teamAtBat: "HOME" | "AWAY";
     
     balls: number;

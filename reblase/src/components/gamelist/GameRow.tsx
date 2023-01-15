@@ -382,7 +382,7 @@ export const GameRowExperimental = React.memo(
                     />
                     <OneLineTeamScore home={home} away={away} />
                     <StandalonePitchers
-                        gameComplete={data.completed}
+                        gameComplete={data.complete}
                         awayPitcher={data.awayPitcher.name}
                         homePitcher={data.homePitcher.name}
                         predictedAwayPitcher={null}
