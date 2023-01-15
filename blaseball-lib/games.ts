@@ -271,6 +271,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /Weather Report arrived from History/,
         /Black Hole \(Black Hole\)/,
         /was Frozen/,
+        /\[ ?BURP ?\]/,
     ]) {
         if (pattern.test(update)) return true;
     }
