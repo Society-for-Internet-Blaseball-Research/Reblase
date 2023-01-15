@@ -77,10 +77,21 @@ function GamesListFetchingExperimental(props: {
     const { data: simData, error: simError, isLoading: simIsLoading } = useSimulationExperimental();
 
     const days = useMemo(() => {
-        let gamesFiltered = props.showFutureGames ? games : games.filter((game) => game.started);
-        if (props.teams) {
-            gamesFiltered = gamesFiltered.filter((game) => props.teams?.indexOf(game.awayTeam.id) !== -1 || props.teams.indexOf(game.homeTeam.id) !== -1)
-        }
+        let gamesFiltered = games.filter((game) => {
+            if (game.cancelled) {
+                return false;
+            }
+            
+            if (!props.showFutureGames && !game.started) {
+                return false;
+            }
+            
+            if (!props.teams) {
+                return true;
+            }
+
+            return props.teams?.indexOf(game.awayTeam.id) !== -1 || props.teams.indexOf(game.homeTeam.id) !== -1;
+        });
 
         return groupByDay(gamesFiltered).reverse();
     }, [games, props.showFutureGames, props.teams]);

@@ -116,6 +116,7 @@ interface BlaseballGameInformationExperimental {
 
     started: boolean;
     complete: boolean;
+    cancelled: boolean;
 
     gameLoserId: TeamID;
     gameWinnerId: TeamID;
