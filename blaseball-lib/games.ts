@@ -221,6 +221,8 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /hits a ((solo|2-run|3-run|4-run) )?home run/i,
         /steals (second base|third base|fourth base|fifth base|home)/,
         /scores/,
+        /takes their base/,
+        /(draws|earns) a walk/,
         /(2s|3s|4s) score/,
         /Rogue Umpire/,
         /feedback/,
