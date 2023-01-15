@@ -1,4 +1,10 @@
-﻿import { isGameUpdateImportant, getBattingTeam, getPitchingTeam, getBattingTeamExperimental, getPitchingTeamExperimental } from "blaseball-lib/games";
+﻿import {
+    isGameUpdateImportant,
+    getBattingTeam,
+    getPitchingTeam,
+    getBattingTeamExperimental,
+    getPitchingTeamExperimental,
+} from "blaseball-lib/games";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
 import { UpdateRowExperimental } from "./UpdateRowExperimental";
@@ -55,7 +61,12 @@ export function UpdatesListFetchingExperimental(props: UpdatesListFetchingExperi
                 </span>
             )}
 
-            <GameUpdateListExperimental firstGame={props.game} updates={props.updates} updateOrder={props.order} filterImportant={props.filterImportant} />
+            <GameUpdateListExperimental
+                firstGame={props.game}
+                updates={props.updates}
+                updateOrder={props.order}
+                filterImportant={props.filterImportant}
+            />
 
             {props.isLoading && <Loading />}
         </div>
@@ -211,18 +222,37 @@ export function addInningHeaderRowsExperimental(
 
     let lastInning = -1;
     let lastTopOfInning = true;
+    let lastDisplayText = "";
+    let lastDisplayOrder = 0;
+
     for (const update of updates) {
-        // Basic dedupe
         const gameState = update;
         const row: ElementExperimental = { type: "row", update };
 
-        // if (!update.displayText) continue;
+        if (!update.displayText) continue;
+        if (lastDisplayText == update.displayText && lastDisplayOrder === update.displayOrder) continue;
+        lastDisplayText = update.displayText;
+        lastDisplayOrder = update.displayOrder;
+
         if (filterImportant && !isGameUpdateImportant(update.displayText, null)) continue;
+
+        console.log(
+            update,
+            "lastInning=",
+            lastInning,
+            "isTopOfInning",
+            update.topOfInning
+        );
 
         const isNewHalfInning = lastInning !== gameState.inning || lastTopOfInning !== gameState.topOfInning;
         if (isNewHalfInning && gameState.inning > -1) {
             // New inning, add header
-            const header: ElementExperimental = { type: "heading", inning: gameState.inning, top: gameState.topOfInning, update };
+            const header: ElementExperimental = {
+                type: "heading",
+                inning: gameState.inning,
+                top: gameState.topOfInning,
+                update,
+            };
 
             // We're skipping "inning 0" so if this is the inning 1 header, "push" it before the first events
             if (gameState.inning === 0 && gameState.topOfInning && direction == "asc") {
@@ -257,7 +287,7 @@ interface GameUpdateListProps<TSecondary> {
     renderSecondary?: (update: SecondaryUpdate<TSecondary>) => React.ReactNode;
 }
 
-type Group<TSecondary> = { firstUpdate: GameOrFight, updates: GroupValue<TSecondary>[] }
+type Group<TSecondary> = { firstUpdate: GameOrFight; updates: GroupValue<TSecondary>[] };
 
 type GroupValue<TSecondary> =
     | { type: "primary"; data: GameOrFight }
@@ -350,12 +380,12 @@ interface GameUpdateListExperimentalProps {
     filterImportant: boolean;
 }
 
-type GroupExperimental = { firstUpdate: CompositeGameState, updates: CompositeGameState[] }
+type GroupExperimental = { firstUpdate: CompositeGameState; updates: CompositeGameState[] };
 
 export function GameUpdateListExperimental(props: GameUpdateListExperimentalProps) {
     const updates = [...props.updates];
 
-    updates.sort((a, b) => dayjs(a.displayTime).unix() - dayjs(b.displayTime).unix());
+    updates.sort((a, b) => a.displayOrder - b.displayOrder);
 
     if (props.updateOrder === "desc") updates.reverse();
 
@@ -387,18 +417,13 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                 .filter((g) => g.updates.length > 0)
                 .map((group) => (
                     <div>
-                        <InningHeaderExperimental key={group.firstUpdate.displayTime + "_heading"} first={props.firstGame} evt={group.firstUpdate} />
+                        <InningHeaderExperimental first={props.firstGame} evt={group.firstUpdate} />
                         <div className="flex flex-col">
                             {group.updates.map((update) => {
                                 const highlight = update.displayTime === scrollTarget;
                                 return (
-                                    <UpdateRowExperimental
-                                        key={update.displayTime + "_update"}
-                                        game={props.firstGame}
-                                        evt={update}
-                                        highlight={highlight}
-                                    />
-                                );                                
+                                    <UpdateRowExperimental game={props.firstGame} evt={update} highlight={highlight} />
+                                );
                             })}
                         </div>
                     </div>
@@ -406,4 +431,3 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
         </div>
     );
 }
-    
