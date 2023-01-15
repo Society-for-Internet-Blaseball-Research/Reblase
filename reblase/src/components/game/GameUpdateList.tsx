@@ -236,14 +236,6 @@ export function addInningHeaderRowsExperimental(
 
         if (filterImportant && !isGameUpdateImportant(update.displayText, null)) continue;
 
-        console.log(
-            update,
-            "lastInning=",
-            lastInning,
-            "isTopOfInning",
-            update.topOfInning
-        );
-
         const isNewHalfInning = lastInning !== gameState.inning || lastTopOfInning !== gameState.topOfInning;
         if (isNewHalfInning && gameState.inning > -1) {
             // New inning, add header
@@ -254,8 +246,6 @@ export function addInningHeaderRowsExperimental(
                 update,
             };
 
-            console.log("new heading");
-
             // We're skipping "inning 0" so if this is the inning 1 header, "push" it before the first events
             if (gameState.inning === 0 && gameState.topOfInning && direction == "asc") {
                 elements.unshift(header);
@@ -264,8 +254,14 @@ export function addInningHeaderRowsExperimental(
             }
         }
 
-        // Add the row
-        elements.push(row);
+        if (isNewHalfInning && lastInning !== -2) {
+            // Add the row
+            elements.push(row, elements.pop()!);
+        }
+        else {
+            // Add the row
+            elements.push(row);
+        }
 
         if (gameState.inning !== -1) {
             lastInning = gameState.inning;
