@@ -217,7 +217,8 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
     if (scoreUpdate) return true;
     for (const pattern of [
         /hits a (Single|Double|Triple|Quadruple|grand slam)/,
-        /hits a (solo|2-run|3-run|4-run) home run/,
+        /on with a (Single|Double|Triple)/,
+        /hits a ((solo|2-run|3-run|4-run) )?home run/i,
         /steals (second base|third base|fourth base|fifth base|home)/,
         /scores/,
         /(2s|3s|4s) score/,
