@@ -385,7 +385,7 @@ type GroupExperimental = { firstUpdate: CompositeGameState; updates: CompositeGa
 export function GameUpdateListExperimental(props: GameUpdateListExperimentalProps) {
     const updates = [...props.updates];
 
-    updates.sort((a, b) => a.displayOrder - b.displayOrder);
+    updates.sort((a, b) => dayjs(a.displayTime).isBefore(dayjs(b.displayTime)) ? 0 : 1);
 
     if (props.updateOrder === "desc") updates.reverse();
 
@@ -420,9 +420,15 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                         <InningHeaderExperimental first={props.firstGame} evt={group.firstUpdate} />
                         <div className="flex flex-col">
                             {group.updates.map((update) => {
-                                const highlight = update.displayTime === scrollTarget;
+                                const displayTimeShort = dayjs(update.displayTime).format("mm:ss");
+                                const highlight = displayTimeShort === scrollTarget;
+
                                 return (
-                                    <UpdateRowExperimental game={props.firstGame} evt={update} highlight={highlight} />
+                                    <UpdateRowExperimental
+                                        key={displayTimeShort + "_update"}
+                                        game={props.firstGame}
+                                        evt={update}
+                                        highlight={highlight} />
                                 );
                             })}
                         </div>
