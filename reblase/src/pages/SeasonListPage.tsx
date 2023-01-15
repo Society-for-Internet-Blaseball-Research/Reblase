@@ -82,6 +82,45 @@ function SeasonGroup(props: { games: ChronGame[]; feedSeasonList?: BlaseballFeed
     );
 }
 
+interface ExperimentalSeason {
+    season: number;
+    seasonData: SeasonData;
+}
+
+function SeasonRowExperimental(props: { data: ExperimentalSeason }) {
+    const data = props.data;
+    const seasonData = props.data.seasonData;
+
+    const startDate = seasonData.start ? dayjs(seasonData.start) : null;
+    const endDate = seasonData.end ? dayjs(seasonData.end) : null;
+
+    const dateFormat = "MMM D, YYYY";
+
+    const target = `/experimental/season/${data.season + 1}`;
+    return (
+        <Link
+            className="flex px-4 py-2 border-b border-solid border-gray-300 dark:border-gray-700 items-center hover:bg-gray-200 dark-hover:bg-gray-800"
+            to={target}
+        >
+            <span className="text-lg font-semibold">{seasonData.name}</span>
+            <span className="text-gray-700 dark:text-gray-300 ml-4 mr-auto">
+                {startDate?.format(dateFormat) ?? "TBD"} - {endDate?.format(dateFormat) ?? "TBD"}
+            </span>
+            <span className="text-semibold">View games</span>
+        </Link>
+    );
+}
+
+function SeasonGroupExperimental(props: { seasons: ExperimentalSeason[] }) {
+    return (
+        <div className="flex flex-col mb-6">
+            {props.seasons.map((season) => (
+                <SeasonRowExperimental key={"return_" + season.season} data={season} />
+            ))}
+        </div>
+    );
+}
+
 export function SeasonListPage() {
     const query = { day: 0 };
     const { games, error, isLoading } = useGameList(query);
@@ -137,9 +176,13 @@ export function SeasonListPage() {
     const expansionEra = seasonsList.filter((x) => x.data.season >= 11);
     const disciplineEra = seasonsList.filter((x) => x.data.season >= 0 && x.data.season < 11);
     const exhibitions = seasonsList.filter((x) => x.data.season < 0);
+    const coronationEra: ExperimentalSeason[] = [{season: 0, seasonData: {start: "2023-01-09T17:00Z", end: "2023-01-14T02:00Z", name: "Season 1"}}];
 
     return (
         <Container className={"mt-4"}>
+            <h2 className="text-2xl font-semibold mb-2">The Return</h2>
+            <SeasonGroupExperimental seasons={coronationEra}/>
+
             <h2 className="text-2xl font-semibold mb-2">
                 Short Circuit
                 <Twemoji emoji={"\u{26A1}"} />
