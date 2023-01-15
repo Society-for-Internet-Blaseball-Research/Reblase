@@ -1,4 +1,4 @@
-﻿import { useGameListExperimental, useSimulationExperimental, useTeamsList } from "../blaseball/hooks";
+﻿import { useFilteredGameListExperimental, useSimulationExperimental, useTeamsList } from "../blaseball/hooks";
 import { BlaseballTeam } from "blaseball-lib/models";
 import React from "react";
 import Error from "../components/elements/Error";
@@ -6,32 +6,52 @@ import { Container } from "../components/layout/Container";
 import { Loading } from "../components/elements/Loading";
 import { Link } from "react-router-dom";
 import { GameRowExperimental } from "../components/gamelist/GameRow";
-import { PlayerID } from "blaseball-lib/common";
+import { TeamID } from "blaseball-lib/common";
 
 function SingleDayGamesList(props: {
     day: number;
 }) {
-    const { games, error, isLoading } = useGameListExperimental();
+    const { games, error, isLoading } = useFilteredGameListExperimental({order: "desc"});
     const { teams, error: teamError, isLoading: isLoadingTeams } = useTeamsList();
 
     if (error) return <Error>{error.toString()}</Error>;
     if (teamError) return <Error>{teamError.toString()}</Error>;
     if (isLoading || isLoadingTeams) return <Loading />;
-    const teamsMap: Record<PlayerID, BlaseballTeam> = {};
+    const teamsMap: Record<TeamID, BlaseballTeam> = {};
     for (const team of teams) teamsMap[team.data.id!] = team.data;
+
+    console.log("all games", games);
+
+    let gameRows: JSX.Element[] = [];
+    games.forEach((game) => {
+        if (game.day !== props.day){
+            return;
+        }
+
+        // the current value is guaranteed to be newer than this one, if it exists, because we're ordering in descending order.
+        if (gameRows.some((row) => row.key)) {
+            return;
+        }
+
+        gameRows.push((          
+            <GameRowExperimental
+                key={game.id}
+                game={game}
+                teams={teamsMap}
+                showWeather={true}
+            />
+        ));
+    });
+
+    if (gameRows.length === 0) {
+        console.log("current day", props.day, "actual days", new Set(games.map((game) => game.day)));
+
+        return (<h2>No Games</h2>);
+    }
 
     return (
         <div className="flex flex-col">
-            {games.filter((game) => {game.day == props.day}).map((game) => {
-                return (
-                    <GameRowExperimental
-                        key={game.id}
-                        game={game}
-                        teams={teamsMap}
-                        showWeather={true}
-                    />
-                );
-            })}
+            {gameRows}
         </div>
     );
 }
@@ -51,7 +71,7 @@ export function Home() {
                 <h3 className="text-2xl font-semibold">Current games</h3>
 
                 <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
-                    Season 1, Day ${sim.simData.currentDay + 1}
+                    Season 1, Day {sim.simData.currentDay + 1}
                 </h4>
 
                 {sim && (
