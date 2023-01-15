@@ -13,12 +13,15 @@ interface UpdateProps {
     evt: CompositeGameState;
 }
 
-function Timestamp({ game, evt: _ }: UpdateProps) {
-    const linkHref = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + game.displayTime;
+function Timestamp({ game: _, evt }: UpdateProps) {
+    const updateTime = dayjs(evt.displayTime);
+    const time = updateTime.format("mm:ss");
+
+    const linkHref = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + time;
 
     return (
         <a href={linkHref} className="UpdateRow-Timestamp">
-            {game.displayTime}
+            {time}
         </a>
     );
 }
