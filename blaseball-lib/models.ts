@@ -225,8 +225,6 @@ export interface CompositeGameState {
     displayText: string;
     displayTime: Timestamp;
     displayOrder: number;
-
-    batchStep: number;
 }
 
 export interface BlaseballTeamExperimental {

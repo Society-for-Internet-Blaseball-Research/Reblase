@@ -159,88 +159,72 @@ interface GameUpdatesExperimentalHookReturn {
 export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, autoupdating: boolean): GameUpdatesExperimentalHookReturn {
     const { data: initialData, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query));
 
-    let lastUpdate: CompositeGameState | null = null;
-
-    const updates = initialData?.items.flatMap((update) => {
-        const data = update.data;
-
-        if (update.data.gameStates.length == 0)
+    const batches = initialData?.items.flatMap((update) => {
+        if (update.data.gameEventBatches.length == 0)
         {
             return [];
         }
 
-        const gameState = update.data.gameStates[0];
-
-        let updatesFromState: CompositeGameState[] = [];
-
-        let newUpdate = {
-            batter: gameState.batter,
-            pitcher: gameState.pitcher,
-            baserunners: gameState.baserunners ?? [],
-            
-            started: data.started,
-            complete: data.complete,
-            teamAtBat: gameState.teamAtBat,
-            
-            balls: gameState.balls,
-            strikes: gameState.strikes,
-            outs: gameState.outs,
-            
-            awayScore: gameState.awayScore,
-            homeScore: gameState.homeScore,
-            shame: gameState.shame,
-        
-            inning: gameState.inning,
-            topOfInning: gameState.topOfInning,
-            
-            displayText: "",
-            displayTime: data.updated,
-            displayOrder: gameState.step,
-
-            batchStep: -1,
-        };
-
-        updatesFromState.push(newUpdate);
-
-        if (update.data.gameEventBatches.length == 0)
-        {
-            return updatesFromState;
-        }
-
-        let gameEventBatch = update.data.gameEventBatches[0];
         let batches: BlaseballGameBatchChangedState[] = JSON.parse(update.data.gameEventBatches[0].batchData);
         
-        updatesFromState = updatesFromState.concat(
-            batches.map((b) => {
-                const updateToApplyPatchTo = lastUpdate ?? newUpdate;
-
-                return {
-                    batter: b.changedState.batter ?? updateToApplyPatchTo.batter,
-                    pitcher: b.changedState.pitcher ?? updateToApplyPatchTo.pitcher,
-                    baserunners: b.changedState.baserunners ?? updateToApplyPatchTo.baserunners,
-                    started: b.changedState.started ?? updateToApplyPatchTo.started,
-                    complete: b.changedState.complete ?? updateToApplyPatchTo.complete,
-                    teamAtBat: b.changedState.teamAtBat ?? updateToApplyPatchTo.teamAtBat,
-                    balls: b.changedState.balls ?? updateToApplyPatchTo.balls,
-                    strikes: b.changedState.strikes ?? updateToApplyPatchTo.strikes,
-                    outs: b.changedState.outs ?? updateToApplyPatchTo.outs,
-                    awayScore: b.changedState.awayScore ?? updateToApplyPatchTo.awayScore,
-                    homeScore: b.changedState.homeScore ?? updateToApplyPatchTo.homeScore,
-                    shame: b.changedState.shame ?? updateToApplyPatchTo.shame,
-                    inning: b.changedState.inning ?? updateToApplyPatchTo.inning,
-                    topOfInning: b.changedState.topOfInning ?? updateToApplyPatchTo.topOfInning,
-                    displayText: b.displayText,
-                    displayTime: b.displayTime,
-                    displayOrder: b.displayOrder,
-                    batchStep: gameEventBatch.batchStep,
-                }
-            })
-        );
-
-        lastUpdate = newUpdate;
-
-        return updatesFromState;
+        return batches;
     });
+
+    if ( !initialData )
+    {
+        return {
+            firstGame: null,
+            updates: [],
+            isLoading: false,
+            error,
+        };
+    }
+
+    let lastUpdate: CompositeGameState | null = null;
+    let updates: CompositeGameState[] = [];
+
+    for (const b of batches!) {
+        updates.push(
+            lastUpdate = lastUpdate 
+            ? {
+                batter: b.changedState.batter ?? lastUpdate.batter,
+                pitcher: b.changedState.pitcher ?? lastUpdate.pitcher,
+                baserunners: b.changedState.baserunners ?? lastUpdate.baserunners,
+                started: b.changedState.started ?? lastUpdate.started,
+                complete: b.changedState.complete ?? lastUpdate.complete,
+                teamAtBat: b.changedState.teamAtBat ?? lastUpdate.teamAtBat,
+                balls: b.changedState.balls ?? lastUpdate.balls,
+                strikes: b.changedState.strikes ?? lastUpdate.strikes,
+                outs: b.changedState.outs ?? lastUpdate.outs,
+                awayScore: b.changedState.awayScore ?? lastUpdate.awayScore,
+                homeScore: b.changedState.homeScore ?? lastUpdate.homeScore,
+                shame: b.changedState.shame ?? lastUpdate.shame,
+                inning: b.changedState.inning ?? lastUpdate.inning,
+                topOfInning: b.changedState.topOfInning ?? lastUpdate.topOfInning,
+                displayText: b.displayText,
+                displayTime: b.displayTime,
+                displayOrder: b.displayOrder,
+            }
+            : {
+                batter: b.changedState.batter ?? null,
+                pitcher: b.changedState.pitcher ?? null,
+                baserunners: b.changedState.baserunners ?? [],
+                started: b.changedState.started ?? false,
+                complete: b.changedState.complete ?? false,
+                teamAtBat: b.changedState.teamAtBat ?? "HOME",
+                balls: b.changedState.balls ?? 0,
+                strikes: b.changedState.strikes ?? 0,
+                outs: b.changedState.outs ?? 0,
+                awayScore: b.changedState.awayScore ?? 0,
+                homeScore: b.changedState.homeScore ?? 0,
+                shame: b.changedState.shame ?? false,
+                inning: b.changedState.inning ?? 0,
+                topOfInning: b.changedState.topOfInning ?? true,
+                displayText: b.displayText,
+                displayTime: b.displayTime,
+                displayOrder: b.displayOrder,
+        });
+    }
 
     console.log("all updates", updates);
 

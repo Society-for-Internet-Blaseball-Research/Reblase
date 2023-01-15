@@ -220,7 +220,7 @@ export function addInningHeaderRowsExperimental(
 ): ElementExperimental[] {
     const elements: ElementExperimental[] = [];
 
-    let lastInning = -1;
+    let lastInning = -2;
     let lastTopOfInning = true;
     let lastDisplayText = "";
     let lastDisplayOrder = 0;
@@ -253,6 +253,8 @@ export function addInningHeaderRowsExperimental(
                 top: gameState.topOfInning,
                 update,
             };
+
+            console.log("new heading");
 
             // We're skipping "inning 0" so if this is the inning 1 header, "push" it before the first events
             if (gameState.inning === 0 && gameState.topOfInning && direction == "asc") {
