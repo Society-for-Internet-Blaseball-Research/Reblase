@@ -193,6 +193,9 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
             
             displayText: "",
             displayTime: data.updated,
+            displayOrder: gameState.step,
+
+            batchStep: -1,
         };
 
         updatesFromState.push(first);
@@ -202,6 +205,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
             return updatesFromState;
         }
 
+        let gameEventBatch = update.data.gameEventBatches[0];
         let batches: BlaseballGameBatchChangedState[] = JSON.parse(update.data.gameEventBatches[0].batchData);
         
         updatesFromState = updatesFromState.concat(
@@ -223,6 +227,8 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
                     topOfInning: b.changedState.topOfInning ?? first.topOfInning,
                     displayText: b.displayText ?? first.displayText,
                     displayTime: b.displayTime ?? first.displayTime,
+                    displayOrder: b.displayOrder,
+                    batchStep: gameEventBatch.batchStep,
                 }
             })
         );
