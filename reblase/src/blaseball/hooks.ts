@@ -49,6 +49,7 @@ import {
     CompositeGameState
 } from "blaseball-lib/models";
 import { GameID } from "blaseball-lib/common";
+import dayjs from "dayjs";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -168,7 +169,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
         let batches: BlaseballGameBatchChangedState[] = JSON.parse(update.data.gameEventBatches[0].batchData);
         
         return batches;
-    });
+    }).sort((a, b) => dayjs(a.displayTime).isBefore(dayjs(b.displayTime)) ? 0 : 1);
 
     if ( !initialData )
     {
