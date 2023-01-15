@@ -188,7 +188,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, 
         updates.push(
             lastUpdate = lastUpdate 
             ? {
-                batter: b.changedState.batter ?? lastUpdate.batter,
+                batter: b.changedState.batter === undefined ? lastUpdate.batter : b.changedState.batter,
                 pitcher: b.changedState.pitcher ?? lastUpdate.pitcher,
                 baserunners: b.changedState.baserunners ?? lastUpdate.baserunners,
                 started: b.changedState.started ?? lastUpdate.started,

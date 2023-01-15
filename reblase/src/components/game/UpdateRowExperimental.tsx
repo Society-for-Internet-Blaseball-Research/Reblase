@@ -40,17 +40,17 @@ function GameLog({ evt }: UpdateProps) {
     );
 }
 
-function Batter({ game, evt: _ }: UpdateProps) {
+function Batter({ game, evt }: UpdateProps) {
     const team = getBattingTeamExperimental(game);
 
-    if (!team.batterName)
+    if (!evt.batter)
         // "hide" when there's no batter
         return null;
 
     return (
         <span className="UpdateRow-Batter">
             <Twemoji emoji={team.emoji} />
-            <span className="ml-1">{team.batterName}</span>
+            <span className="ml-1">{evt.batter.name}</span>
         </span>
     );
 }
