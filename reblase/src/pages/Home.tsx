@@ -1,4 +1,4 @@
-﻿import { useFilteredGameListExperimental, useSimulationExperimental, useTeamsList } from "../blaseball/hooks";
+﻿import { useGameListExperimental, useSimulationExperimental, useTeamsList } from "../blaseball/hooks";
 import { BlaseballTeam } from "blaseball-lib/models";
 import React from "react";
 import Error from "../components/elements/Error";
@@ -11,7 +11,7 @@ import { TeamID } from "blaseball-lib/common";
 function SingleDayGamesList(props: {
     day: number;
 }) {
-    const { games, error, isLoading } = useFilteredGameListExperimental({order: "desc"});
+    const { games, error, isLoading } = useGameListExperimental({order: "desc"});
     const { teams, error: teamError, isLoading: isLoadingTeams } = useTeamsList();
 
     if (error) return <Error>{error.toString()}</Error>;

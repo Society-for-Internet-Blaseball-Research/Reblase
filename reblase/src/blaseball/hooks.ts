@@ -30,6 +30,7 @@ import {
     ChronSunSunPressure,
     ChronFeedSeasonList,
     Timestamp,
+    GameUpdatesQueryExperimental,
     GameListQueryExperimental,
 } from "blaseball-lib/chronicler";
 import {
@@ -41,9 +42,7 @@ import {
     BlaseballFeedEntry, 
     BlaseballFeedTemporalMetadata,
     BlaseballGameBatchChangedState,
-    BlaseballGameBatchChanges,
     BlaseballGameExperimental,
-    BlaseballGameUpdateExperimental,
     BlaseballSimData,
     BlaseballSimExperimental,
     CompositeGameState
@@ -73,24 +72,8 @@ interface GameListExperimentalHookReturn {
     isLoading: boolean;
 }
 
-export function useGameListExperimental(): GameListExperimentalHookReturn {
-    const { data, error } = useSWR<BlaseballGameExperimental[]>((process.env.REACT_APP_SIBR_API_MIRROR ?? "") + "/games");
-
-    return {
-        games: data ?? [],
-        error,
-        isLoading: !data,
-    };
-}
-
-interface FilteredGameListExperimentalHookReturn {
-    games: BlaseballGameExperimental[];
-    error: any;
-    isLoading: boolean;
-}
-
-export function useFilteredGameListExperimental(query: GameListQueryExperimental): FilteredGameListExperimentalHookReturn {
-    const { data, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query));
+export function useGameListExperimental(query?: GameListQueryExperimental): GameListExperimentalHookReturn {
+    const { data, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query ?? {}));
 
     return {
         games: data?.items.map((item) => item.data) ?? [],
@@ -144,11 +127,6 @@ export function useGameUpdates(query: GameUpdatesQuery, autoRefresh: boolean): G
     };
 }
 
-interface GameUpdatesExperimentalQuery {
-    id: GameID,
-    after?: Timestamp,
-    count?: number;
-}
 
 interface GameUpdatesExperimentalHookReturn {
     firstGame: BlaseballGameExperimental | null;
@@ -157,8 +135,8 @@ interface GameUpdatesExperimentalHookReturn {
     isLoading: boolean;
 }
 
-export function useGameUpdatesExperimental(query: GameUpdatesExperimentalQuery, autoupdating: boolean): GameUpdatesExperimentalHookReturn {
-    const { data: initialData, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query));
+export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, autoupdating: boolean): GameUpdatesExperimentalHookReturn {
+    const { data: initialData, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameUpdates(query));
 
     const batches = initialData?.items.flatMap((update) => {
         if (update.data.gameEventBatches.length == 0)
@@ -474,7 +452,7 @@ interface SimDataExperimentalHookReturn {
 }
 
 export function useSimulationExperimental(): SimDataExperimentalHookReturn {
-    const { data, error } = useSWR<ChronExperimental<BlaseballSimExperimental>>(chroniclerExperimentalApi.sim({order: "desc", count: 1}));
+    const { data, error } = useSWR<ChronExperimental<BlaseballSimExperimental>>(chroniclerExperimentalApi.sim({order: "desc"}));
 
     return {
         data: data?.items[0].data ?? null,
