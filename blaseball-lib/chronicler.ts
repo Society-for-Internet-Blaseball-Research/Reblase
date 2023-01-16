@@ -32,8 +32,9 @@ export const chroniclerApi = {
 export const BASE_EXPERIMENTAL_URL = process.env.REACT_APP_SIBR_API_NEW ?? "/";
 
 export const chroniclerExperimentalApi = {
-    gameList: (query: GameListQueryExperimental) => BASE_EXPERIMENTAL_URL + "v0/versions?kind=game&" + queryString.stringify(query),
-    sim: (query: QueryExperimental) => BASE_EXPERIMENTAL_URL + "v0/versions?kind=sim&" + queryString.stringify(query),
+    gameUpdates: (query: GameUpdatesQueryExperimental) => BASE_EXPERIMENTAL_URL + "v0/versions?kind=game&" + queryString.stringify(query),
+    gameList: (query: GameListQueryExperimental) => BASE_EXPERIMENTAL_URL + "v0/entities?kind=game&" + queryString.stringify(query),
+    sim: (query: QueryExperimental) => BASE_EXPERIMENTAL_URL + "v0/entities?kind=sim&" + queryString.stringify(query),
 };
 
 export type PlayerUpdatesQuery = {
@@ -54,9 +55,15 @@ export type GameListQuery = {
     sim?: string;
 };
 
+export type GameUpdatesQueryExperimental = {
+    order?: "asc" | "desc";
+    after?: Timestamp;
+    count?: number;
+    id?: GameID;
+}
+
 export type GameListQueryExperimental = {
     order?: "asc" | "desc";
-    id?: GameID;
 }
 
 export type QueryExperimental = {
