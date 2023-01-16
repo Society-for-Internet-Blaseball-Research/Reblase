@@ -7,7 +7,15 @@ import Error from "../components/elements/Error";
 import { Link } from "react-router-dom";
 import { useGameList, useAllTemporal, useFeedSeasonList } from "../blaseball/hooks";
 import dayjs from "dayjs";
-import { displaySeason, displaySim, didSimHaveMultipleSeasons, GameTeam, getAwayTeam, getHomeTeam, STATIC_ID } from "blaseball-lib/games";
+import {
+    displaySeason,
+    displaySim,
+    didSimHaveMultipleSeasons,
+    GameTeam,
+    getAwayTeam,
+    getHomeTeam,
+    STATIC_ID,
+} from "blaseball-lib/games";
 import Twemoji from "components/elements/Twemoji";
 import { BlaseballFeedSeasonList } from "blaseball-lib/models";
 
@@ -119,8 +127,16 @@ const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent; feedSeasons: Blasebal
                         {evt.emoji} {evt.name}
                     </Link>
                     <Link to={`/game/${evt.game}`} className="text-sm">
-                        {evt.sim != STATIC_ID && <><strong>{displaySim(evt.sim, feedSeasons)}</strong>, </>}
-                        {didSimHaveMultipleSeasons(evt.sim) && <>Season <strong>{displaySeason(evt.season)}</strong>, </>}
+                        {evt.sim != STATIC_ID && (
+                            <>
+                                <strong>{displaySim(evt.sim, feedSeasons)}</strong>,{" "}
+                            </>
+                        )}
+                        {didSimHaveMultipleSeasons(evt.sim) && (
+                            <>
+                                Season <strong>{displaySeason(evt.season)}</strong>,{" "}
+                            </>
+                        )}
                         Day <strong>{evt.day + 1}</strong>
                     </Link>
                 </div>
@@ -160,7 +176,7 @@ const EventRow = ({ evt, feedSeasons }: { evt: BlaseEvent; feedSeasons: Blasebal
 };
 
 export function EventsPage() {
-    const { games, error, isLoading } = useGameList({ outcomes: true, order: "desc" });
+    const { games, error, isLoading } = useGameList({ order: "desc" });
     const { updates: temporalUpdates, error: temporalError, isLoading: temporalIsLoading } = useAllTemporal();
     const { feedSeasonList, error: feedSeasonError, isLoading: feedSeasonIsLoading } = useFeedSeasonList();
 
@@ -170,8 +186,18 @@ export function EventsPage() {
 
     const gameEvents: BlaseEvent[] = [];
     for (const game of games) {
-        const outcomes = getOutcomes(game.data.outcomes ?? []);
+        const outcomes = getOutcomes(
+            game.data.outcomes ?? [],
+            game.data.shame,
+            game.data.awayTeam,
+            game.startTime,
+            game.endTime
+        );
         for (const outcome of outcomes) {
+            if (outcome.name === "Party" || outcome.name === "Shame")
+                // too damn many
+                continue;
+
             const lastEvent = gameEvents[gameEvents.length - 1];
             if (
                 lastEvent &&
@@ -182,10 +208,6 @@ export function EventsPage() {
                 lastEvent.text.push(outcome.text);
                 continue;
             }
-
-            if (outcome.name === "Party")
-                // too damn many
-                continue;
 
             gameEvents.push({
                 type: "game",

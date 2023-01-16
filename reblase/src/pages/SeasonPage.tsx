@@ -105,10 +105,9 @@ function GamesListFetching(props: {
         started: !props.showFutureGames ? true : undefined,
         team: props.teams ? props.teams.join(",") : undefined,
         weather: props.weather ? props.weather.join(",") : undefined,
-        outcomes:
-            props.outcomes && props.outcomes.every((x) => calculatedOutcomeTypes.map((x) => x.name).indexOf(x) === -1)
-                ? true
-                : undefined,
+        outcomes: props.outcomes && props.outcomes.every((x) => {
+            calculatedOutcomeTypes.map((x) => x.name).indexOf(x) === -1
+        }) ? true : undefined,
     });
 
     const { data: simData, error: simError, isLoading: simIsLoading } = useSimulation();
@@ -117,7 +116,14 @@ function GamesListFetching(props: {
         let gamesFiltered = games;
         if (props.outcomes) {
             gamesFiltered = gamesFiltered.filter((game) => {
-                const gameOutcomes = getOutcomes(game.data.outcomes ?? [], game.data.shame, game.data.awayTeamNickname);
+                const gameOutcomes = getOutcomes(
+                    game.data.outcomes ?? [],
+                    game.data.shame,
+                    game.data.awayTeamNickname,
+                    game.startTime,
+                    game.endTime
+                );
+
                 for (const gameOutcome of gameOutcomes)
                     if (props.outcomes?.indexOf(gameOutcome.name) !== -1) return true;
                 return false;
