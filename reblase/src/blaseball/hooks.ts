@@ -139,14 +139,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, 
     const { data: initialData, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameUpdates(query));
 
     const batches = initialData?.items.flatMap((update) => {
-        if (update.data.gameEventBatches.length == 0)
-        {
-            return [];
-        }
-
-        let batches: BlaseballGameBatchChangedState[] = JSON.parse(update.data.gameEventBatches[0].batchData);
-        
-        return batches;
+        return update.data.gameEventBatches.flatMap(({batchData}) => JSON.parse(batchData)).filter((batch) => batch);
     }).sort((a, b) => dayjs(a.displayTime).isBefore(dayjs(b.displayTime)) ? 0 : 1);
 
     if ( !initialData )
@@ -204,8 +197,6 @@ export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, 
                 displayOrder: b.displayOrder,
         });
     }
-
-    console.log("all updates", updates);
 
     return {
         firstGame: initialData && initialData.items[0].data || null,
