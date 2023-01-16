@@ -1,7 +1,7 @@
 ﻿import { useLocation } from "react-router";
 import React, { useMemo, useState } from "react";
 
-import {  DayTableExperimental } from "../components/gamelist/DayTable";
+import { DayTableExperimental } from "../components/gamelist/DayTable";
 import { Loading } from "../components/elements/Loading";
 import { Container } from "../components/layout/Container";
 import Error from "../components/elements/Error";
@@ -78,17 +78,10 @@ function GamesListFetchingExperimental(props: {
 
     const days = useMemo(() => {
         let gamesFiltered = games.filter((game) => {
-            if (game.cancelled) {
-                return false;
-            }
-            
-            if (!props.showFutureGames && !game.started) {
-                return false;
-            }
-            
-            if (!props.teams) {
-                return true;
-            }
+            if (game.cancelled) return false;
+            // "show future games" is left as a problem for the reader
+            if (!game.started && !game.complete) return false;
+            if (!props.teams) return true;
 
             return props.teams?.indexOf(game.awayTeam.id) !== -1 || props.teams.indexOf(game.homeTeam.id) !== -1;
         });
