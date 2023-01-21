@@ -67,6 +67,7 @@ const GamesList = React.memo(
 );
 
 function GamesListFetchingExperimental(props: {
+    games: BlaseballGameExperimental[];
     teams: string[] | null;
 
     complete: boolean;
@@ -75,9 +76,8 @@ function GamesListFetchingExperimental(props: {
 
     allTeams: BlaseballTeam[];
 }) {
-    const { games, error, isLoading } = useGameListExperimental();
-
     const { data: simData, error: simError, isLoading: simIsLoading } = useSimulationExperimental();
+    const games = props.games;
 
     const days = useMemo(() => {
         let gamesFiltered = games.filter((game) => {
@@ -178,6 +178,7 @@ export function SeasonPageExperimental() {
             <GamesListFetchingExperimental
                 teams={selectedTeams.length ? selectedTeams : null}
                 complete={complete}
+                games={games}
                 showFutureGames={showFutureGames}
                 showFutureWeather={showFutureWeather}
                 allTeams={teams.map((p) => p.data)}
