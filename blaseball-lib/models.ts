@@ -267,7 +267,7 @@ export interface BlaseballSimExperimental {
 export interface BlaseballSimDataExperimental {
     currentDay: number;
     currentSeasonId: SeasonID;
-    currentSeasonNumber: boolean; // this exists?! 
+    currentSeasonNumber: number; // this exists?! 
 }
 
 export interface DamageResult {
