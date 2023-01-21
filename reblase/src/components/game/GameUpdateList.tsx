@@ -424,7 +424,7 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                         <InningHeaderExperimental 
                             awayTeam={props.awayTeam}
                             homeTeam={props.homeTeam}
-                            evt={group.firstUpdate} />
+                            evt={group.firstUpdate.pitcher ? group.firstUpdate : group.updates[1]} />
                         <div className="flex flex-col">
                             {group.updates.map((update) => {
                                 const displayTimeShort = dayjs(update.displayTime).format("mm:ss");
