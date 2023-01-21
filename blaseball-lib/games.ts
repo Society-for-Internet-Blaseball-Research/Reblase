@@ -1,5 +1,5 @@
 import { PlayerID, TeamID } from "./common";
-import { BlaseballFeedSeasonList, BlaseballGame, BlaseballGameUpdateExperimental } from "./models";
+import { BlaseballFeedSeasonList, BlaseballGame, BlaseballTeamExperimental } from "./models";
 
 export const STATIC_ID = "thisidisstaticyo";
 
@@ -59,35 +59,6 @@ export function getHomeTeam(game: BlaseballGame): GameTeam {
     };
 }
 
-export function getHomeTeamExperimental(game: BlaseballGameUpdateExperimental): GameTeam {
-    return {
-        id: game.homeTeam.id,
-        name: game.homeTeam.name,
-        nickname: game.homeTeam.nickname,
-        emoji: game.homeTeam.emoji,
-        color: game.homeTeam.primaryColor,
-        secondaryColor: game.homeTeam.secondaryColor,
-
-        isBatting: !game.gameState.topOfInning,
-        isPitching: game.gameState.topOfInning,
-
-        score: game.gameState.homeScore,
-        opposingScore: game.gameState.awayScore,
-
-        batter: !game.gameState.topOfInning && game.gameState.batter?.id || null,
-        batterName: !game.gameState.topOfInning && game.gameState.batter?.name || null,
-        pitcher: game.homePitcher.id,
-        pitcherName: game.homePitcher.name,
-
-        // just writing into the same values here, it doesn't matter
-        totalBases: game.gameState.totalBases,
-        maxBalls: game.gameState.ballsNeeded,
-        maxStrikes: game.gameState.strikesNeeded,
-        maxOuts: game.gameState.outsNeeded,
-    };
-}
-
-
 export function getAwayTeam(game: BlaseballGame): GameTeam {
     return {
         id: game.awayTeam,
@@ -116,34 +87,6 @@ export function getAwayTeam(game: BlaseballGame): GameTeam {
     };
 }
 
-export function getAwayTeamExperimental(game: BlaseballGameUpdateExperimental): GameTeam {
-    return {
-        id: game.awayTeam.id,
-        name: game.awayTeam.name,
-        nickname: game.awayTeam.nickname,
-        emoji: game.awayTeam.emoji,
-        color: game.awayTeam.primaryColor,
-        secondaryColor: game.awayTeam.secondaryColor,
-
-        isBatting: game.gameState.topOfInning,
-        isPitching: !game.gameState.topOfInning,
-
-        score: game.gameState.awayScore,
-        opposingScore: game.gameState.homeScore,
-
-        batter: game.gameState.topOfInning && game.gameState.batter?.id || null,
-        batterName: game.gameState.topOfInning && game.gameState.batter?.name || null,
-        pitcher: game.awayPitcher.id,
-        pitcherName: game.awayPitcher.name,
-
-        // just writing into the same values here, it doesn't matter
-        totalBases: game.gameState.totalBases,
-        maxBalls: game.gameState.ballsNeeded,
-        maxStrikes: game.gameState.strikesNeeded,
-        maxOuts: game.gameState.outsNeeded,
-    };
-}
-
 export function getBattingTeam(game: BlaseballGame): GameTeam {
     return game.topOfInning ? getAwayTeam(game) : getHomeTeam(game);
 }
@@ -152,12 +95,12 @@ export function getPitchingTeam(game: BlaseballGame): GameTeam {
     return game.topOfInning ? getHomeTeam(game) : getAwayTeam(game);
 }
 
-export function getBattingTeamExperimental(game: BlaseballGameUpdateExperimental): GameTeam {
-    return game.gameState.topOfInning ? getAwayTeamExperimental(game) : getHomeTeamExperimental(game);
+export function getBattingTeamExperimental(topOfInning: boolean, awayTeam: BlaseballTeamExperimental, homeTeam: BlaseballTeamExperimental): BlaseballTeamExperimental {
+    return topOfInning ? awayTeam : homeTeam;
 }
 
-export function getPitchingTeamExperimental(game: BlaseballGameUpdateExperimental): GameTeam {
-    return game.gameState.topOfInning ? getHomeTeamExperimental(game) : getAwayTeamExperimental(game);
+export function getPitchingTeamExperimental(topOfInning: boolean, awayTeam: BlaseballTeamExperimental, homeTeam: BlaseballTeamExperimental): BlaseballTeamExperimental {
+    return topOfInning ? homeTeam : awayTeam;
 }
 
 export interface BaseState {

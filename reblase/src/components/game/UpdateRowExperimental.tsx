@@ -1,19 +1,20 @@
-﻿import { isGameUpdateImportant, getBattingTeamExperimental } from "blaseball-lib/games";
+﻿import { isGameUpdateImportant, getBattingTeamExperimental, GameTeam } from "blaseball-lib/games";
 import { Circles } from "../elements/Circles";
 import React, { useEffect, useRef } from "react";
 import dayjs from "dayjs";
-import { BlaseballGameUpdateExperimental, CompositeGameState } from "blaseball-lib/models";
+import { BlaseballTeamExperimental, CompositeGameState } from "blaseball-lib/models";
 import { BaseDisplayExperimental } from "../elements/BaseDisplay";
 import clsx from "clsx";
 import "./UpdateRow.css";
 import Twemoji from "components/elements/Twemoji";
 
 interface UpdateProps {
-    game: BlaseballGameUpdateExperimental;
+    awayTeam: BlaseballTeamExperimental;
+    homeTeam: BlaseballTeamExperimental;
     evt: CompositeGameState;
 }
 
-function Timestamp({ game: _, evt }: UpdateProps) {
+function Timestamp({ evt }: UpdateProps) {
     const updateTime = dayjs(evt.displayTime);
     const time = updateTime.format("mm:ss");
 
@@ -40,8 +41,8 @@ function GameLog({ evt }: UpdateProps) {
     );
 }
 
-function Batter({ game, evt }: UpdateProps) {
-    const team = getBattingTeamExperimental(game);
+function Batter({ awayTeam, homeTeam, evt }: UpdateProps) {
+    const team = getBattingTeamExperimental(evt.topOfInning, awayTeam, homeTeam);
 
     if (!evt.batter)
         // "hide" when there's no batter
@@ -55,25 +56,28 @@ function Batter({ game, evt }: UpdateProps) {
     );
 }
 
-function AtBatInfo({ game, evt }: UpdateProps) {
-    const team = getBattingTeamExperimental(game);
+function AtBatInfo({ evt }: UpdateProps) {
     return (
         <div className="UpdateRow-AtBat">
-            <BlaseRunners game={game} evt={evt} />
+            <BlaseRunners evt={evt} />
             <span className="flex space-x-1">
-                <Circles label="Balls" amount={evt.balls} total={team.maxBalls - 1} />
-                <Circles label="Strikes" amount={evt.strikes} total={team.maxStrikes - 1} />
-                <Circles label="Outs" amount={evt.outs} total={team.maxOuts - 1} />
+                <Circles label="Balls" amount={evt.balls} total={3} />
+                <Circles label="Strikes" amount={evt.strikes} total={2} />
+                <Circles label="Outs" amount={evt.outs} total={2} />
             </span>
         </div>
     );
 }
-function BlaseRunners({ game, evt }: UpdateProps) {
-    const team = getBattingTeamExperimental(game);
+
+interface BaseRunnersProps {
+    evt: CompositeGameState;
+}
+
+function BlaseRunners({ evt }: BaseRunnersProps) {
     return (
         <BaseDisplayExperimental
             baseRunners={evt.baserunners}
-            totalBases={team.totalBases}
+            totalBases={3}
         />
     );
 }
@@ -83,7 +87,7 @@ interface UpdateRowProps extends UpdateProps {
 }
 
 export const UpdateRowExperimental = React.memo(
-    function UpdateRowExperimental({ game, evt, highlight }: UpdateRowProps) {
+    function UpdateRowExperimental({ awayTeam, homeTeam, evt, highlight }: UpdateRowProps) {
         const scrollRef = useRef<HTMLDivElement>(null);
         useEffect(() => {
             if (highlight) {
@@ -96,11 +100,11 @@ export const UpdateRowExperimental = React.memo(
                 ref={highlight ? scrollRef : undefined}
                 className={"UpdateRow" + (highlight ? " UpdateRow-Highlight" : "")}
             >
-                <GameLog game={game} evt={evt} />
-                <Timestamp game={game} evt={evt} />
-                <Score game={game} evt={evt} />
-                <Batter game={game} evt={evt} />
-                <AtBatInfo game={game} evt={evt} />
+                <GameLog awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
+                <Timestamp awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
+                <Score awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
+                <Batter awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
+                <AtBatInfo awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
             </div>
         );
     },
