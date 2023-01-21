@@ -1,4 +1,4 @@
-﻿import { useLocation } from "react-router";
+﻿import { useLocation, useParams } from "react-router";
 import React, { useMemo, useState } from "react";
 
 import { DayTableExperimental } from "../components/gamelist/DayTable";
@@ -11,6 +11,7 @@ import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
 import { BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballTeam } from "blaseball-lib/models";
 import { PlayerID, SeasonID } from "blaseball-lib/common";
+import { returnedSeasons } from "blaseball-lib/seasons";
 
 type GameDay = { games: BlaseballGameExperimental[]; season: SeasonID; day: number };
 function groupByDay(games: BlaseballGameExperimental[]): GameDay[] {
@@ -38,6 +39,7 @@ function groupByDay(games: BlaseballGameExperimental[]): GameDay[] {
 
 const GamesList = React.memo(
     (props: {
+        season: number;
         days: GameDay[];
         teams: BlaseballTeam[];
         showFutureWeather: boolean;
@@ -53,6 +55,7 @@ const GamesList = React.memo(
                     return (
                         <DayTableExperimental
                             key={day}
+                            season={props.season}
                             day={day}
                             currentDay={props.currentDay}
                             games={games}
@@ -67,6 +70,7 @@ const GamesList = React.memo(
 );
 
 function GamesListFetchingExperimental(props: {
+    season: number;
     games: BlaseballGameExperimental[];
     teams: string[] | null;
 
@@ -94,14 +98,23 @@ function GamesListFetchingExperimental(props: {
         return groupByDay(gamesFiltered).reverse();
     }, [games, props.showFutureGames, props.teams]);
 
-    if (error || simError) return <Error>{(error || simError).toString()}</Error>;
-    if (isLoading || simIsLoading) return <Loading />;
+    if (days.length === 0) return (
+        <>
+            <span className="font-semibold mt-4 space-x-2">
+                No games which match current filters.
+            </span>
+        </>
+    );
+
+    if (simError) return <Error>{simError}</Error>;
+    if (simIsLoading) return <Loading />;
 
     const currentDay = simData?.simData.currentDay ?? 0;
 
     return (
         <>
             <GamesList
+                season={props.season}
                 days={days}
                 teams={props.allTeams}
                 showFutureWeather={props.showFutureWeather}
@@ -146,7 +159,7 @@ export function SeasonPageExperimental() {
             </p>
             <h2 className="text-2xl font-semibold mb-4">
                 <Link to={location.pathname}>
-                    Games in Season 1
+                    Games in Season {seasonNumber}
                 </Link>
             </h2>
 
@@ -176,11 +189,12 @@ export function SeasonPageExperimental() {
             </div>
 
             <GamesListFetchingExperimental
-                teams={selectedTeams.length ? selectedTeams : null}
+                season={seasonNumber}
                 complete={complete}
                 games={games}
                 showFutureGames={showFutureGames}
                 showFutureWeather={showFutureWeather}
+                teams={selectedTeams.length ? selectedTeams : null}
                 allTeams={teams.map((p) => p.data)}
             />
         </Container>
