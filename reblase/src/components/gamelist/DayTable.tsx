@@ -82,6 +82,7 @@ export const DayTable = function DayTable(props: DayTableProps) {
 
 interface DayTableExperimentalProps {
     games: BlaseballGameExperimental[];
+    season: number,
     day: number;
     currentDay: number;
     showFutureWeather: boolean;
@@ -107,6 +108,7 @@ export const DayTableExperimental = function DayTable(props: DayTableExperimenta
                 return (
                     <GameRowExperimental
                         key={game.id}
+                        season={props.season}
                         game={game}
                         teams={props.teams}
                         showWeather={props.showFutureWeather || game.started}
