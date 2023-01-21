@@ -29,7 +29,6 @@ import {
     SunSunPressureResponse,
     ChronSunSunPressure,
     ChronFeedSeasonList,
-    Timestamp,
     GameUpdatesQueryExperimental,
     GameListQueryExperimental,
 } from "blaseball-lib/chronicler";
@@ -41,13 +40,11 @@ import {
 import { 
     BlaseballFeedEntry, 
     BlaseballFeedTemporalMetadata,
-    BlaseballGameBatchChangedState,
     BlaseballGameExperimental,
     BlaseballSimData,
     BlaseballSimExperimental,
     CompositeGameState
 } from "blaseball-lib/models";
-import { GameID } from "blaseball-lib/common";
 import dayjs from "dayjs";
 
 interface GameListHookReturn {
@@ -72,12 +69,15 @@ interface GameListExperimentalHookReturn {
     isLoading: boolean;
 }
 
-export function useGameListExperimental(query?: GameListQueryExperimental): GameListExperimentalHookReturn {
+export function useGameListExperimental(query: GameListQueryExperimental): GameListExperimentalHookReturn {
     const { data, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList(query ?? {}));
 
+    const allGames = data?.items.map((item) => item.data);
+    const filteredGames = allGames?.filter((game) => !query.season || game.seasonId == query.season);
+
     return {
-        games: data?.items.map((item) => item.data) ?? [],
-        error,
+        games: filteredGames ?? [],
+        error: error,
         isLoading: !data,
     };
 }
@@ -443,7 +443,7 @@ interface SimDataExperimentalHookReturn {
 }
 
 export function useSimulationExperimental(): SimDataExperimentalHookReturn {
-    const { data, error } = useSWR<ChronExperimental<BlaseballSimExperimental>>(chroniclerExperimentalApi.sim({order: "desc"}));
+    const { data, error } = useSWR<ChronExperimental<BlaseballSimExperimental>>(chroniclerExperimentalApi.sim({}));
 
     return {
         data: data?.items[0].data ?? null,

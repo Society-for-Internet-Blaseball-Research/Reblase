@@ -106,9 +106,16 @@ function GamesListFetchingExperimental(props: {
     );
 }
 
+interface SeasonPageParams {
+    season: string;
+}
+
 export function SeasonPageExperimental() {
     const location = useLocation();
 
+    const { season: seasonStr } = useParams<SeasonPageParams>();
+    const seasonNumber = parseInt(seasonStr);
+    const seasonId = returnedSeasons.get(seasonNumber - 1);
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
     const [showFutureGames, setShowFutureGames] = useState<boolean>(false);
 
@@ -118,7 +125,7 @@ export function SeasonPageExperimental() {
         games,
         error: gamesError,
         isLoading: isLoadingGames,
-    } = useGameListExperimental();
+    } = useGameListExperimental({season: seasonId});
 
     if (error || gamesError)
         return <Error>{(error || gamesError).toString()}</Error>;

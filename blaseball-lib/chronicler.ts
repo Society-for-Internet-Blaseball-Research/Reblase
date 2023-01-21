@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { GameID } from "./common";
+import { GameID, SeasonID } from "./common";
 import {
     BlaseballFight,
     BlaseballGame,
@@ -64,6 +64,7 @@ export type GameUpdatesQueryExperimental = {
 
 export type GameListQueryExperimental = {
     order?: "asc" | "desc";
+    season?: SeasonID;
 }
 
 export type QueryExperimental = {
