@@ -8,7 +8,7 @@ import { useGameUpdatesExperimental } from "../blaseball/hooks";
 import { BlaseballGameExperimental, BlaseballGameUpdateExperimental } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
 import { displaySimAndSeasonPlaintext, displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
-import { getWeather } from "blaseball-lib/weather";
+import { getWeatherExperimental } from "blaseball-lib/weather";
 import Twemoji from "components/elements/Twemoji";
 import { Loading } from "components/elements/Loading";
 
@@ -18,7 +18,7 @@ interface PayloadProps {
 
 const GameHeading = ({ game }: PayloadProps) => {
     const location = useLocation();
-    const weather = getWeather(3000);
+    const weather = getWeatherExperimental(game.weather);
 
     return (
         <>
