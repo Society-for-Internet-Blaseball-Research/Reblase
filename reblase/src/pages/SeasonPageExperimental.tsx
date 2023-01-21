@@ -68,6 +68,8 @@ const GamesList = React.memo(
 
 function GamesListFetchingExperimental(props: {
     teams: string[] | null;
+
+    complete: boolean;
     showFutureGames: boolean;
 
     allTeams: BlaseballTeam[];
@@ -79,8 +81,10 @@ function GamesListFetchingExperimental(props: {
     const days = useMemo(() => {
         let gamesFiltered = games.filter((game) => {
             if (game.cancelled) return false;
-            // "show future games" is left as a problem for the reader
-            if (!game.started && !game.complete) return false;
+            if (!game.started) {
+                if (props.complete) return false;
+                if (!props.showFutureGames) return false;
+            }
             if (!props.teams) return true;
 
             return props.teams?.indexOf(game.awayTeam.id) !== -1 || props.teams.indexOf(game.homeTeam.id) !== -1;
@@ -116,6 +120,8 @@ export function SeasonPageExperimental() {
     const { season: seasonStr } = useParams<SeasonPageParams>();
     const seasonNumber = parseInt(seasonStr);
     const seasonId = returnedSeasons.get(seasonNumber - 1);
+    const complete = Math.max(...returnedSeasons.keys()) !== seasonNumber - 1;
+
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
     const [showFutureGames, setShowFutureGames] = useState<boolean>(false);
 
@@ -154,16 +160,19 @@ export function SeasonPageExperimental() {
                     />
                 </div>
 
+                {!complete &&
                 <div className="col-start-1">
                     <div className="font-semibold mb-1">Options</div>
                     <Checkbox value={showFutureGames} setValue={setShowFutureGames}>
                         Show future games
                     </Checkbox>
                 </div>
+                }
             </div>
 
             <GamesListFetchingExperimental
                 teams={selectedTeams.length ? selectedTeams : null}
+                complete={complete}
                 showFutureGames={showFutureGames}
                 allTeams={teams.map((p) => p.data)}
             />
