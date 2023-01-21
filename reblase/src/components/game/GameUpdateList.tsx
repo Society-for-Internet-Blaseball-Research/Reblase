@@ -11,7 +11,7 @@ import { UpdateRowExperimental } from "./UpdateRowExperimental";
 
 import "../../style/GamePage.css";
 import { ChronFightUpdate, ChronGameUpdate } from "blaseball-lib/chronicler";
-import { BlaseballGame, BlaseballGameUpdateExperimental, CompositeGameState } from "blaseball-lib/models";
+import { BlaseballGame, BlaseballTeamExperimental, CompositeGameState } from "blaseball-lib/models";
 import Spinner from "components/elements/Spinner";
 import { Loading } from "components/elements/Loading";
 import Twemoji from "components/elements/Twemoji";
@@ -45,7 +45,10 @@ export function UpdatesListFetching(props: UpdatesListFetchingProps) {
 
 interface UpdatesListFetchingExperimentalProps {
     isLoading: boolean;
-    game: BlaseballGameUpdateExperimental;
+    
+    awayTeam: BlaseballTeamExperimental;
+    homeTeam: BlaseballTeamExperimental;
+    
     updates: CompositeGameState[];
     order: "asc" | "desc";
     filterImportant: boolean;
@@ -62,7 +65,8 @@ export function UpdatesListFetchingExperimental(props: UpdatesListFetchingExperi
             )}
 
             <GameUpdateListExperimental
-                firstGame={props.game}
+                awayTeam={props.awayTeam}
+                homeTeam={props.homeTeam}
                 updates={props.updates}
                 updateOrder={props.order}
                 filterImportant={props.filterImportant}
@@ -107,15 +111,16 @@ export const InningHeader = React.memo(function InningHeader(props: UpdateProps)
 });
 
 interface UpdateExperimentalProps {
-    first: BlaseballGameUpdateExperimental;
+    awayTeam: BlaseballTeamExperimental;
+    homeTeam: BlaseballTeamExperimental;
     evt: CompositeGameState;
 }
 
 export const InningHeaderExperimental = React.memo(function InningHeaderExperimental(props: UpdateExperimentalProps) {
     const arrow = props.evt.topOfInning ? "\u25B2" : "\u25BC";
     const halfString = props.evt.topOfInning ? "Top" : "Bottom";
-    const pitchingTeam = getPitchingTeamExperimental(props.first);
-    const battingTeam = getBattingTeamExperimental(props.first);
+    const pitchingTeam = getPitchingTeamExperimental(props.evt.topOfInning, props.awayTeam, props.homeTeam);
+    const battingTeam = getBattingTeamExperimental(props.evt.topOfInning, props.awayTeam, props.homeTeam);
 
     return (
         <div className="col-span-4 lg:col-span-5 mb-2 my-4">
@@ -127,7 +132,7 @@ export const InningHeaderExperimental = React.memo(function InningHeaderExperime
                 <strong>
                     <Twemoji emoji={pitchingTeam.emoji} /> {pitchingTeam.name}
                 </strong>{" "}
-                fielding, with <strong>{pitchingTeam.pitcherName}</strong> pitching
+                fielding, with <strong>{props.evt.pitcher!.name}</strong> pitching
             </div>
 
             <div className="text-sm">
@@ -372,7 +377,8 @@ export function GameUpdateList<TSecondary = undefined>(props: GameUpdateListProp
 }
 
 interface GameUpdateListExperimentalProps {
-    firstGame: BlaseballGameUpdateExperimental;
+    awayTeam: BlaseballTeamExperimental;
+    homeTeam: BlaseballTeamExperimental;
     updates: CompositeGameState[];
     updateOrder: "asc" | "desc";
     filterImportant: boolean;
@@ -415,7 +421,10 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                 .filter((g) => g.updates.length > 0)
                 .map((group) => (
                     <div>
-                        <InningHeaderExperimental first={props.firstGame} evt={group.firstUpdate} />
+                        <InningHeaderExperimental 
+                            awayTeam={props.awayTeam}
+                            homeTeam={props.homeTeam}
+                            evt={group.firstUpdate} />
                         <div className="flex flex-col">
                             {group.updates.map((update) => {
                                 const displayTimeShort = dayjs(update.displayTime).format("mm:ss");
@@ -424,7 +433,8 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                                 return (
                                     <UpdateRowExperimental
                                         key={displayTimeShort + "_update"}
-                                        game={props.firstGame}
+                                        awayTeam={props.awayTeam}
+                                        homeTeam={props.homeTeam}
                                         evt={update}
                                         highlight={highlight} />
                                 );

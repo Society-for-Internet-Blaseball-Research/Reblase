@@ -5,7 +5,7 @@ import { UpdatesListFetchingExperimental } from "../components/game/GameUpdateLi
 import { cache } from "swr";
 import Error from "../components/elements/Error";
 import { useGameUpdatesExperimental } from "../blaseball/hooks";
-import { BlaseballGameExperimental, BlaseballGameUpdateExperimental } from "blaseball-lib/models";
+import { BlaseballGameExperimental } from "blaseball-lib/models";
 import { Link } from "react-router-dom";
 import { displaySimAndSeasonPlaintext, displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
 import { getWeatherExperimental } from "blaseball-lib/weather";
@@ -127,16 +127,8 @@ export function GamePageExperimental() {
     // Stop autoupdating once the game is over
     if (last?.complete && options.autoUpdate) setOptions({ ...options, autoUpdate: false });
 
-    const firstUpdate = updates[0];
-
-    const helpMe: BlaseballGameUpdateExperimental = {
-        ...firstGame,
-        gameState: {...firstUpdate, step: 0, ballsNeeded: 4, strikesNeeded: 3, outsNeeded: 3, totalBases: 3},
-        displayText: firstUpdate.displayText,
-        displayTime: firstUpdate.displayTime,
-        displayDelay: 0,
-        displayOrder: 0,
-    };
+    const awayTeam = firstGame.awayTeam;
+    const homeTeam = firstGame.homeTeam;
 
     return (
         <div className="container mx-auto px-4">
@@ -149,7 +141,8 @@ export function GamePageExperimental() {
             />
 
             <UpdatesListFetchingExperimental
-                game={helpMe}
+                awayTeam={awayTeam}
+                homeTeam={homeTeam}
                 updates={updates}
                 isLoading={isLoading || !firstGame}
                 order={options.reverse ? "desc" : "asc"}
