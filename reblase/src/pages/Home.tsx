@@ -10,6 +10,7 @@ import { TeamID } from "blaseball-lib/common";
 
 function SingleDayGamesList(props: {
     day: number;
+    season: number;
 }) {
     const { games, error, isLoading } = useGameListExperimental({order: "desc"});
     const { teams, error: teamError, isLoading: isLoadingTeams } = useTeamsList();
@@ -19,8 +20,6 @@ function SingleDayGamesList(props: {
     if (isLoading || isLoadingTeams) return <Loading />;
     const teamsMap: Record<TeamID, BlaseballTeam> = {};
     for (const team of teams) teamsMap[team.data.id!] = team.data;
-
-    console.log("all games", games);
 
     let gameRows: JSX.Element[] = [];
     games.forEach((game) => {
@@ -36,6 +35,7 @@ function SingleDayGamesList(props: {
         gameRows.push((          
             <GameRowExperimental
                 key={game.id}
+                season={props.season}
                 game={game}
                 teams={teamsMap}
                 showWeather={true}
@@ -44,8 +44,6 @@ function SingleDayGamesList(props: {
     });
 
     if (gameRows.length === 0) {
-        console.log("current day", props.day, "actual days", new Set(games.map((game) => game.day)));
-
         return (<h2>No Games</h2>);
     }
 
@@ -70,18 +68,25 @@ export function Home() {
             <div>
                 <h3 className="text-2xl font-semibold">Current games</h3>
 
+                {(sim.simData.currentDay < 0) ?
                 <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
-                    Season 1, Day {sim.simData.currentDay + 1}
+                    Preseason for Season {sim.simData.currentSeasonNumber + 1}
                 </h4>
+                :
+                <>
+                    <h4 className="text-md text-gray-700 dark:text-gray-300 mb-2">
+                        Season {sim.simData.currentSeasonNumber + 1}, Day {sim.simData.currentDay + 1}
+                    </h4>
 
-                {sim && (
-                    <SingleDayGamesList day={sim.simData.currentDay} />
-                )}
+                    {sim && (
+                        <SingleDayGamesList season={sim.simData.currentSeasonNumber} day={sim.simData.currentDay} />
+                    )}
+                </>}
                 <Link className="block mt-2" to={
                     // we can worry about multiple seasons when there are multiple seasons
-                    `/experimental/season/1`
+                    `/experimental/season/${sim.simData.currentSeasonNumber + 1}`
                 }>
-                    <>View all Season 1 games &rarr;</>
+                    <>View all Season {sim.simData.currentSeasonNumber + 1} games &rarr;</>
                 </Link>
             </div>
         </Container>
