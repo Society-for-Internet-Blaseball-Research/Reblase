@@ -176,11 +176,14 @@ export function SeasonListPage() {
     const expansionEra = seasonsList.filter((x) => x.data.season >= 11);
     const disciplineEra = seasonsList.filter((x) => x.data.season >= 0 && x.data.season < 11);
     const exhibitions = seasonsList.filter((x) => x.data.season < 0);
-    const coronationEra: ExperimentalSeason[] = [{season: 0, seasonData: {start: "2023-01-09T17:00Z", end: "2023-01-14T02:00Z", name: "Season 1"}}];
+    const coronationEra: ExperimentalSeason[] = [
+        {season: 1, seasonData: {start: "2023-01-23T17:00Z", end: "2023-01-28T02:00Z", name: "Season 2"}},
+        {season: 0, seasonData: {start: "2023-01-09T17:00Z", end: "2023-01-14T02:00Z", name: "Season 1"}},
+    ];
 
     return (
         <Container className={"mt-4"}>
-            <h2 className="text-2xl font-semibold mb-2">The Return</h2>
+            <h2 className="text-2xl font-semibold mb-2">Coronation Era</h2>
             <SeasonGroupExperimental seasons={coronationEra}/>
 
             <h2 className="text-2xl font-semibold mb-2">
