@@ -109,7 +109,7 @@ export const DayTableExperimental = function DayTable(props: DayTableExperimenta
                         key={game.id}
                         game={game}
                         teams={props.teams}
-                        showWeather={props.showFutureWeather || game.startTime !== null}
+                        showWeather={props.showFutureWeather || game.started}
                     />
                 );
             })}
