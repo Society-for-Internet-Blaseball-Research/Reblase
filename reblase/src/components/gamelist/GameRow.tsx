@@ -4,8 +4,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
 import { getOutcomes, Outcome } from "../../blaseball/outcome";
-import { getWeather } from "blaseball-lib/weather";
-import { BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballTeam } from "blaseball-lib/models";
+import { getWeather, getWeatherExperimental } from "blaseball-lib/weather";
+import { BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballTeam, BlaseballWeatherExperimental } from "blaseball-lib/models";
 import Twemoji from "../elements/Twemoji";
 import { displaySimAndSeasonShorthand } from "blaseball-lib/games";
 
@@ -86,6 +86,16 @@ const Duration = React.memo(
 
 export const Weather = React.memo((props: { weather: number | null; className?: string }) => {
     const weather = getWeather(props.weather ?? -1) ?? { name: "???", emoji: "\u{2753}" };
+
+    return (
+        <Tooltip placement="top" overlay={<span>{weather.name}</span>}>
+            <Twemoji emoji={weather.emoji ?? "?"} className={props.className} />
+        </Tooltip>
+    );
+});
+
+export const WeatherExperimental = React.memo((props: { weather: BlaseballWeatherExperimental | null; className?: string }) => {
+    const weather = props.weather && getWeatherExperimental(props.weather) || { name: "???", emoji: "\u{2753}" };
 
     return (
         <Tooltip placement="top" overlay={<span>{weather.name}</span>}>
@@ -343,8 +353,7 @@ export const GameRowExperimental = React.memo(
             win: data.gameWinnerId == data.awayTeam.id,
         };
 
-        // hacks
-        const weather = props.showWeather ? 3000 : null;
+        const weather = props.showWeather ? data.weather : null;
 
         return (
             <Link
@@ -356,7 +365,7 @@ export const GameRowExperimental = React.memo(
 
                     <div className="flex flex-col justify-center items-end">
                         <div className="flex flex-row space-x-2">
-                            <Weather weather={weather} className="text-sm" />
+                            <WeatherExperimental weather={weather} className="text-sm" />
                             <SeasonDayExperimental
                                 day={data.day}
                                 className="text-right"
@@ -398,7 +407,7 @@ export const GameRowExperimental = React.memo(
                             inning={gameState?.inning ?? 0}
                             topOfInning={gameState?.topOfInning ?? false}
                         />
-                        <Weather weather={weather} />
+                        <WeatherExperimental weather={weather} />
                     </div>
                 </div>
             </Link>
