@@ -204,12 +204,13 @@ const SeasonDay = React.memo(
 
 const SeasonDayExperimental = React.memo(
     (props: {
+        season: number;
         day: number | string;
         className?: string;
     }) => {
         return (
             <div className={`text-sm font-semibold ${props.className}`}>
-                S1/{typeof props.day === "number" ? props.day + 1 : props.day}
+                S{props.season + 1}/{typeof props.day === "number" ? props.day + 1 : props.day}
             </div>
         );
     }
@@ -324,6 +325,7 @@ export const GameRow = React.memo(
 
 export const GameRowExperimental = React.memo(
     (props: {
+        season: number;
         game: BlaseballGameExperimental;
         teams: Record<string, BlaseballTeam>;
         showWeather: boolean;
@@ -367,6 +369,7 @@ export const GameRowExperimental = React.memo(
                         <div className="flex flex-row space-x-2">
                             <WeatherExperimental weather={weather} className="text-sm" />
                             <SeasonDayExperimental
+                                season={props.season - 1}
                                 day={data.day}
                                 className="text-right"
                             />
@@ -386,6 +389,7 @@ export const GameRowExperimental = React.memo(
 
                 <div className="hidden md:contents">
                     <SeasonDayExperimental
+                        season={props.season - 1}
                         day={data.day}
                         className="text-right"
                     />
