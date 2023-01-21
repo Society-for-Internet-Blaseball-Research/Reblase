@@ -71,6 +71,7 @@ function GamesListFetchingExperimental(props: {
 
     complete: boolean;
     showFutureGames: boolean;
+    showFutureWeather: boolean;
 
     allTeams: BlaseballTeam[];
 }) {
@@ -103,7 +104,7 @@ function GamesListFetchingExperimental(props: {
             <GamesList
                 days={days}
                 teams={props.allTeams}
-                showFutureWeather={true}
+                showFutureWeather={props.showFutureWeather}
                 currentDay={currentDay}
             />
         </>
@@ -124,6 +125,7 @@ export function SeasonPageExperimental() {
 
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
     const [showFutureGames, setShowFutureGames] = useState<boolean>(false);
+    const [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
 
     const { teams, error, isLoading: isLoadingTeams } = useTeamsList();
 
@@ -166,6 +168,9 @@ export function SeasonPageExperimental() {
                     <Checkbox value={showFutureGames} setValue={setShowFutureGames}>
                         Show future games
                     </Checkbox>
+                    <Checkbox value={showFutureWeather} setValue={setShowFutureWeather}>
+                        Show future weather
+                    </Checkbox>
                 </div>
                 }
             </div>
@@ -174,6 +179,7 @@ export function SeasonPageExperimental() {
                 teams={selectedTeams.length ? selectedTeams : null}
                 complete={complete}
                 showFutureGames={showFutureGames}
+                showFutureWeather={showFutureWeather}
                 allTeams={teams.map((p) => p.data)}
             />
         </Container>
