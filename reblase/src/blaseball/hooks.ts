@@ -140,7 +140,13 @@ export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, 
 
     const batches = initialData?.items.flatMap((update) => {
         return update.data.gameEventBatches.flatMap(({batchData}) => JSON.parse(batchData)).filter((batch) => batch);
-    }).sort((a, b) => dayjs(a.displayTime).isBefore(dayjs(b.displayTime)) ? 0 : 1);
+    }).sort((a, b) => {
+        const aDisplayTime = dayjs(a.displayTime);
+        const bDisplayTime = dayjs(b.displayTime);
+        if (aDisplayTime.isSame(b.DisplayTime)) return 0;
+
+        return aDisplayTime.isBefore(bDisplayTime) ? -1 : 1;
+    });
 
     if ( !initialData )
     {
