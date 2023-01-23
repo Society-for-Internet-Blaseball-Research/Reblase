@@ -11,6 +11,7 @@ import { displaySimAndSeasonPlaintext, displaySimSeasonAndDayPlaintext } from "b
 import { getWeatherExperimental } from "blaseball-lib/weather";
 import Twemoji from "components/elements/Twemoji";
 import { Loading } from "components/elements/Loading";
+import { returnedSeasonsById } from "blaseball-lib/seasons";
 
 interface PayloadProps {
     game: BlaseballGameExperimental,
@@ -20,16 +21,18 @@ const GameHeading = ({ game }: PayloadProps) => {
     const location = useLocation();
     const weather = getWeatherExperimental(game.weather);
 
+    const seasonNumber = returnedSeasonsById.get(game.seasonId) ?? NaN;
+
     return (
         <>
             <p className="mb-2">
-                <Link to={`/experimental/season/1`}>
-                    &larr; Back to {displaySimAndSeasonPlaintext(undefined, 0, null)}
+                <Link to={`/experimental/season/${seasonNumber + 1}`}>
+                    &larr; Back to {displaySimAndSeasonPlaintext(undefined, seasonNumber, null)}
                 </Link>
             </p>
             <Link to={location.pathname}>
                 <h2 className="text-3xl font-semibold">
-                    {displaySimSeasonAndDayPlaintext(undefined, 0, game.day, null)}
+                    {displaySimSeasonAndDayPlaintext(undefined, seasonNumber, game.day + 1, null)}
                 </h2>
             </Link>
 
