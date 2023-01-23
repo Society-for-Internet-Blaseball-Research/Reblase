@@ -6,14 +6,17 @@ import { Container } from "../components/layout/Container";
 import { Loading } from "../components/elements/Loading";
 import { Link } from "react-router-dom";
 import { GameRowExperimental } from "../components/gamelist/GameRow";
-import { TeamID } from "blaseball-lib/common";
+import { SeasonID, TeamID } from "blaseball-lib/common";
 
 function SingleDayGamesList(props: {
     day: number;
-    season: number;
+    seasonNumber: number;
+    seasonId: SeasonID;
 }) {
     const { games, error, isLoading } = useGameListExperimental({order: "desc"});
     const { teams, error: teamError, isLoading: isLoadingTeams } = useTeamsList();
+
+    console.log("games", games);
 
     if (error) return <Error>{error.toString()}</Error>;
     if (teamError) return <Error>{teamError.toString()}</Error>;
@@ -23,19 +26,21 @@ function SingleDayGamesList(props: {
 
     let gameRows: JSX.Element[] = [];
     games.forEach((game) => {
-        if (game.day !== props.day){
+        if (game.day !== props.day || game.seasonId != props.seasonId){
             return;
         }
 
+        console.log("day does match", game.day, props.day);
+
         // the current value is guaranteed to be newer than this one, if it exists, because we're ordering in descending order.
-        if (gameRows.some((row) => row.key)) {
+        if (gameRows.some((row) => row.key == game.id)) {
             return;
-        }
+        }        
 
         gameRows.push((          
             <GameRowExperimental
                 key={game.id}
-                season={props.season}
+                season={props.seasonNumber}
                 game={game}
                 teams={teamsMap}
                 showWeather={true}
@@ -46,6 +51,8 @@ function SingleDayGamesList(props: {
     if (gameRows.length === 0) {
         return (<h2>No Games</h2>);
     }
+
+    console.log(gameRows);
 
     return (
         <div className="flex flex-col">
@@ -79,7 +86,10 @@ export function Home() {
                     </h4>
 
                     {sim && (
-                        <SingleDayGamesList season={sim.simData.currentSeasonNumber} day={sim.simData.currentDay} />
+                        <SingleDayGamesList
+                            seasonNumber={sim.simData.currentSeasonNumber}
+                            seasonId={sim.simData.currentSeasonId}
+                            day={sim.simData.currentDay} />
                     )}
                 </>}
                 <Link className="block mt-2" to={
