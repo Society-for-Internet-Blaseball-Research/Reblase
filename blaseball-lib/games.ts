@@ -274,6 +274,7 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /Black Hole \(Black Hole\)/,
         /was Frozen/,
         /\[ ?BURP ?\]/,
+        /Can't Lose! They join/,
     ]) {
         if (pattern.test(update)) return true;
     }
