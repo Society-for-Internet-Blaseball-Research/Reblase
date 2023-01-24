@@ -32,7 +32,7 @@ const GameHeading = ({ game }: PayloadProps) => {
             </p>
             <Link to={location.pathname}>
                 <h2 className="text-3xl font-semibold">
-                    {displaySimSeasonAndDayPlaintext(undefined, seasonNumber, game.day + 1, null)}
+                    {displaySimSeasonAndDayPlaintext(undefined, seasonNumber, game.day, null)}
                 </h2>
             </Link>
 
