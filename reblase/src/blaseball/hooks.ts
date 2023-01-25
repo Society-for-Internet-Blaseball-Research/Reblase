@@ -180,7 +180,7 @@ export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, 
                 }
                 : {
                     batter: b.changedState.batter ?? null,
-                    pitcher: b.changedState.pitcher ?? null,
+                    pitcher: b.changedState.pitcher ?? {id: "null", name: "unknown"},
                     baserunners: b.changedState.baserunners ?? [],
                     started: b.changedState.started ?? false,
                     complete: b.changedState.complete ?? false,
