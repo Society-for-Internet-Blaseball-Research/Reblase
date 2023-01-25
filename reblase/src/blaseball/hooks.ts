@@ -31,6 +31,7 @@ import {
     ChronFeedSeasonList,
     GameUpdatesQueryExperimental,
     GameListQueryExperimental,
+    ChronGameEventsExperimental,
 } from "blaseball-lib/chronicler";
 import {
     eventuallyApi,
@@ -136,17 +137,17 @@ interface GameUpdatesExperimentalHookReturn {
 }
 
 export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, autoRefresh: boolean): GameUpdatesExperimentalHookReturn {
-    const { data: initialData, error } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameUpdates(query));
+    const { data: game, error: firstGameError } = useSWR<ChronExperimental<BlaseballGameExperimental>>(chroniclerExperimentalApi.gameList({id: query.game_id, count: 1}))
+    const { data: initialData, error } = useSWR<ChronGameEventsExperimental>(chroniclerExperimentalApi.gameUpdates(query));
 
     // Updates added via autoupdating
     const [extraUpdates, setExtraUpdates] = useState<CompositeGameState[]>([]);
 
-    const batches = initialData?.items.flatMap((update) => {
-        return update.data.gameEventBatches.flatMap(({batchData}) => JSON.parse(batchData)).filter((batch) => batch);
-    }).sort((a, b) => {
+    const batches = initialData?.items.map(({data}) => data)
+    .sort((a, b) => {
         const aDisplayTime = dayjs(a.displayTime);
         const bDisplayTime = dayjs(b.displayTime);
-        if (aDisplayTime.isSame(b.DisplayTime)) return 0;
+        if (aDisplayTime.isSame(bDisplayTime)) return 0;
 
         return aDisplayTime.isBefore(bDisplayTime) ? -1 : 1;
     });
@@ -268,10 +269,10 @@ export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, 
     }, [query, autoRefresh, allUpdates, extraUpdates, updates, lastUpdate]);
 
     return {
-        firstGame: initialData && initialData.items[0].data || null,
+        firstGame: game?.items[0].data ?? null,
         updates: allUpdates,
-        isLoading: !initialData,
-        error,
+        isLoading: !initialData || !game,
+        error: error && firstGameError,
     };
 }
 

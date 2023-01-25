@@ -117,10 +117,7 @@ export function GamePageExperimental() {
 
     if (options.autoUpdate && !options.reverse) setOptions({ ...options, reverse: true });
 
-    const query = {
-        id: gameId ?? "null",
-    };
-    const { firstGame, updates, error, isLoading } = useGameUpdatesExperimental(query, options.autoUpdate);
+    const { firstGame, updates, error, isLoading } = useGameUpdatesExperimental({game_id: gameId ?? "null"}, options.autoUpdate);
     if (error) return <Error>{error.toString()}</Error>;
 
     const last = updates[updates.length - 1];
