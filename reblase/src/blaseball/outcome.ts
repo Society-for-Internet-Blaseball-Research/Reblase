@@ -1,3 +1,5 @@
+import { BlaseballDisplayExperimental } from "../../../blaseball-lib/models";
+
 export interface Outcome {
     name: string;
     emoji: string;
@@ -47,6 +49,15 @@ export const outcomeTypes: OutcomeType[] = [
     { name: "Nullified", emoji: "\u{2B1B}", search: [/nullified/], color: "red" },
 ];
 
+export const experimentalOutcomeTypes: OutcomeType[] = [
+    shameOutcome,
+    // { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "gray" },
+    { name: "Incineration", emoji: "\u{1F525}", search: [/rogue umpire incinerates/i], color: "orange" },
+    { name: "Alternate", emoji: "\u{1F465}", search: [/a mage umpire calls [\w\s]+'s Alternate!/i], color: "purple" },
+    { name: "Knighted", emoji: "\u{2694}", search: [/They embark on a Side Quest!/], color: "gray" },
+    { name: "Curse", emoji: "\u{1F9D9}\u{200D}\u{2640}\u{FE0F}", search: [/rogue umpire/i], color: "purple" },
+];
+
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {
     const foundOutcomes = [];
 
@@ -71,6 +82,38 @@ export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: stri
             const outcome = {
                 ...foundType,
                 text: outcomeText.trim(),
+            };
+            foundOutcomes.push(outcome);
+        }
+    }
+
+    return foundOutcomes;
+}
+
+export function getOutcomesExperimental(gameEvents: BlaseballDisplayExperimental[], shame?: boolean, awayTeam?: string): Outcome[] {
+    const foundOutcomes = [];
+
+    if (shame && awayTeam) {
+        const outcome = {
+            ...shameOutcome,
+            text: `The ${awayTeam} were shamed!`,
+        };
+        foundOutcomes.push(outcome);
+    }
+
+    for (const gameEvent of gameEvents) {
+        let foundType = null;
+        for (const outcomeType of experimentalOutcomeTypes) {
+            for (const outcomeSearch of outcomeType.search) {
+                // Use a flag since multiple matching searchs shouldn't duplicate
+                if (foundType == null && outcomeSearch.test(gameEvent.displayText)) foundType = outcomeType;
+            }
+        }
+
+        if (foundType) {
+            const outcome = {
+                ...foundType,
+                text: gameEvent.displayText.trim(),
             };
             foundOutcomes.push(outcome);
         }
