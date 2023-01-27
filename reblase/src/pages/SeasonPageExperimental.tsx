@@ -7,10 +7,13 @@ import { Container } from "../components/layout/Container";
 import Error from "../components/elements/Error";
 import { useGameListExperimental, useSimulationExperimental,useTeamsList } from "../blaseball/hooks";
 import { TeamPickerExperimental } from "../components/elements/TeamPicker";
+import { WeatherPickerExperimental } from "../components/elements/WeatherPicker";
+import { OutcomePickerExperimental } from "../components/elements/OutcomePicker";
+import StadiumPicker from "components/elements/StadiumPicker";
 import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
 import { BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballTeam } from "blaseball-lib/models";
-import { PlayerID, SeasonID } from "blaseball-lib/common";
+import { PlayerID, SeasonID, WeatherID } from "blaseball-lib/common";
 import { returnedSeasons } from "blaseball-lib/seasons";
 
 type GameDay = { games: BlaseballGameExperimental[]; season: SeasonID; day: number };
@@ -72,7 +75,9 @@ const GamesList = React.memo(
 function GamesListFetchingExperimental(props: {
     season: number;
     games: BlaseballGameExperimental[];
+
     teams: string[] | null;
+    weather: WeatherID[] | null;
 
     complete: boolean;
     showFutureGames: boolean;
@@ -90,6 +95,7 @@ function GamesListFetchingExperimental(props: {
                 if (props.complete) return false;
                 if (!props.showFutureGames) return false;
             }
+            if (props.weather && !props.weather.some((weatherId) => game.weather.id === weatherId)) return false;
             if (!props.teams) return true;
 
             return props.teams?.indexOf(game.awayTeam.id) !== -1 || props.teams.indexOf(game.homeTeam.id) !== -1;
@@ -137,6 +143,9 @@ export function SeasonPageExperimental() {
     const complete = Math.max(...returnedSeasons.keys()) !== seasonNumber - 1;
 
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+    const [selectedStadiums, setSelectedStadiums] = useState<string[]>([]);
+    const [selectedOutcomes, setSelectedOutcomes] = useState<string[]>([]);
+    const [selectedWeather, setSelectedWeather] = useState<WeatherID[]>([]);
     const [showFutureGames, setShowFutureGames] = useState<boolean>(false);
     const [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
 
@@ -175,6 +184,34 @@ export function SeasonPageExperimental() {
                     />
                 </div>
 
+                <div>
+                    <div className="font-semibold mb-1">Filter by events</div>
+                    <OutcomePickerExperimental
+                        placeholder="Select event(s)..."
+                        selectedOutcomes={selectedOutcomes}
+                        setSelectedOutcomes={setSelectedOutcomes}
+                    />
+                </div>
+
+                <div>
+                    <div className="font-semibold mb-1">Filter by weather</div>
+                    <WeatherPickerExperimental
+                        placeholder="Select weather..."
+                        selectedWeather={selectedWeather}
+                        setSelectedWeather={setSelectedWeather}
+                    />
+                </div>
+
+                <div>
+                    <div className="font-semibold mb-1">Filter by stadium</div>
+                    <StadiumPicker
+                        placeholder="Select stadium(s)..."
+                        games={[]}
+                        selectedStadiums={selectedStadiums}
+                        setSelectedStadiums={setSelectedStadiums}
+                    />
+                </div>
+
                 {!complete &&
                 <div className="col-start-1">
                     <div className="font-semibold mb-1">Options</div>
@@ -196,6 +233,7 @@ export function SeasonPageExperimental() {
                 showFutureWeather={showFutureWeather}
                 teams={selectedTeams.length ? selectedTeams : null}
                 allTeams={teams.map((p) => p.data)}
+                weather={selectedWeather.length ? selectedWeather : null}
             />
         </Container>
     );
