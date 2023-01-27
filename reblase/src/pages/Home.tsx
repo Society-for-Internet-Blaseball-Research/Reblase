@@ -1,4 +1,4 @@
-﻿import { useGameListExperimental, useSimulationExperimental, useTeamsList } from "../blaseball/hooks";
+﻿import { useGameListExperimental, useGameOutcomesExperimental, useSimulationExperimental, useTeamsList } from "../blaseball/hooks";
 import { BlaseballTeam } from "blaseball-lib/models";
 import React from "react";
 import Error from "../components/elements/Error";
@@ -14,11 +14,11 @@ function SingleDayGamesList(props: {
     seasonId: SeasonID;
 }) {
     const { games, error, isLoading } = useGameListExperimental({order: "desc"});
+    let { data: outcomes, error: outcomesError, isLoading: _ } = useGameOutcomesExperimental();
     const { teams, error: teamError, isLoading: isLoadingTeams } = useTeamsList();
 
-    console.log("games", games);
-
     if (error) return <Error>{error.toString()}</Error>;
+    if (outcomesError) return <Error>{outcomesError.toString()}</Error>;
     if (teamError) return <Error>{teamError.toString()}</Error>;
     if (isLoading || isLoadingTeams) return <Loading />;
     const teamsMap: Record<TeamID, BlaseballTeam> = {};
@@ -30,8 +30,6 @@ function SingleDayGamesList(props: {
             return;
         }
 
-        console.log("day does match", game.day, props.day);
-
         // the current value is guaranteed to be newer than this one, if it exists, because we're ordering in descending order.
         if (gameRows.some((row) => row.key == game.id)) {
             return;
@@ -42,7 +40,7 @@ function SingleDayGamesList(props: {
                 key={game.id}
                 complete={false}
                 season={props.seasonNumber}
-                game={{...game, outcomes: []}}
+                game={{...game, outcomes: outcomes.get(game.id) ?? []}}
                 teams={teamsMap}
                 showWeather={true}
             />
@@ -52,8 +50,6 @@ function SingleDayGamesList(props: {
     if (gameRows.length === 0) {
         return (<h2>No Games</h2>);
     }
-
-    console.log(gameRows);
 
     return (
         <div className="flex flex-col">
