@@ -1,7 +1,7 @@
-﻿import { isGameUpdateImportant, getBattingTeamExperimental, GameTeam } from "blaseball-lib/games";
+﻿import { isGameUpdateImportant, getBattingTeamExperimental, GameTeam, getShortTime } from "blaseball-lib/games";
 import { Circles } from "../elements/Circles";
 import React, { useEffect, useRef } from "react";
-import dayjs from "dayjs";
+import { Dayjs } from "dayjs";
 import { BlaseballTeamExperimental, CompositeGameState } from "blaseball-lib/models";
 import { BaseDisplayExperimental } from "../elements/BaseDisplay";
 import clsx from "clsx";
@@ -9,14 +9,20 @@ import "./UpdateRow.css";
 import Twemoji from "components/elements/Twemoji";
 
 interface UpdateProps {
-    awayTeam: BlaseballTeamExperimental;
-    homeTeam: BlaseballTeamExperimental;
     evt: CompositeGameState;
 }
 
-function Timestamp({ evt }: UpdateProps) {
-    const updateTime = dayjs(evt.displayTime);
-    const time = updateTime.format("mm:ss");
+interface TeamUpdateProps extends UpdateProps {
+    awayTeam: BlaseballTeamExperimental;
+    homeTeam: BlaseballTeamExperimental;
+}
+
+interface TimedUpdateProps extends UpdateProps {
+    firstUpdateTime: Dayjs;
+}
+
+function Timestamp({ evt, firstUpdateTime }: TimedUpdateProps) {
+    const time = getShortTime(firstUpdateTime, evt.displayTime);
 
     const linkHref = window.location.protocol + "//" + window.location.host + window.location.pathname + "#" + time;
 
@@ -41,7 +47,7 @@ function GameLog({ evt }: UpdateProps) {
     );
 }
 
-function Batter({ awayTeam, homeTeam, evt }: UpdateProps) {
+function Batter({ awayTeam, homeTeam, evt }: TeamUpdateProps) {
     const team = getBattingTeamExperimental(evt.topOfInning, awayTeam, homeTeam);
 
     if (!evt.batter)
@@ -82,12 +88,12 @@ function BlaseRunners({ evt }: BaseRunnersProps) {
     );
 }
 
-interface UpdateRowProps extends UpdateProps {
+interface UpdateRowProps extends TimedUpdateProps, TeamUpdateProps {
     highlight: boolean;
 }
 
 export const UpdateRowExperimental = React.memo(
-    function UpdateRowExperimental({ awayTeam, homeTeam, evt, highlight }: UpdateRowProps) {
+    function UpdateRowExperimental({ awayTeam, homeTeam, evt, highlight, firstUpdateTime }: UpdateRowProps) {
         const scrollRef = useRef<HTMLDivElement>(null);
         useEffect(() => {
             if (highlight) {
@@ -100,11 +106,11 @@ export const UpdateRowExperimental = React.memo(
                 ref={highlight ? scrollRef : undefined}
                 className={"UpdateRow" + (highlight ? " UpdateRow-Highlight" : "")}
             >
-                <GameLog awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
-                <Timestamp awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
-                <Score awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
+                <GameLog evt={evt} />
+                <Timestamp firstUpdateTime={firstUpdateTime} evt={evt} />
+                <Score evt={evt} />
                 <Batter awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
-                <AtBatInfo awayTeam={awayTeam} homeTeam={homeTeam} evt={evt} />
+                <AtBatInfo evt={evt} />
             </div>
         );
     },

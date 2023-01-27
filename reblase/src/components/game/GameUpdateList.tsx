@@ -4,6 +4,7 @@
     getPitchingTeam,
     getBattingTeamExperimental,
     getPitchingTeamExperimental,
+    getShortTime,
 } from "blaseball-lib/games";
 import React, { useMemo } from "react";
 import { UpdateRow } from "./UpdateRow";
@@ -400,6 +401,7 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
 
     const grouped = [];
     let lastGroup: GroupExperimental | null = null;
+    const firstUpdateTime = dayjs(props.updates[0].displayTime);
 
     for (const elem of elements) {
         if (elem.type === "heading") {
@@ -427,7 +429,7 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                             evt={group.firstUpdate.pitcher ? group.firstUpdate : group.updates[1]} />
                         <div className="flex flex-col">
                             {group.updates.map((update) => {
-                                const displayTimeShort = dayjs(update.displayTime).format("mm:ss");
+                                const displayTimeShort = getShortTime(firstUpdateTime, update.displayTime);
                                 const highlight = displayTimeShort === scrollTarget;
 
                                 return (
@@ -436,7 +438,8 @@ export function GameUpdateListExperimental(props: GameUpdateListExperimentalProp
                                         awayTeam={props.awayTeam}
                                         homeTeam={props.homeTeam}
                                         evt={update}
-                                        highlight={highlight} />
+                                        highlight={highlight}
+                                        firstUpdateTime={firstUpdateTime} />
                                 );
                             })}
                         </div>
