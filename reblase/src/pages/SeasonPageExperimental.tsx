@@ -97,8 +97,10 @@ function GamesListFetchingExperimental(props: {
         let gamesFiltered = games.filter((game) => {
             if (game.cancelled) return false;
             if (!game.started) {
-                if (props.complete) return false;
-                if (!props.showFutureGames) return false;
+                if (!props.showFutureGames) {
+                    if (game.gameStates.length == 0) return false;
+                    
+                }
             }
             if (props.weather && !props.weather.some((weatherId) => game.weather.id === weatherId)) return false;
             if (!props.teams) return true;
@@ -122,9 +124,6 @@ function GamesListFetchingExperimental(props: {
         }
 
         let gamesByDay = groupByDay(gamesWithOutcomesFiltered).reverse();
-        if (props.selectedOutcomes) {
-
-        }
 
         return gamesByDay;
     }, [games, props.outcomes, props.season, props.showFutureGames, props.weather, props.selectedOutcomes, props.teams]);
