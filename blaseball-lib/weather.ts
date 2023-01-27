@@ -281,9 +281,18 @@ export function getWeather(id: number): WeatherType {
     );
 }
 
-export const allExperimentalWeatherTypes: Map<WeatherID,WeatherType> = new Map([
+export interface ExperimentalWeatherType {
+    id: WeatherID;
+    name: string;
+    emoji: string;
+    background: string;
+    color: string;
+    forbidden: boolean;
+}
+
+export const allExperimentalWeatherTypes: Map<WeatherID,ExperimentalWeatherType> = new Map([
     ["8b260bb1-2b25-44af-9de4-2e97894b02f0", {
-        id: 0,
+        id: "8b260bb1-2b25-44af-9de4-2e97894b02f0",
         name: "Horizon",
         emoji: "\u{1F573}",
         background: "#36001b",
@@ -291,41 +300,41 @@ export const allExperimentalWeatherTypes: Map<WeatherID,WeatherType> = new Map([
         forbidden: false,
     }],
     ["1f2e2c8f-61c9-46ce-ad26-71d08a40c271", {
-        id: 0,
+        id: "1f2e2c8f-61c9-46ce-ad26-71d08a40c271",
         name: "Solar Eclipse (Red)",
         emoji: "\u{1f534}",
         background: "#67678a",
         color: "#ff0000",
-        forbidden: true,
+        forbidden: false,
     }],
     ["1b36e28f-332e-47ef-b716-4894bd7db2ad", {
-        id: 0,
+        id: "1b36e28f-332e-47ef-b716-4894bd7db2ad",
         name: "Solar Eclipse (Gold)",
         emoji: "\u{1F7E1}",
         background: "#67678a",
         color: "#000000",
-        forbidden: true,
+        forbidden: false,
     }],
     ["28757787-3d3d-4977-994a-4b76d3acc647", {
-        id: 0,
+        id: "28757787-3d3d-4977-994a-4b76d3acc647",
         name: "Solar Eclipse (Silver)",
         emoji: "\u{26AA}",
         background: "#67678a",
         color: "#000000",
-        forbidden: true,
+        forbidden: false,
     }],
     ["67631938-6e37-4ef0-97fd-5e92a95a0587", {
-        id: 0,
+        id: "67631938-6e37-4ef0-97fd-5e92a95a0587",
         name: "Solar Eclipse (Blue)",
         emoji: "\u{1f535}",
         background: "#67678a",
         color: "#00ff00",
-        forbidden: true,
+        forbidden: false,
     }],
 ]);
 
 
-export function getWeatherExperimental(gameWeather: BlaseballWeatherExperimental): WeatherType {
+export function getWeatherExperimental(gameWeather: BlaseballWeatherExperimental): ExperimentalWeatherType {
     const weather = allExperimentalWeatherTypes.get(gameWeather.id);
 
     if (weather) return weather;
@@ -333,7 +342,7 @@ export function getWeatherExperimental(gameWeather: BlaseballWeatherExperimental
     console.error("no weather", gameWeather);
 
     return {
-            id: -1,
+            id: "unknown",
             name: "???",
             emoji: "\u{2753}",
             background: "#ffffff",
