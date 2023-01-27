@@ -113,7 +113,7 @@ export const DayTableExperimental = function DayTable(props: DayTableExperimenta
                         complete={props.complete}
                         game={game}
                         teams={props.teams}
-                        showWeather={props.showFutureWeather || game.started}
+                        showWeather={props.showFutureWeather || game.started || game.gameStates.length > 0}
                     />
                 );
             })}
