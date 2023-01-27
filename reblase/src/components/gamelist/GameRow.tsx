@@ -3,24 +3,26 @@ import Tooltip from "rc-tooltip";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChronFight, ChronGame } from "blaseball-lib/chronicler";
-import { getOutcomes, getOutcomesExperimental, Outcome } from "../../blaseball/outcome";
+import { getOutcomes, getOutcomesExperimental, Outcome, OutcomeColor } from "../../blaseball/outcome";
 import { getWeather, getWeatherExperimental } from "blaseball-lib/weather";
-import { BlaseballDisplayExperimental, BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballTeam, BlaseballWeatherExperimental } from "blaseball-lib/models";
+import { BlaseballDisplayExperimental, BlaseballFeedSeasonList, BlaseballGameExperimentalWithOutcomes, BlaseballTeam, BlaseballWeatherExperimental } from "blaseball-lib/models";
 import Twemoji from "../elements/Twemoji";
 import { displaySimAndSeasonShorthand } from "blaseball-lib/games";
+
+const outcomeStyle: Record<OutcomeColor, string> = {
+    red: "bg-red-200 dark:bg-red-900 text-red-800 dark:text-red-200",
+    orange: "bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200",
+    blue: "bg-blue-200 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
+    pink: "bg-pink-200 dark:bg-pin-900 text-pink-800 dark:text-pin-200",
+    purple: "bg-purple-200 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
+    gray: "bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200",
+    brown: "bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200",
+    green: "bg-green-200 dark:bg-green-900 text-green-800 dark:text-green-200",
+};
 
 const Events = React.memo((props: { outcomes: string[]; shame: boolean; awayTeam: string }) => {
     const outcomes = getOutcomes(props.outcomes, props.shame, props.awayTeam);
     if (!outcomes) return <></>;
-
-    const style: Record<string, string> = {
-        red: "bg-red-200 dark:bg-red-900 text-red-800 dark:text-red-200",
-        orange: "bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200",
-        blue: "bg-blue-200 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
-        pink: "bg-pink-200 dark:bg-pin-900 text-pink-800 dark:text-pin-200",
-        purple: "bg-purple-200 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
-        gray: "bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200",
-    };
 
     const outcomesByType: Record<string, Outcome[]> = {};
     for (const outcome of outcomes) {
@@ -40,7 +42,7 @@ const Events = React.memo((props: { outcomes: string[]; shame: boolean; awayTeam
                         placement="top"
                         overlay={<div className="whitespace-pre-line text-center">{combined}</div>}
                     >
-                        <span className={`ml-1 tag-sm ${style[outcomes[0].color]}`}>
+                        <span className={`ml-1 tag-sm ${outcomeStyle[outcomes[0].color]}`}>
                             {outcomeType}
                             {outcomes.length > 1 ? <span className="ml-1"> x{outcomes.length}</span> : ""}
                         </span>
@@ -54,16 +56,6 @@ const Events = React.memo((props: { outcomes: string[]; shame: boolean; awayTeam
 const EventsExperimental = React.memo((props: { outcomes: BlaseballDisplayExperimental[]; shame: boolean; awayTeam: string }) => {
     const outcomes = getOutcomesExperimental(props.outcomes, props.shame, props.awayTeam);
     if (!outcomes) return <></>;
-
-    const style: Record<string, string> = {
-        red: "bg-red-200 dark:bg-red-900 text-red-800 dark:text-red-200",
-        orange: "bg-orange-200 dark:bg-orange-900 text-orange-800 dark:text-orange-200",
-        blue: "bg-blue-200 dark:bg-blue-900 text-blue-800 dark:text-blue-200",
-        pink: "bg-pink-200 dark:bg-pin-900 text-pink-800 dark:text-pin-200",
-        purple: "bg-purple-200 dark:bg-purple-900 text-purple-800 dark:text-purple-200",
-        gray: "bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-200",
-    };
-
     const outcomesByType: Record<string, Outcome[]> = {};
     for (const outcome of outcomes) {
         if (!outcomesByType[outcome.name]) outcomesByType[outcome.name] = [];
@@ -82,7 +74,7 @@ const EventsExperimental = React.memo((props: { outcomes: BlaseballDisplayExperi
                         placement="top"
                         overlay={<div className="whitespace-pre-line text-center">{combined}</div>}
                     >
-                        <span className={`ml-1 tag-sm ${style[outcomes[0].color]}`}>
+                        <span className={`ml-1 tag-sm ${outcomeStyle[outcomes[0].color]}`}>
                             {outcomeType}
                             {outcomes.length > 1 ? <span className="ml-1"> x{outcomes.length}</span> : ""}
                         </span>
@@ -368,7 +360,8 @@ export const GameRow = React.memo(
 export const GameRowExperimental = React.memo(
     (props: {
         season: number;
-        game: BlaseballGameExperimental;
+        complete: boolean;
+        game: BlaseballGameExperimentalWithOutcomes;
         teams: Record<string, BlaseballTeam>;
         showWeather: boolean;
     }) => {
@@ -419,7 +412,7 @@ export const GameRowExperimental = React.memo(
 
                         <div className="flex flex-row justify-end items-baseline space-x-2">
                             <EventsExperimental
-                                outcomes={[]}
+                                outcomes={data.outcomes}
                                 shame={gameState?.shame ?? false}
                                 awayTeam={away.name} />
                             <Duration
@@ -451,7 +444,7 @@ export const GameRowExperimental = React.memo(
 
                     <div className="flex flex-row justify-end items-baseline space-x-2">
                         <EventsExperimental
-                            outcomes={[]}
+                            outcomes={data.outcomes}
                             shame={gameState?.shame ?? false}
                             awayTeam={away.name} />
                         <Duration

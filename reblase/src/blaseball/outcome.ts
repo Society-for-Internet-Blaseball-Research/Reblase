@@ -1,17 +1,19 @@
 import { BlaseballDisplayExperimental } from "../../../blaseball-lib/models";
 
+export type OutcomeColor = "red" | "orange" | "blue" | "pink" | "purple" | "gray" | "brown" | "green";
+
 export interface Outcome {
     name: string;
     emoji: string;
     text: string;
-    color: string;
+    color: OutcomeColor;
 }
 
-interface OutcomeType {
+export interface OutcomeType {
     name: string;
     emoji: string;
     search: RegExp[];
-    color: string;
+    color: OutcomeColor;
 }
 
 const shameOutcome: OutcomeType = { name: "Shame", emoji: "\u{1F7E3}", search: [], color: "purple" };
@@ -52,10 +54,12 @@ export const outcomeTypes: OutcomeType[] = [
 export const experimentalOutcomeTypes: OutcomeType[] = [
     shameOutcome,
     // { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "gray" },
-    { name: "Incineration", emoji: "\u{1F525}", search: [/rogue umpire incinerates/i], color: "orange" },
-    { name: "Alternate", emoji: "\u{1F465}", search: [/a mage umpire calls [\w\s]+'s Alternate!/i], color: "purple" },
+    { name: "Incineration", emoji: "\u{1F525}", search: [/Rogue Umpire incinerates/], color: "orange" },
+    { name: "Alternate", emoji: "\u{1F465}", search: [/Alternate/], color: "purple" },
     { name: "Knighted", emoji: "\u{2694}", search: [/They embark on a Side Quest!/], color: "gray" },
-    { name: "Curse", emoji: "\u{1F9D9}\u{200D}\u{2640}\u{FE0F}", search: [/rogue umpire/i], color: "purple" },
+    { name: "Curse", emoji: "\u{1F9D9}\u{200D}\u{2640}\u{FE0F}", search: [/curses/], color: "purple" },
+    { name: "Burp", emoji: "\u{1F4A8}", search: [/BURP/], color: "green" },
+    { name: "Can't Lose", emoji: "\u{1F683}", search: [/Can't Lose! They join/], color: "gray" },
 ];
 
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {
@@ -90,7 +94,7 @@ export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: stri
     return foundOutcomes;
 }
 
-export function getOutcomesExperimental(gameEvents: BlaseballDisplayExperimental[], shame?: boolean, awayTeam?: string): Outcome[] {
+export function getOutcomesExperimental(gameEvents: BlaseballDisplayExperimental[], shame?: boolean, awayTeam?: string): Outcome[] | null {
     const foundOutcomes = [];
 
     if (shame && awayTeam) {
@@ -106,7 +110,9 @@ export function getOutcomesExperimental(gameEvents: BlaseballDisplayExperimental
         for (const outcomeType of experimentalOutcomeTypes) {
             for (const outcomeSearch of outcomeType.search) {
                 // Use a flag since multiple matching searchs shouldn't duplicate
-                if (foundType == null && outcomeSearch.test(gameEvent.displayText)) foundType = outcomeType;
+                const matches = outcomeSearch.test(gameEvent.displayText);
+
+                if (foundType == null && matches) foundType = outcomeType;
             }
         }
 
@@ -119,5 +125,5 @@ export function getOutcomesExperimental(gameEvents: BlaseballDisplayExperimental
         }
     }
 
-    return foundOutcomes;
+    return foundOutcomes.length > 0 ? foundOutcomes : null;
 }

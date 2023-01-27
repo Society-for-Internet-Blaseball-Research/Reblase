@@ -5,7 +5,7 @@ import "./DayTable.css";
 import { GameRow, GameRowExperimental } from "./GameRow";
 import { ChronGame } from "blaseball-lib/chronicler";
 import { predictGamePitcher } from "blaseball-lib/team";
-import { BlaseballFeedSeasonList, BlaseballGame, BlaseballGameExperimental, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
+import { BlaseballFeedSeasonList, BlaseballGame, BlaseballGameExperimentalWithOutcomes, BlaseballPlayer, BlaseballTeam } from "blaseball-lib/models";
 import { displaySimSeasonAndDayPlaintext } from "blaseball-lib/games";
 
 interface DayTableProps {
@@ -81,9 +81,10 @@ export const DayTable = function DayTable(props: DayTableProps) {
 };
 
 interface DayTableExperimentalProps {
-    games: BlaseballGameExperimental[];
+    games: BlaseballGameExperimentalWithOutcomes[];
     season: number,
     day: number;
+    complete: boolean;
     currentDay: number;
     showFutureWeather: boolean;
     teams: Record<string, BlaseballTeam>;
@@ -109,6 +110,7 @@ export const DayTableExperimental = function DayTable(props: DayTableExperimenta
                     <GameRowExperimental
                         key={game.id}
                         season={props.season}
+                        complete={props.complete}
                         game={game}
                         teams={props.teams}
                         showWeather={props.showFutureWeather || game.started}

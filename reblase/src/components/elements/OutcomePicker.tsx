@@ -1,5 +1,5 @@
 import React from "react";
-import { experimentalOutcomeTypes, outcomeTypes } from "../../blaseball/outcome";
+import { experimentalOutcomeTypes, OutcomeType, outcomeTypes } from "../../blaseball/outcome";
 import { selectTheme } from "../../blaseball/select";
 import Twemoji from "./Twemoji";
 import Select from "react-select";
@@ -41,15 +41,15 @@ export default function OutcomePicker(props: OutcomePickerProps) {
 
 export interface OutcomePickerExperimentalProps {
     placeholder?: string;
-    selectedOutcomes?: string[];
-    setSelectedOutcomes?: (outcomes: string[]) => void;
+    selectedOutcomes?: OutcomeType[];
+    setSelectedOutcomes?: (outcomes: OutcomeType[]) => void;
 }
 
 export function OutcomePickerExperimental(props: OutcomePickerExperimentalProps) {
     const items = experimentalOutcomeTypes
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((outcome) => ({
-            value: outcome.name,
+            value: outcome,
             label: (
                 <span key={outcome.name}>
                     <Twemoji className="mr-1" emoji={outcome.emoji} />
@@ -66,8 +66,8 @@ export function OutcomePickerExperimental(props: OutcomePickerExperimentalProps)
             placeholder={props.placeholder}
             value={items.filter((item) => (props.selectedOutcomes ?? []).indexOf(item.value) !== -1)}
             onChange={(newItems, _) => {
-                const ids = ((newItems ?? []) as any[]).map((item) => item.value as string);
-                if (props.setSelectedOutcomes) props.setSelectedOutcomes(ids);
+                const outcomes = ((newItems ?? []) as any[]).map((item) => item.value as OutcomeType);
+                if (props.setSelectedOutcomes) props.setSelectedOutcomes(outcomes);
             }}
         />
     );
