@@ -40,6 +40,7 @@ function SingleDayGamesList(props: {
         gameRows.push((          
             <GameRowExperimental
                 key={game.id}
+                complete={false}
                 season={props.seasonNumber}
                 game={{...game, outcomes: []}}
                 teams={teamsMap}

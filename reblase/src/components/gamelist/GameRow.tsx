@@ -417,8 +417,8 @@ export const GameRowExperimental = React.memo(
                                 awayTeam={away.name} />
                             <Duration
                                 gameId={props.game.id}
-                                startTime={(props.game.started || props.game.complete) ? props.game.startTime : null}
-                                endTime={props.game.updated}
+                                startTime={(props.complete || props.game.started || props.game.complete) ? props.game.startTime : null}
+                                endTime={props.complete || props.game.complete ? props.game.updated : null}
                                 inning={gameState?.inning ?? 0}
                                 topOfInning={gameState?.topOfInning ?? false}
                             />
@@ -449,8 +449,8 @@ export const GameRowExperimental = React.memo(
                             awayTeam={away.name} />
                         <Duration
                             gameId={props.game.id}
-                            startTime={(props.game.started || props.game.complete) ? props.game.startTime : null}
-                            endTime={props.game.updated}
+                            startTime={(props.complete || props.game.started || props.game.complete) ? props.game.startTime : null}
+                            endTime={props.complete || props.game.complete ? props.game.updated : null}
                             inning={gameState?.inning ?? 0}
                             topOfInning={gameState?.topOfInning ?? false}
                         />
