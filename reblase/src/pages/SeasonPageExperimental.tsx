@@ -5,19 +5,20 @@ import { DayTableExperimental } from "../components/gamelist/DayTable";
 import { Loading } from "../components/elements/Loading";
 import { Container } from "../components/layout/Container";
 import Error from "../components/elements/Error";
-import { useGameListExperimental, useSimulationExperimental,useTeamsList } from "../blaseball/hooks";
+import { useGameListExperimental, useGameOutcomesExperimental, useSimulationExperimental,useTeamsList } from "../blaseball/hooks";
 import { TeamPickerExperimental } from "../components/elements/TeamPicker";
 import { WeatherPickerExperimental } from "../components/elements/WeatherPicker";
 import { OutcomePickerExperimental } from "../components/elements/OutcomePicker";
 import StadiumPicker from "components/elements/StadiumPicker";
 import Checkbox from "../components/elements/Checkbox";
 import { Link } from "react-router-dom";
-import { BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballTeam } from "blaseball-lib/models";
-import { PlayerID, SeasonID, WeatherID } from "blaseball-lib/common";
+import { BlaseballDisplayExperimental, BlaseballFeedSeasonList, BlaseballGameExperimental, BlaseballGameExperimentalWithOutcomes, BlaseballTeam } from "blaseball-lib/models";
+import { GameID, PlayerID, SeasonID, WeatherID } from "blaseball-lib/common";
 import { returnedSeasons } from "blaseball-lib/seasons";
+import { Outcome, OutcomeType } from "blaseball/outcome";
 
-type GameDay = { games: BlaseballGameExperimental[]; season: SeasonID; day: number };
-function groupByDay(games: BlaseballGameExperimental[]): GameDay[] {
+type GameDay = { games: BlaseballGameExperimentalWithOutcomes[]; season: SeasonID; day: number };
+function groupByDay(games: BlaseballGameExperimentalWithOutcomes[]): GameDay[] {
     const days: Record<string, GameDay> = {};
     let maxDay = -1;
     for (const game of games) {
@@ -44,6 +45,7 @@ const GamesList = React.memo(
     (props: {
         season: number;
         days: GameDay[];
+        complete: boolean;
         teams: BlaseballTeam[];
         showFutureWeather: boolean;
         currentDay: number;
@@ -60,6 +62,7 @@ const GamesList = React.memo(
                             key={day}
                             season={props.season}
                             day={day}
+                            complete={props.complete}
                             currentDay={props.currentDay}
                             games={games}
                             teams={teamsMap}
@@ -75,9 +78,11 @@ const GamesList = React.memo(
 function GamesListFetchingExperimental(props: {
     season: number;
     games: BlaseballGameExperimental[];
+    outcomes: Map<GameID, BlaseballDisplayExperimental[]>;
 
     teams: string[] | null;
     weather: WeatherID[] | null;
+    selectedOutcomes: OutcomeType[] | null;
 
     complete: boolean;
     showFutureGames: boolean;
@@ -101,8 +106,28 @@ function GamesListFetchingExperimental(props: {
             return props.teams?.indexOf(game.awayTeam.id) !== -1 || props.teams.indexOf(game.homeTeam.id) !== -1;
         });
 
-        return groupByDay(gamesFiltered).reverse();
-    }, [games, props.showFutureGames, props.teams]);
+        const outcomesFiltered = new Map(Array(...props.outcomes.entries()).filter((value) => gamesFiltered.some((game) => game.id === value[0])));
+
+        let gamesWithOutcomesFiltered = gamesFiltered.map((game) => {return {...game, outcomes: outcomesFiltered.get(game.id) ?? []}});
+
+        if (props.selectedOutcomes && props.selectedOutcomes.length > 0) {
+            gamesWithOutcomesFiltered = gamesWithOutcomesFiltered.filter((game) => {
+                if (game.outcomes.length == 0) return false;
+
+                return game.outcomes
+                    .some((outcome) => props.selectedOutcomes!
+                        .some((outcomeType) => outcomeType.search
+                            .some((r) => {return r.test(outcome.displayText)})))
+            });
+        }
+
+        let gamesByDay = groupByDay(gamesWithOutcomesFiltered).reverse();
+        if (props.selectedOutcomes) {
+
+        }
+
+        return gamesByDay;
+    }, [games, props.outcomes, props.season, props.showFutureGames, props.weather, props.selectedOutcomes, props.teams]);
 
     if (days.length === 0) return (
         <>
@@ -122,6 +147,7 @@ function GamesListFetchingExperimental(props: {
             <GamesList
                 season={props.season}
                 days={days}
+                complete={props.complete}
                 teams={props.allTeams}
                 showFutureWeather={props.showFutureWeather}
                 currentDay={currentDay}
@@ -144,7 +170,7 @@ export function SeasonPageExperimental() {
 
     const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
     const [selectedStadiums, setSelectedStadiums] = useState<string[]>([]);
-    const [selectedOutcomes, setSelectedOutcomes] = useState<string[]>([]);
+    const [selectedOutcomes, setSelectedOutcomes] = useState<OutcomeType[]>([]);
     const [selectedWeather, setSelectedWeather] = useState<WeatherID[]>([]);
     const [showFutureGames, setShowFutureGames] = useState<boolean>(false);
     const [showFutureWeather, setShowFutureWeather] = useState<boolean>(false);
@@ -157,8 +183,13 @@ export function SeasonPageExperimental() {
         isLoading: isLoadingGames,
     } = useGameListExperimental({season: seasonId});
 
-    if (error || gamesError)
-        return <Error>{(error || gamesError).toString()}</Error>;
+    let {
+        data: outcomes,
+        error: outcomesError,
+        isLoading: _, // do not pause execution while outcomes load
+    } = useGameOutcomesExperimental();
+
+    if (error || gamesError || outcomesError) return <Error>{(error || gamesError).toString()}</Error>;
     if (isLoadingTeams || isLoadingGames) return <Loading />;
 
     return (
@@ -229,6 +260,8 @@ export function SeasonPageExperimental() {
                 season={seasonNumber}
                 complete={complete}
                 games={games}
+                outcomes={outcomes}
+                selectedOutcomes={selectedOutcomes}
                 showFutureGames={showFutureGames}
                 showFutureWeather={showFutureWeather}
                 teams={selectedTeams.length ? selectedTeams : null}

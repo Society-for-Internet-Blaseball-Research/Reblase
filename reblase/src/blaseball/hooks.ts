@@ -39,6 +39,7 @@ import {
     EARLIEST_FEED_CONSIDERATION_DATE,
 } from "blaseball-lib/eventually";
 import { 
+    BlaseballDisplayExperimental,
     BlaseballFeedEntry, 
     BlaseballFeedTemporalMetadata,
     BlaseballGameExperimental,
@@ -47,6 +48,8 @@ import {
     CompositeGameState
 } from "blaseball-lib/models";
 import dayjs from "dayjs";
+import { experimentalOutcomeTypes } from "./outcome";
+import { GameID } from "blaseball-lib/common";
 
 interface GameListHookReturn {
     games: ChronGame[];
@@ -274,6 +277,37 @@ export function useGameUpdatesExperimental(query: GameUpdatesQueryExperimental, 
         isLoading: !initialData || !game,
         error: error && firstGameError,
     };
+}
+
+interface GameOutcomesHookReturn {
+    data: Map<GameID, BlaseballDisplayExperimental[]>;
+    isLoading: boolean;
+    error: any;
+}
+
+export function useGameOutcomesExperimental(): GameOutcomesHookReturn {
+    const { data, error } = useSWR<ChronGameEventsExperimental>(chroniclerExperimentalApi.notableGameEvents(
+        experimentalOutcomeTypes
+            .flatMap((outcome) => outcome.search)
+            .map((search) => search.source)
+            .join(' OR '),
+            {}))
+
+    const eventsByGame: Map<GameID, BlaseballDisplayExperimental[]> = new Map();
+    data?.items.forEach(event => {
+        if (!eventsByGame.has(event.game_id)){
+            eventsByGame.set(event.game_id, [event.data]);
+            return;
+        }
+
+        eventsByGame.get(event.game_id)!.push(event.data);
+    });
+
+    return {
+        data: eventsByGame,
+        isLoading: !data && !error,
+        error
+    }
 }
 
 interface FightUpdatesHookReturn {

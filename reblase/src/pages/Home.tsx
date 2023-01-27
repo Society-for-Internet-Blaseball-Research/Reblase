@@ -41,7 +41,7 @@ function SingleDayGamesList(props: {
             <GameRowExperimental
                 key={game.id}
                 season={props.seasonNumber}
-                game={game}
+                game={{...game, outcomes: []}}
                 teams={teamsMap}
                 showWeather={true}
             />

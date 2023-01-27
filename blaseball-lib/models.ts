@@ -134,6 +134,10 @@ export interface BlaseballGameExperimental extends BlaseballGameInformationExper
     gameStates: BlaseballGameStateExperimental[];
 }
 
+export interface BlaseballGameExperimentalWithOutcomes extends BlaseballGameExperimental {
+    outcomes: BlaseballDisplayExperimental[];
+}
+
 export interface BlaseballGameUpdateExperimental extends BlaseballGameInformationExperimental, BlaseballDisplayExperimental {
     gameState: BlaseballGameStateExperimental;
 
