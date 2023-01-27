@@ -1,5 +1,10 @@
 import { PlayerID, TeamID } from "./common";
 import { BlaseballFeedSeasonList, BlaseballGame, BlaseballTeamExperimental } from "./models";
+import dayjs from "dayjs";
+import { Dayjs } from "dayjs";
+import duration from "dayjs/plugin/duration";
+/// <reference path="../node_modules/dayjs/plugin/duration.d.ts" />
+dayjs.extend(duration);
 
 export const STATIC_ID = "thisidisstaticyo";
 
@@ -302,4 +307,13 @@ export function displaySimSeasonAndDayPlaintext(
     return `${!simIsStaticIdYo ? displaySim(sim!, feedSeasons) + ", " : ""}${
         !simIsStaticIdYo && didSimHaveMultipleSeasons(sim) ? "Season " + displaySeason(season) + ", " : ""
     }Day ${day + 1}`;
+}
+
+export function getShortTime(
+    startTime: Dayjs,
+    currentTime: string
+) {
+    const duration = dayjs.duration(dayjs(currentTime).diff(startTime))
+
+    return duration.format(duration.hours() > 0 ? "H:mm:ss" : "mm:ss");
 }
