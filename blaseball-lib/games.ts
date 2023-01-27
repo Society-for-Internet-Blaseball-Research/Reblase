@@ -223,6 +223,11 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /was Frozen/,
         /\[ ?BURP ?\]/,
         /Can't Lose! They join/,
+        /A (Bard|Mage|Knight|Rogue) Umpire rules in [\w\s]+'s favor/,
+        /A Mage Umpire calls [\w\s]+'s Alternate/,
+        /A Bard Umpire curses/,
+        /A Knight swears at/,
+        /parries a (Bard|Mage|Knight) Umpire's/,
     ]) {
         if (pattern.test(update)) return true;
     }
