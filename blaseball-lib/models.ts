@@ -122,7 +122,7 @@ interface BlaseballGameInformationExperimental {
     gameWinnerId: TeamID;
 }
 
-interface BlaseballDisplayExperimental {
+export interface BlaseballDisplayExperimental {
     displayText: string;
     displayTime: Timestamp;
     displayDelay: number;
