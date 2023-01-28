@@ -98,8 +98,7 @@ function GamesListFetchingExperimental(props: {
             if (game.cancelled) return false;
             if (!game.started) {
                 if (!props.showFutureGames) {
-                    if (game.gameStates.length == 0) return false;
-                    
+                    if (game.gameStates.length == 0 || !game.gameStates[0]) return false;
                 }
             }
             if (props.weather && !props.weather.some((weatherId) => game.weather.id === weatherId)) return false;
