@@ -227,7 +227,10 @@ export function isGameUpdateImportant(update: string, scoreUpdate: string | null
         /A Mage Umpire calls [\w\s]+'s Alternate/,
         /A Bard Umpire curses/,
         /A Knight swears at/,
-        /parries a (Bard|Mage|Knight) Umpire's/,
+        /parries a Knight Umpire's/,
+        /dodges the Bard Umpire's/,
+        /finds a Heart/,
+        /retreats from the sound of scuttling/,
     ]) {
         if (pattern.test(update)) return true;
     }

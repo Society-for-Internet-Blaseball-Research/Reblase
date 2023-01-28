@@ -56,10 +56,12 @@ export const experimentalOutcomeTypes: OutcomeType[] = [
     // { name: "Party", emoji: "\u{1F389}", search: [/Partying/i], color: "gray" },
     { name: "Incineration", emoji: "\u{1F525}", search: [/Rogue Umpire incinerates/], color: "orange" },
     { name: "Alternate", emoji: "\u{1F465}", search: [/Alternate/], color: "purple" },
-    { name: "Knighted", emoji: "\u{2694}", search: [/They embark on a Side Quest!/], color: "gray" },
+    { name: "Knighted", emoji: "\u{2694}", search: [/They embark on a Side Quest/], color: "gray" },
     { name: "Curse", emoji: "\u{1F9D9}\u{200D}\u{2640}\u{FE0F}", search: [/curses/], color: "purple" },
     { name: "Burp", emoji: "\u{1F4A8}", search: [/BURP/], color: "green" },
     { name: "Can't Lose", emoji: "\u{1F683}", search: [/Can't Lose! They join/], color: "gray" },
+    { name: "Avoided", emoji: "\u{1F6E1}", search: [/parries a Knight/, /dodges the Bard/], color: "gray"},
+    { name: "Quest", emoji: "\u{1F409}", search: [/finds a heart/i, /retreats from the sound/i], color: "gray"},
 ];
 
 export function getOutcomes(outcomes: string[], shame?: boolean, awayTeam?: string): Outcome[] {
