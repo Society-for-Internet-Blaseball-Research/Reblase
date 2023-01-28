@@ -107,7 +107,11 @@ export function getOutcomesExperimental(gameEvents: BlaseballDisplayExperimental
         foundOutcomes.push(outcome);
     }
 
+    const foundDisplayOrders: number[] = [];
+
     for (const gameEvent of gameEvents) {
+        if (foundDisplayOrders.some((o) => o === gameEvent.displayOrder)) continue;
+
         let foundType = null;
         for (const outcomeType of experimentalOutcomeTypes) {
             for (const outcomeSearch of outcomeType.search) {
@@ -119,6 +123,7 @@ export function getOutcomesExperimental(gameEvents: BlaseballDisplayExperimental
         }
 
         if (foundType) {
+            foundDisplayOrders.push(gameEvent.displayOrder);
             const outcome = {
                 ...foundType,
                 text: gameEvent.displayText.trim(),
