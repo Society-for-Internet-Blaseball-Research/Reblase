@@ -35,6 +35,8 @@ function SingleDayGamesList(props: {
             return;
         }        
 
+        if (!game.started && (game.gameStates.length == 0 || !game.gameStates[0])) return;
+
         gameRows.push((          
             <GameRowExperimental
                 key={game.id}
