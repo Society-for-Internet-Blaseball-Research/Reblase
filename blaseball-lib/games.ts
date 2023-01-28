@@ -318,7 +318,7 @@ export function getShortTime(
     startTime: Dayjs,
     currentTime: string
 ) {
-    const duration = dayjs.duration(dayjs(currentTime).diff(startTime))
+    const duration = dayjs.duration(dayjs(currentTime).diff(startTime.startOf("hour")))
 
     return duration.format(duration.hours() > 0 ? "H:mm:ss" : "mm:ss");
 }
