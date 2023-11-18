@@ -79,7 +79,7 @@ function SemiCentennialUpdateList(props: {
         if (upd.data.type === "temporal") {
             return (
                 <div
-                    key={upd.timestamp + "_temporal"}
+                    id={upd.timestamp + "_temporal"}
                     className="p-2 border-b border-gray-300 dark:border-gray-700 TemporalRow"
                 >
                     <span className="TemporalRow-Icon">
@@ -91,7 +91,7 @@ function SemiCentennialUpdateList(props: {
         } else if (upd.data.type === "sunSun") {
             return (
                 <div
-                    key={upd.timestamp + "_pressure"}
+                    id={upd.timestamp + "_pressure"}
                     className="SunSunPressure"
                 >
                     <div>
