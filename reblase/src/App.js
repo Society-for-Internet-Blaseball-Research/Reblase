@@ -6,7 +6,6 @@ import { GamePage } from "./pages/GamePage";
 import { GamePageExperimental } from "./pages/GamePageExperimental";
 import { SeasonPage } from "./pages/SeasonPage";
 import { SeasonPageExperimental } from "./pages/SeasonPageExperimental";
-import { Home } from "./pages/Home";
 import { EventsPage } from "./pages/EventsPage";
 import { SeasonListPage } from "./pages/SeasonListPage";
 import PlayerUpdatesPage from "pages/PlayerUpdatesPage";
@@ -35,7 +34,7 @@ export default function App() {
                     <Route path="/events" component={EventsPage} />
                     {/* <Route path="/players" component={PlayersPage} /> */}
                     <Route path="/player/:playerId" component={PlayerUpdatesPage} />
-                    <Route path="/" component={Home} />
+                    <Route path="/" component={SeasonListPage} />
                 </Switch>
             </PageLayout>
         </SWRConfig>
