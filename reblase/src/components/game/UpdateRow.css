@@ -17,10 +17,42 @@
     grid-template-areas: "icon delta .";
 }
 
+.SunSunPressure {
+    padding: 0.5rem;
+
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "delta delta"
+	"pressure gauge";
+
+    border-color: rgba(226, 232, 240, var(--tw-border-opacity));
+    border-bottom-width: 1px;
+}
+
+.SunSunPressure > * {
+    grid-area: delta;
+}
+
+.pressure-value {
+    grid-area: pressure;
+    justify-self: end;
+}
+
+.progress-bar__outer {
+    grid-area: gauge;
+    background: linear-gradient(90deg, rgba(251,205,98,1) 0%, rgba(212,76,20,1) 100%);
+    width: 8.625rem;
+    border-radius: 0.3rem;
+}
+
 .progress-bar {
-    background-color: #007bff;
     height: 100%;
-  }
+    background-color: #007bff;
+    background: linear-gradient(90deg, #10457f 0%, #2379a6 100%);
+    border-top-left-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+}
 
 .TemporalRow-Icon {
     grid-area: icon;
@@ -36,6 +68,11 @@
         grid-template-areas:
             "gamelog gamelog gamelog gamelog timestamp"
             "score batter . atbat atbat";
+    }
+
+    .SunSunPressure {
+	grid-template-columns: 1fr fit-content auto;
+	grid-template-areas: "delta pressure gauge";
     }
 }
 

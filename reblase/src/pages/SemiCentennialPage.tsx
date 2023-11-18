@@ -92,7 +92,7 @@ function SemiCentennialUpdateList(props: {
             return (
                 <div
                     key={upd.timestamp + "_pressure"}
-                    className="p-2 border-b border-gray-300 dark:border-gray-700 flex flex-row"
+                    className="SunSunPressure"
                 >
                     <div>
                         <span className="font-semibold">
@@ -100,19 +100,12 @@ function SemiCentennialUpdateList(props: {
                         </span>
                         Sun(Sun)'s Pressure built...
                     </div>
-                    <div className="text-right flex-1">
-                        <span className="text-gray-800 dark:text-gray-200 mr-1">
-                            <Twemoji emoji={"\u{1F31E}"} />
-                            {Math.round((upd.data.pressure.current / upd.data.pressure.maximum) * 100).toLocaleString()}
-                            %
-                        </span>
-                    </div>
-                    <div
-                        style={{
-                            background: "linear-gradient(90deg, rgba(251,205,98,1) 0%, rgba(212,76,20,1) 100%",
-                            width: "100px",
-                        }}
-                    >
+                    <span className="pressure-value text-gray-800 dark:text-gray-200 mr-1">
+                        <Twemoji emoji={"\u{1F31E}"} />
+                        {Math.round((upd.data.pressure.current / upd.data.pressure.maximum) * 100).toLocaleString()}
+                        %
+                    </span>
+                    <div className="progress-bar__outer">
                         <div
                             className="progress-bar"
                             aria-valuenow={(upd.data.pressure.current / upd.data.pressure.maximum) * 100}
@@ -125,7 +118,6 @@ function SemiCentennialUpdateList(props: {
                                     ).toLocaleString(),
                                     "%"
                                 ),
-                                background: "linear-gradient(90deg, #10457f 0%, #2379a6 100%",
                             }}
                         />
                     </div>
